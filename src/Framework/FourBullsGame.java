@@ -198,7 +198,9 @@ public class FourBullsGame implements GameController {
 			else
 				current = white;
 			return true;
-		} else
+		} else {
+			this.message = "Move not allowed";
 			return false;
+		}
 	}
 }

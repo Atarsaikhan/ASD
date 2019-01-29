@@ -9,7 +9,7 @@ public interface GameController {
 
 	public abstract boolean validate(Position pos1, Position pos2);
 
-	public abstract void capture(Position pos);
+	public abstract boolean capture(Position pos);
 
 	public abstract void check();
 

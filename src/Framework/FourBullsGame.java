@@ -5,12 +5,21 @@ import java.util.List;
 
 public class FourBullsGame implements GameController {
 	private GameState gameState;
+	private boolean isCaptureGame;
 	private Player current;
 	private Player white;
 	private Player black;
 	private List<Position> positions;
 	private String message;
-	private boolean isCaptureGame;
+	private int totalMove;
+
+	public boolean isCaptureGame() {
+		return isCaptureGame;
+	}
+
+	public int getTotalMove() {
+		return totalMove;
+	}
 
 	public Player getCurrent() {
 		return current;
@@ -26,6 +35,10 @@ public class FourBullsGame implements GameController {
 
 	public List<Position> getPositions() {
 		return positions;
+	}
+
+	public FourBullsGame(boolean isCaptureGame) {
+		this(new Player("Player1", 2, BullColor.WHITE), new Player("Player2", 2, BullColor.BLACK), isCaptureGame);
 	}
 
 	public FourBullsGame() {
@@ -120,6 +133,7 @@ public class FourBullsGame implements GameController {
 			this.message = "";
 			pos2.setColor(pos1.getColor());
 			pos1.setColor(BullColor.NONE);
+			this.totalMove++;
 
 			if (current == white)
 				current = black;
@@ -172,14 +186,19 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public void capture(Position pos) {
-		pos.setColor(BullColor.NONE);
-		this.message = "";
-		this.gameState = GameState.ACTIVE;
+	public boolean capture(Position pos) {
+		if (pos.getColor().equals(current.getColor())) {
+			pos.setColor(BullColor.NONE);
+			current.decPieces();
+			this.message = "";
+			this.gameState = GameState.ACTIVE;
 
-		if (current == white)
-			current = black;
-		else
-			current = white;
+			if (current == white)
+				current = black;
+			else
+				current = white;
+			return true;
+		} else
+			return false;
 	}
 }

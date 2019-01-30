@@ -19,16 +19,19 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class CDrawer implements IDrawer {
+public class CDrawer implements IDrawer, IObserver {
 
 	private IGameController game;
 	private Stack<ICommand> commandsExecuted;
 	private List<APosition> positions;
 	private APosition activePos = null;
 	private GraphicsContext gc;
+	private CGameSettings gameSettings;
+//	private renderStatus
 
 	CDrawer(IGameController game) {
 		this.game = game;
+		this.gameSettings = CGameSettings.getInstance();
 		commandsExecuted = new Stack<ICommand>();
 		this.positions = game.getPositions();
 		//this.gc.setFill(FILL_COLOR);
@@ -107,14 +110,14 @@ public class CDrawer implements IDrawer {
 			ret = cmd.undo();
 			this.drawPos(cmd.getPos1(), NORMAL_STROKE_COLOR);
 			this.drawPos(cmd.getPos2(), NORMAL_STROKE_COLOR);
-			this.updateStatus();
+			this.renderStatus();
 			System.out.println(cmd.getPos1().getId() + "|"+cmd.getPos1().getColor());
 			System.out.println(cmd.getPos2().getId() + "|"+cmd.getPos2().getColor());
 		}
 		return ret;
 	}
 
-	public void updateStatus() {
+	public void renderStatus() {
 		if (game.getGameState() == EGameState.GAMEOVER) {
 			drawStatusText(game.getMessage());
 			drawGameOver();
@@ -243,5 +246,14 @@ public class CDrawer implements IDrawer {
 
 	public void setGc(GraphicsContext gc) {
 		this.gc = gc;
+	}
+	
+	public void setGameSettings(CGameSettings gameSettings) {
+		this.gameSettings = gameSettings;
+	}
+	
+	@Override
+	public void update(double moveNumber) {
+		
 	}
 }

@@ -3,7 +3,6 @@ package Application;
 import Framework.BullColor;
 import Framework.FourBullsGame;
 import Framework.Player;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,28 +18,44 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-public class FourBulls extends Application {
-	Drawer drawer;
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		launch(args);
+public class JavaFxGuiBuilder implements GuiBuilder {
+	GameScene bullScene;
+    MenuItem mniNewGame = new MenuItem("New game"); 
+    MenuItem mniUndo = new MenuItem("Undo"); 
+    MenuItem m2 = new MenuItem("Edit"); 
+    MenuItem mniExit = new MenuItem("Exit"); 
+    
+    Button btnNew = new Button("New game");
+    Button btnUndo = new Button("Undo"); 
+    Canvas canvas = new Canvas(600, 700);
+    GraphicsContext gc = canvas.getGraphicsContext2D();
+	
+	JavaFxGuiBuilder(){
+		bullScene = new GameScene(new Group());
+	}
+	
+	public void buildPlayer(String playerName1, String playerName2) {
+		bullScene.setPlayer1(new Player(playerName1, 2, BullColor.WHITE));
+		bullScene.setPlayer2(new Player(playerName1, 2, BullColor.BLACK));
 	}
 
 	@Override
-	public void start(Stage theStage) {
-		theStage.setTitle("4 bulls");
+	public void initGameControl() {
+		bullScene.setDrawer( new Drawer(new FourBullsGame(bullScene.getPlayer1(), bullScene.getPlayer2(), true)) );
+	}
+
+	@Override
+	public void buildGuiControls() {
 		
-        // create a menu 
+		// create a menu 
         Menu m = new Menu("Menu"); 
   
-        // create menuitems 
-        MenuItem mniNewGame = new MenuItem("New game"); 
-        MenuItem mniUndo = new MenuItem("Undo"); 
-        MenuItem m2 = new MenuItem("Edit"); 
-        MenuItem mniExit = new MenuItem("Exit"); 
+//        // create menuitems 
+//        MenuItem mniNewGame = new MenuItem("New game"); 
+//        MenuItem mniUndo = new MenuItem("Undo"); 
+//        MenuItem m2 = new MenuItem("Edit"); 
+//        MenuItem mniExit = new MenuItem("Exit"); 
   
         // add menu items to menu 
         m.getItems().add(mniNewGame); 
@@ -65,30 +80,38 @@ public class FourBulls extends Application {
         AnchorPane controlsPane = new AnchorPane();
         controlBox.getChildren().add(controlsPane);
 
-        Button btnNew = new Button("New game"); 
+//        Button btnNew = new Button("New game"); 
         AnchorPane.setTopAnchor(btnNew, 200.0); 
         AnchorPane.setLeftAnchor(btnNew, 30.0); 
         AnchorPane.setRightAnchor(btnNew, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
         controlsPane.getChildren().add(btnNew);
         
-        Button btnUndo = new Button("Undo"); 
+//        Button btnUndo = new Button("Undo"); 
         AnchorPane.setTopAnchor(btnUndo, 240.0); 
         AnchorPane.setLeftAnchor(btnUndo, 30.0); 
         AnchorPane.setRightAnchor(btnUndo, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
         controlsPane.getChildren().add(btnUndo);
 		
-		Canvas canvas = new Canvas(600, 700);
+//		Canvas canvas = new Canvas(600, 700);
 		mainArea.getChildren().add(canvas);
 
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+//		GraphicsContext gc = canvas.getGraphicsContext2D();
 
+		//Group root = new Group();
+		//Scene theScene = new Scene(root);
+		//root.getChildren().add(containerBox);
+		bullScene.root.getChildren().add(containerBox);
+	}
+
+	@Override
+	public void buildHandlers() {
 		canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				if (drawer !=null) {
-					drawer.processClick((int) e.getX(), (int) e.getY());
-					drawer.updateStatus();
+				if (bullScene.getDrawer() !=null) {
+					bullScene.getDrawer().processClick((int) e.getX(), (int) e.getY());
+					bullScene.getDrawer().updateStatus();
 				}
 			}
 		});
@@ -99,37 +122,38 @@ public class FourBulls extends Application {
 //              drawer.drawPositions();
         		Player player1 = new Player("Player 1", 2, BullColor.WHITE);
         		Player player2 = new Player("Player 2", 2, BullColor.BLACK);
-        		drawer = new Drawer(gc, new FourBullsGame(player1, player2, true));
-        		drawer.drawPositions();
-            	
+        		bullScene.setDrawer(new Drawer(new FourBullsGame(player1, player2, true)));
+        		bullScene.getDrawer().setGc(gc);
+        		bullScene.getDrawer().drawPositions();
             }
         };
 		
 		EventHandler<ActionEvent> undoHandler = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	if (drawer !=null) {
-            		drawer.undo();
-            		drawer.drawPositions();
+            	if (bullScene.getDrawer() !=null) {
+            		bullScene.getDrawer().undo();
+            		bullScene.getDrawer().drawPositions();
                 }
             }
         };
-		
-        mniNewGame.setOnAction(newHandler);
-        btnNew.setOnAction(newHandler);
-
-        mniUndo.setOnAction(undoHandler);
-        btnUndo.setOnAction(undoHandler);
         
         mniExit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	Platform.exit();
             }
         });
+
         
-		Group root = new Group();
-		Scene theScene = new Scene(root);
-		root.getChildren().add(containerBox);
-		theStage.setScene(theScene);
-		theStage.show();
+        mniNewGame.setOnAction(newHandler);
+        btnNew.setOnAction(newHandler);
+
+        mniUndo.setOnAction(undoHandler);
+        btnUndo.setOnAction(undoHandler);
 	}
+
+	@Override
+	public Scene getGui() {
+		return bullScene;
+	}
+
 }

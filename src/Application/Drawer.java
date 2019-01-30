@@ -35,13 +35,12 @@ public class Drawer {
 	private Position activePos = null;
 	private GraphicsContext gc;
 
-	Drawer(GraphicsContext gc, GameController game) {
+	Drawer(GameController game) {
 		this.game = game;
 		commandsExecuted = new Stack<Command>();
 		this.positions = game.getPositions();
-		this.gc = gc;
-		this.gc.setFill(FILL_COLOR);
-		this.gc.setLineWidth(LINE_WIDTH);
+		//this.gc.setFill(FILL_COLOR);
+		//this.gc.setLineWidth(LINE_WIDTH);
 	}
 
 	public void processClick(int x, int y) {
@@ -131,7 +130,7 @@ public class Drawer {
 			drawStatusText(game.getMessage());
 			// drawGameOver();
 		} else {
-			drawCurrentPlayer(game.getCurrent().getColor());
+			drawCurrentPlayers(game.getCurrent().getColor());
 			drawStatusText(game.getMessage());
 		}
 	}
@@ -139,9 +138,9 @@ public class Drawer {
 	private void drawStatusText(String text) {
 		// clear previous text
 		gc.setFill(BASE_COLOR);
-		gc.fillRoundRect(95, 645, 410, 30, 10, 10);
+		gc.fillRoundRect(145, 15, 310, 30, 10, 10);
 		gc.setFill(TEXT_COLOR);
-		gc.fillText(text, 100, 660, 400);
+		gc.fillText(text, 150, 30, 300);
 	}
 
 	private void drawGameOver() {
@@ -155,42 +154,39 @@ public class Drawer {
 		gc.fillText("Game is over", 230, 320, 400);
 	}
 
-	private void drawCurrentPlayer(BullColor color) {
-		String arrowLeftUrl = "resources/images/arrow_left.png";
-		String arrowRightUrl = "resources/images/arrow_right.png";
-
+	private void drawCurrentPlayers(BullColor color) {
+		
 		String whiteURL = "resources/images/bull_blue.jpg";
 		String blackURL = "resources/images/bull_purple.jpg";
-		Image imA;
+		
 		Image imB;
+		imB = new Image(whiteURL);
+		imB = new Image(blackURL);
+		gc.drawImage(imB, 300 - imB.getWidth() / 2 + 150, 600 - imB.getHeight() / 2);
+		gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
+		
+		String arrowLeftUrl = "resources/images/arrow_left.png";
+		String arrowRightUrl = "resources/images/arrow_right.png";
+		Image imA;
 
 		// Clear previous arrow
 		gc.setFill(BASE_COLOR);
-		int arrowBackSize = 70;
-		gc.fillRoundRect(300 - arrowBackSize / 2, 600 - arrowBackSize / 2, arrowBackSize, arrowBackSize, 20, 20);
+		int arrowBgSize = 90;
+		gc.fillRoundRect(300 - arrowBgSize / 2, 600 - arrowBgSize / 2, arrowBgSize, arrowBgSize, 20, 20);
 
 		if (color == BullColor.WHITE) {
 			imA = new Image(arrowLeftUrl);
-			imB = new Image(whiteURL);
 			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
-			gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
 		} else // if (game.getCurrent().getColor() == BullColor.WHITE)
 		{
 			imA = new Image(arrowRightUrl);
-			imB = new Image(blackURL);
 			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
-			gc.drawImage(imB, 300 - imB.getWidth() / 2 + 150, 600 - imB.getHeight() / 2);
 		}
-	}
-	
-	private void drawButtons(){
-//		gc.setFill(BUTTON_COLOR);
-//		gc.fillRoundRect(500, 300, 100, 50, 20, 20);
-//		gc.setFill(TEXT_COLOR);
-//		gc.fillText("Undo", 510, 310);
 	}
 
 	public void drawPositions() {
+		//this.gc.setFill(FILL_COLOR);
+		//this.gc.setLineWidth(LINE_WIDTH);
 		gc.setFill(BASE_COLOR);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
@@ -207,10 +203,9 @@ public class Drawer {
 			drawPos(pos, NORMAL_STROKE_COLOR);
 		}
 
-		drawCurrentPlayer(BullColor.BLACK);
-		drawCurrentPlayer(BullColor.WHITE);
-		
-		drawButtons();
+		drawCurrentPlayers(BullColor.BLACK);
+		drawCurrentPlayers(BullColor.WHITE);
+
 	}
 
 	private void drawPos(Position pos, Color strokColor) {
@@ -249,6 +244,14 @@ public class Drawer {
 
 	public void restartGame() {
 		game.restart();
+	}
+
+	public GraphicsContext getGc() {
+		return gc;
+	}
+
+	public void setGc(GraphicsContext gc) {
+		this.gc = gc;
 	}
 
 }

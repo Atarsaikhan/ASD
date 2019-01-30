@@ -78,31 +78,22 @@ public class FourBulls extends Application {
         AnchorPane.setRightAnchor(btnUndo, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
         controlsPane.getChildren().add(btnUndo);
-        
-		Group root = new Group();
-		Scene theScene = new Scene(root);
-		
-		root.getChildren().add(containerBox);
-		
-		theStage.setScene(theScene);
 		
 		Canvas canvas = new Canvas(600, 700);
-//		root.getChildren().add(canvas);
 		mainArea.getChildren().add(canvas);
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		// gc.drawImage(positions.get(0).getImage(), positions.get(0).getX(),
-		// positions.get(0).getY());
-
 		canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				drawer.processClick((int) e.getX(), (int) e.getY());
-				drawer.updateStatus();
+				if (drawer !=null) {
+					drawer.processClick((int) e.getX(), (int) e.getY());
+					drawer.updateStatus();
+				}
 			}
 		});
 		
-        mniNewGame.setOnAction(new EventHandler<ActionEvent>() {
+		EventHandler<ActionEvent> newHandler = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 //              drawer.restartGame();
 //              drawer.drawPositions();
@@ -112,14 +103,22 @@ public class FourBulls extends Application {
         		drawer.drawPositions();
             	
             }
-        });
-        
-        mniUndo.setOnAction(new EventHandler<ActionEvent>() {
+        };
+		
+		EventHandler<ActionEvent> undoHandler = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                drawer.undo();
-                drawer.drawPositions();
+            	if (drawer !=null) {
+            		drawer.undo();
+            		drawer.drawPositions();
+                }
             }
-        });
+        };
+		
+        mniNewGame.setOnAction(newHandler);
+        btnNew.setOnAction(newHandler);
+
+        mniUndo.setOnAction(undoHandler);
+        btnUndo.setOnAction(undoHandler);
         
         mniExit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -127,22 +126,10 @@ public class FourBulls extends Application {
             }
         });
         
-        btnUndo.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                drawer.undo();
-                drawer.drawPositions();
-            }
-        });
-        
-        btnNew.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-        		Player player1 = new Player("Player 1", 2, BullColor.WHITE);
-        		Player player2 = new Player("Player 2", 2, BullColor.BLACK);
-        		drawer = new Drawer(gc, new FourBullsGame(player1, player2, true));
-        		drawer.drawPositions();
-            }
-        });
-		
+		Group root = new Group();
+		Scene theScene = new Scene(root);
+		root.getChildren().add(containerBox);
+		theStage.setScene(theScene);
 		theStage.show();
 	}
 }

@@ -159,8 +159,8 @@ public class Drawer {
 		String arrowLeftUrl = "resources/images/arrow_left.png";
 		String arrowRightUrl = "resources/images/arrow_right.png";
 
-		String whiteURL = "resources/images/bull_white.png";
-		String blackURL = "resources/images/bull_black.png";
+		String whiteURL = "resources/images/bull_blue.jpg";
+		String blackURL = "resources/images/bull_purple.jpg";
 		Image imA;
 		Image imB;
 
@@ -193,6 +193,8 @@ public class Drawer {
 	public void drawPositions() {
 		gc.setFill(BASE_COLOR);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		gc.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
+		
 		gc.setStroke(NORMAL_STROKE_COLOR);
 		for (Position pos : positions) {
 			pos.setImage();

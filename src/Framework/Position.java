@@ -13,8 +13,8 @@ public abstract class Position {
 	protected BullColor color;
 	private List<Position> neighbors;
 	private Image image;
-	private String whiteURL = "resources/images/bull_white.png";
-	private String blackURL = "resources/images/bull_black.png";
+	private String whiteURL = "resources/images/bull_blue.jpg";
+	private String blackURL = "resources/images/bull_purple.jpg";
 
 	public int getX() {
 		return x;

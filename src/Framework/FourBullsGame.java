@@ -157,24 +157,28 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public boolean undoMove(int pos1, int pos2) {
-		return undoMove(positions.get(pos1), positions.get(pos2));
+	public boolean undoMove(int pos1, int pos2, GameState state) {
+		return undoMove(positions.get(pos1), positions.get(pos2), state);
 	}
 
 	@Override
-	public boolean undoMove(Position pos1, Position pos2) {
+	public boolean undoMove(Position pos1, Position pos2, GameState state) {
 		if (pos1.getColor().equals(BullColor.NONE)) {
-			this.gameState = GameState.ACTIVE;
-			this.message = "";
 			pos1.setColor(pos2.getColor());
 			pos2.setColor(BullColor.NONE);
 			this.totalMove--;
 
-			if (current == white)
-				current = black;
-			else
-				current = white;
+			if (this.gameState != GameState.GAMEOVER)
+				if (current == white)
+					current = black;
+				else
+					current = white;
 
+			this.gameState = state;
+			this.message = "";
+
+			System.out.println(current.getColor().toString());
+			
 			printBoard();
 			return true;
 		}
@@ -219,6 +223,25 @@ public class FourBullsGame implements GameController {
 			current.decPieces();
 			this.message = "";
 			this.gameState = GameState.ACTIVE;
+
+			if (current == white)
+				current = black;
+			else
+				current = white;
+			return true;
+		} else {
+			this.message = "Move not allowed";
+			return false;
+		}
+	}
+
+	@Override
+	public boolean undoCapture(Position pos, GameState state) {
+		if (pos.getColor().equals(BullColor.NONE)) {
+			pos.setColor(current.getColor());
+			current.incPieces();
+			this.message = "";
+			this.gameState = state;
 
 			if (current == white)
 				current = black;

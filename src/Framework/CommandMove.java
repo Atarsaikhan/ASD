@@ -1,9 +1,10 @@
 package Framework;
 
 public class CommandMove implements Command {
-	GameController game;
-	Position pos1;
-	Position pos2;
+	private GameController game;
+	private Position pos1;
+	private Position pos2;
+	private GameState state;
 
 	public Position getPos1() {
 		return pos1;
@@ -15,6 +16,7 @@ public class CommandMove implements Command {
 
 	public CommandMove(GameController game, Position pos1, Position pos2) {
 		this.game = game;
+		this.state = game.getGameState();
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 	}
@@ -26,7 +28,7 @@ public class CommandMove implements Command {
 
 	@Override
 	public boolean undo() {
-		return game.undoMove(pos1, pos2);
+		return game.undoMove(pos1, pos2, state);
 	}
 
 }

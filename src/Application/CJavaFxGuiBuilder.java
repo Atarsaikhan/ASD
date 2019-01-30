@@ -121,7 +121,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 			public void handle(MouseEvent e) {
 				if (bullScene.getDrawer() !=null) {
 					bullScene.getDrawer().processClick((int) e.getX(), (int) e.getY());
-					bullScene.getDrawer().updateStatus();
+					bullScene.getDrawer().renderStatus();
 				}
 			}
 		});

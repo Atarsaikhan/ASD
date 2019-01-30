@@ -20,7 +20,7 @@ public interface IDrawer {
 	public void processMove(int x, int y);
 	public boolean move(APosition pos1, APosition pos2);
 	public boolean undo();
-	public void updateStatus();
+	public void renderStatus();
 	public void drawStatusText(String text);
 	public void drawGameOver();
 	public void drawCurrentPlayers(EBullColor color);

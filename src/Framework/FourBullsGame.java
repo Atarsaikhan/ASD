@@ -238,15 +238,15 @@ public class FourBullsGame implements GameController {
 	@Override
 	public boolean undoCapture(Position pos, GameState state) {
 		if (pos.getColor().equals(BullColor.NONE)) {
+			if (current == white)
+				current = black;
+			else
+				current = white;
 			pos.setColor(current.getColor());
 			current.incPieces();
 			this.message = "";
 			this.gameState = state;
 
-			if (current == white)
-				current = black;
-			else
-				current = white;
 			return true;
 		} else {
 			this.message = "Move not allowed";

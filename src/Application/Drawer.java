@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import Framework.BullColor;
 import Framework.Command;
-import Framework.FourBullsGame;
+import Framework.CommandCapture;
 import Framework.GameController;
 import Framework.GameState;
 import Framework.CommandMove;
@@ -20,13 +20,14 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class Drawer {
-	private final int P_SIZE = 100;
-	private final Color FILL_COLOR = Color.WHITE;
-	private final Color BASE_COLOR = Color.CORNSILK;
-	private final Color TEXT_COLOR = Color.RED;
-	private final Color NORMAL_STROKE_COLOR = Color.BLACK;
-	private final Color ACTIVE_STROKE_COLOR = Color.YELLOW;
-	private final int LINE_WIDTH = 5;
+	private static final int P_SIZE = 100;
+	private static final Color FILL_COLOR = Color.WHITE;
+	private static final Color BASE_COLOR = Color.CORNSILK;
+	private static final Color TEXT_COLOR = Color.RED;
+	private static final Color BUTTON_COLOR = Color.MEDIUMTURQUOISE;
+	private static final Color NORMAL_STROKE_COLOR = Color.BLACK;
+	private static final Color ACTIVE_STROKE_COLOR = Color.YELLOW;
+	private static final int LINE_WIDTH = 5;
 
 	private GameController game;
 	private Stack<Command> commandsExecuted;
@@ -55,8 +56,12 @@ public class Drawer {
 		for (Position pos : positions) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2 && pos.getColor() == game.getCurrent().getColor()) {
-					game.capture(pos);
-					drawPos(pos, NORMAL_STROKE_COLOR);
+				
+				Command cmd = new CommandCapture(game, pos);
+				if (cmd.execute()) {
+						this.commandsExecuted.push(cmd);
+						drawPos(pos, NORMAL_STROKE_COLOR);
+					}
 				}
 			}
 	}
@@ -111,9 +116,13 @@ public class Drawer {
 			ret = cmd.undo();
 			this.drawPos(cmd.getPos1(), NORMAL_STROKE_COLOR);
 			this.drawPos(cmd.getPos2(), NORMAL_STROKE_COLOR);
+			this.updateStatus();
+			System.out.println(cmd.getPos1().getId() + "|"+cmd.getPos1().getColor());
+			System.out.println(cmd.getPos2().getId() + "|"+cmd.getPos2().getColor());
 		}
 		return ret;
 	}
+
 	public void updateStatus() {
 		if (game.getGameState() == GameState.GAMEOVER) {
 			drawStatusText(game.getMessage());
@@ -173,8 +182,17 @@ public class Drawer {
 			gc.drawImage(imB, 300 - imB.getWidth() / 2 + 150, 600 - imB.getHeight() / 2);
 		}
 	}
+	
+	private void drawButtons(){
+//		gc.setFill(BUTTON_COLOR);
+//		gc.fillRoundRect(500, 300, 100, 50, 20, 20);
+//		gc.setFill(TEXT_COLOR);
+//		gc.fillText("Undo", 510, 310);
+	}
 
 	public void drawPositions() {
+		gc.setFill(BASE_COLOR);
+		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setStroke(NORMAL_STROKE_COLOR);
 		for (Position pos : positions) {
 			pos.setImage();
@@ -189,6 +207,8 @@ public class Drawer {
 
 		drawCurrentPlayer(BullColor.BLACK);
 		drawCurrentPlayer(BullColor.WHITE);
+		
+		drawButtons();
 	}
 
 	private void drawPos(Position pos, Color strokColor) {

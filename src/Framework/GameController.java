@@ -4,8 +4,10 @@ import java.util.List;
 
 public interface GameController {
 	public abstract boolean move(Position pos1, Position pos2);
+	public abstract boolean undoMove(Position pos1, Position pos2);
 
 	public abstract boolean move(int pos1, int pos2);
+	public abstract boolean undoMove(int pos1, int pos2);
 
 	public abstract boolean validate(Position pos1, Position pos2);
 

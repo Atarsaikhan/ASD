@@ -31,12 +31,14 @@ public class FourBulls extends Application {
         Menu m = new Menu("Menu"); 
   
         // create menuitems 
-        MenuItem mniNewGame = new MenuItem("New game"); 
+        MenuItem mnuNewGame = new MenuItem("New game"); 
+        MenuItem mnuUndo = new MenuItem("Undo"); 
         MenuItem m2 = new MenuItem("Edit"); 
         MenuItem m3 = new MenuItem("Options"); 
   
         // add menu items to menu 
-        m.getItems().add(mniNewGame); 
+        m.getItems().add(mnuNewGame); 
+        m.getItems().add(mnuUndo); 
         m.getItems().add(m2); 
         m.getItems().add(m3); 
   
@@ -47,10 +49,16 @@ public class FourBulls extends Application {
         mb.getMenus().add(m); 
 
         
-        mniNewGame.setOnAction(new EventHandler<ActionEvent>() {
+        mnuNewGame.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 drawer.restartGame();
                 drawer.drawPositions();
+            }
+        });
+        
+        mnuUndo.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                drawer.undo();
             }
         });
         

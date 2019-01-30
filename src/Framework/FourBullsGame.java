@@ -157,6 +157,33 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
+	public boolean undoMove(int pos1, int pos2) {
+		return undoMove(positions.get(pos1), positions.get(pos2));
+	}
+
+	@Override
+	public boolean undoMove(Position pos1, Position pos2) {
+		if (pos1.getColor().equals(BullColor.NONE)) {
+			this.gameState = GameState.ACTIVE;
+			this.message = "";
+			pos1.setColor(pos2.getColor());
+			pos2.setColor(BullColor.NONE);
+			this.totalMove--;
+
+			if (current == white)
+				current = black;
+			else
+				current = white;
+
+			printBoard();
+			return true;
+		}
+		message = "Undo not allowed!";
+		System.out.println(message);
+		return false;
+	}
+
+	@Override
 	public boolean validate(Position pos1, Position pos2) {
 		if (pos2.getColor() != BullColor.NONE || pos1.getColor() != current.getColor())
 			return false;

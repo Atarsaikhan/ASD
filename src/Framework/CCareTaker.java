@@ -3,7 +3,7 @@ package Framework;
 import java.util.ArrayList;
 import java.util.List;
 
-class CareTaker {
+class CCareTaker {
 	
 	private List<Memento> mementoList = new ArrayList<Memento>();
 

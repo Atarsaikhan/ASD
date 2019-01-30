@@ -1,21 +1,14 @@
 package Framework;
 
-import java.util.List;
-
-import Framework.GameController;
-import Framework.Player;
-import Framework.Position;
-
-
 class Memento {
-	private GameController gameSnapshot;
+	private IGameController gameSnapshot;
 	
-	public Memento(GameController gameSnapshot) {
+	public Memento(IGameController gameSnapshot) {
 		this.gameSnapshot = gameSnapshot;
 	
 	}
 
-	public GameController getGameSnapshot() {
+	public IGameController getGameSnapshot() {
 		return gameSnapshot;
 	}
 }

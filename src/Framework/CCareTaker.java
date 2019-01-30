@@ -5,13 +5,13 @@ import java.util.List;
 
 class CCareTaker {
 	
-	private List<Memento> mementoList = new ArrayList<Memento>();
+	private List<CMemento> mementoList = new ArrayList<CMemento>();
 
-	void add(Memento game) {
+	void add(CMemento game) {
 		mementoList.add(game);
 	}
 
-	Memento get(int index) {
+	CMemento get(int index) {
 		return mementoList.get(index);
 	}
 }

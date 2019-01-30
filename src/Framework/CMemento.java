@@ -1,9 +1,9 @@
 package Framework;
 
-class Memento {
+class CMemento {
 	private IGameController gameSnapshot;
 	
-	public Memento(IGameController gameSnapshot) {
+	public CMemento(IGameController gameSnapshot) {
 		this.gameSnapshot = gameSnapshot;
 	
 	}

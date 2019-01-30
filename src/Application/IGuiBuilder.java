@@ -2,7 +2,7 @@ package Application;
 
 import javafx.scene.Scene;
 
-public interface GuiBuilder {
+public interface IGuiBuilder {
 	
 	public void buildPlayer(String playerName1, String playerName2);
 

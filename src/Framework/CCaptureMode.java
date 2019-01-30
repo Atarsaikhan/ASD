@@ -2,22 +2,22 @@ package Framework;
 
 import java.util.List;
 
-public class CaptureMode implements GameMode {
+public class CCaptureMode implements IGameMode {
 	private String message;
 
 	@Override
-	public GameState changeState(List<Position> positions, Player current) {
-		GameState temp = GameState.NOMOVE;
+	public EGameState changeState(List<APosition> positions, CPlayer current) {
+		EGameState temp = EGameState.NOMOVE;
 		this.message = "No move!";
-		for (Position pos : positions) {
+		for (APosition pos : positions) {
 			if (pos.getColor().equals(current.getColor()) && pos.isMovable()) {
-				temp = GameState.ACTIVE;
+				temp = EGameState.ACTIVE;
 				this.message = "";
 				return temp;
 			}
 		}
 		if (current.getCurrentPieces() < 2)
-			temp = GameState.GAMEOVER;
+			temp = EGameState.GAMEOVER;
 		
 		return temp;
 	}

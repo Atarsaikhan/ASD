@@ -1,23 +1,9 @@
 package Application;
 
-import java.util.List;
-import java.util.Stack;
-
-import Framework.BullColor;
-import Framework.Command;
-import Framework.CommandCapture;
-import Framework.CommandMove;
-import Framework.GameController;
-import Framework.GameState;
-import Framework.Position;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import Framework.APosition;
+import Framework.EBullColor;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 public interface IDrawer {
 	static final int P_SIZE = 100;
@@ -32,15 +18,15 @@ public interface IDrawer {
 	public void processClick(int x, int y);
 	public void processCapture(int x, int y);
 	public void processMove(int x, int y);
-	public boolean move(Position pos1, Position pos2);
+	public boolean move(APosition pos1, APosition pos2);
 	public boolean undo();
 	public void updateStatus();
 	public void drawStatusText(String text);
 	public void drawGameOver();
-	public void drawCurrentPlayers(BullColor color);
+	public void drawCurrentPlayers(EBullColor color);
 	public void drawPositions();
-	public void drawPos(Position pos, Color strokColor);
-	public void animatePos(Position pos);
+	public void drawPos(APosition pos, Color strokColor);
+	public void animatePos(APosition pos);
 	public void restartGame();
 	public GraphicsContext getGc();
 	public void setGc(GraphicsContext gc);

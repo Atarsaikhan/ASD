@@ -1,8 +1,8 @@
 package Application;
 
-import Framework.BullColor;
-import Framework.FourBullsGame;
-import Framework.Player;
+import Framework.EBullColor;
+import Framework.CFourBullsGame;
+import Framework.CPlayer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,8 +19,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class JavaFxGuiBuilder implements GuiBuilder {
-	GameScene bullScene;
+public class CJavaFxGuiBuilder implements IGuiBuilder {
+	CGameScene bullScene;
     MenuItem mniNewGame = new MenuItem("New game"); 
     MenuItem mniUndo = new MenuItem("Undo"); 
     MenuItem m2 = new MenuItem("Edit"); 
@@ -31,18 +31,18 @@ public class JavaFxGuiBuilder implements GuiBuilder {
     Canvas canvas = new Canvas(600, 700);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 	
-	JavaFxGuiBuilder(){
-		bullScene = new GameScene(new Group());
+	CJavaFxGuiBuilder(){
+		bullScene = new CGameScene(new Group());
 	}
 	
 	public void buildPlayer(String playerName1, String playerName2) {
-		bullScene.setPlayer1(new Player(playerName1, 2, BullColor.WHITE));
-		bullScene.setPlayer2(new Player(playerName1, 2, BullColor.BLACK));
+		bullScene.setPlayer1(new CPlayer(playerName1, 2, EBullColor.WHITE));
+		bullScene.setPlayer2(new CPlayer(playerName1, 2, EBullColor.BLACK));
 	}
 
 	@Override
 	public void initGameControl() {
-		bullScene.setDrawer( new Drawer(new FourBullsGame(bullScene.getPlayer1(), bullScene.getPlayer2(), true)) );
+		bullScene.setDrawer( new CDrawer(new CFourBullsGame(bullScene.getPlayer1(), bullScene.getPlayer2(), true)) );
 	}
 
 	@Override
@@ -120,9 +120,9 @@ public class JavaFxGuiBuilder implements GuiBuilder {
             public void handle(ActionEvent t) {
 //              drawer.restartGame();
 //              drawer.drawPositions();
-        		Player player1 = new Player("Player 1", 2, BullColor.WHITE);
-        		Player player2 = new Player("Player 2", 2, BullColor.BLACK);
-        		bullScene.setDrawer(new Drawer(new FourBullsGame(player1, player2, true)));
+        		CPlayer player1 = new CPlayer("Player 1", 2, EBullColor.WHITE);
+        		CPlayer player2 = new CPlayer("Player 2", 2, EBullColor.BLACK);
+        		bullScene.setDrawer(new CDrawer(new CFourBullsGame(player1, player2, true)));
         		bullScene.getDrawer().setGc(gc);
         		bullScene.getDrawer().drawPositions();
             }

@@ -1,19 +1,19 @@
 package Framework;
 
-public class CommandCapture implements Command {
-	private GameController game;
-	private Position pos;
-	private GameState state;
+public class CCmdCapture implements ICommand {
+	private IGameController game;
+	private APosition pos;
+	private EGameState state;
 
-	public Position getPos1() {
+	public APosition getPos1() {
 		return pos;
 	}
 
-	public Position getPos2() {
+	public APosition getPos2() {
 		return pos;
 	}
 
-	public CommandCapture(GameController game, Position pos) {
+	public CCmdCapture(IGameController game, APosition pos) {
 		this.game = game;
 		this.state = game.getGameState();
 		this.pos = pos;

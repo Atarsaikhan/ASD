@@ -2,9 +2,9 @@ package Application;
 
 import javafx.scene.Scene;
 
-public class GuiDirector {
-	private GuiBuilder guiBuilder;
-	public GuiDirector(GuiBuilder guiBuilder) {
+public class CGuiDirector {
+	private IGuiBuilder guiBuilder;
+	public CGuiDirector(IGuiBuilder guiBuilder) {
 		this.guiBuilder = guiBuilder;
 	}
 

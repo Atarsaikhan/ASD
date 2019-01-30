@@ -1,11 +1,11 @@
 package Framework;
 
-public class Player {
+public class CPlayer {
 	private String name;
 	private int defaultPieces;
 	private int currentPieces;
-	private BullColor color;
-	private GameState state;
+	private EBullColor color;
+	private EGameState state;
 	private int moves;
 
 	public int getMoves() {
@@ -24,11 +24,11 @@ public class Player {
 		return name;
 	}
 
-	public GameState getState() {
+	public EGameState getState() {
 		return state;
 	}
 
-	public void setState(GameState state) {
+	public void setState(EGameState state) {
 		this.state = state;
 	}
 
@@ -48,11 +48,11 @@ public class Player {
 		currentPieces--;
 	}
 	
-	public BullColor getColor() {
+	public EBullColor getColor() {
 		return color;
 	}
 
-	public Player(String name, int pieces, BullColor color) {
+	public CPlayer(String name, int pieces, EBullColor color) {
 		super();
 		this.name = name;
 		this.defaultPieces = pieces;
@@ -62,7 +62,7 @@ public class Player {
 
 	public void reset() {
 		this.currentPieces = this.defaultPieces;
-		this.state = GameState.ACTIVE;
+		this.state = EGameState.ACTIVE;
 		this.moves = 0;
 	}
 

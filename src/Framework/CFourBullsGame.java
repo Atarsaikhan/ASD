@@ -3,13 +3,13 @@ package Framework;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FourBullsGame implements GameController {
-	private GameState gameState;
-	private GameMode gameMode;
-	private Player current;
-	private Player white;
-	private Player black;
-	private List<Position> positions;
+public class CFourBullsGame implements IGameController {
+	private EGameState gameState;
+	private IGameMode gameMode;
+	private CPlayer current;
+	private CPlayer white;
+	private CPlayer black;
+	private List<APosition> positions;
 	private String message;
 	private int totalMove;
 
@@ -17,7 +17,7 @@ public class FourBullsGame implements GameController {
 		return totalMove;
 	}
 
-	public Player getCurrent() {
+	public CPlayer getCurrent() {
 		return current;
 	}
 
@@ -25,31 +25,31 @@ public class FourBullsGame implements GameController {
 		return message;
 	}
 
-	public GameState getGameState() {
+	public EGameState getGameState() {
 		return gameState;
 	}
 
-	public List<Position> getPositions() {
+	public List<APosition> getPositions() {
 		return positions;
 	}
 
-	public FourBullsGame(boolean isCaptureGame) {
-		this(new Player("Player1", 2, BullColor.WHITE), new Player("Player2", 2, BullColor.BLACK), isCaptureGame);
+	public CFourBullsGame(boolean isCaptureGame) {
+		this(new CPlayer("Player1", 2, EBullColor.WHITE), new CPlayer("Player2", 2, EBullColor.BLACK), isCaptureGame);
 	}
 
-	public FourBullsGame() {
-		this(new Player("Player1", 2, BullColor.WHITE), new Player("Player2", 2, BullColor.BLACK), false);
+	public CFourBullsGame() {
+		this(new CPlayer("Player1", 2, EBullColor.WHITE), new CPlayer("Player2", 2, EBullColor.BLACK), false);
 	}
 
-	public FourBullsGame(Player white, Player black) {
+	public CFourBullsGame(CPlayer white, CPlayer black) {
 		this(white, black, false);
 	}
 
-	public FourBullsGame(Player white, Player black, boolean isCaptureGame) {
+	public CFourBullsGame(CPlayer white, CPlayer black, boolean isCaptureGame) {
 		if (isCaptureGame)
-			this.gameMode = new CaptureMode();
+			this.gameMode = new CCaptureMode();
 		else
-			this.gameMode = new NoCaptureMode();
+			this.gameMode = new CNonCaptureMode();
 
 		this.white = white;
 		this.black = black;
@@ -61,11 +61,11 @@ public class FourBullsGame implements GameController {
 	private void initPositions() {
 
 		positions = new ArrayList<>();
-		Position pos0 = new PositionImpl(0, 100, 100, BullColor.WHITE);
-		Position pos1 = new PositionImpl(1, 500, 100, BullColor.BLACK);
-		Position pos2 = new PositionImpl(2, 300, 300, BullColor.NONE);
-		Position pos3 = new PositionImpl(3, 100, 500, BullColor.BLACK);
-		Position pos4 = new PositionImpl(4, 500, 500, BullColor.WHITE);
+		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE);
+		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK);
+		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE);
+		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK);
+		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE);
 
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
@@ -95,18 +95,18 @@ public class FourBullsGame implements GameController {
 	}
 
 	public void restart() {
-		this.gameState = GameState.ACTIVE;
+		this.gameState = EGameState.ACTIVE;
 		this.message = "";
 
 		this.current = white;
 		white.reset();
 		black.reset();
 
-		positions.get(0).setColor(BullColor.WHITE);
-		positions.get(1).setColor(BullColor.BLACK);
-		positions.get(2).setColor(BullColor.NONE);
-		positions.get(3).setColor(BullColor.BLACK);
-		positions.get(4).setColor(BullColor.WHITE);
+		positions.get(0).setColor(EBullColor.WHITE);
+		positions.get(1).setColor(EBullColor.BLACK);
+		positions.get(2).setColor(EBullColor.NONE);
+		positions.get(3).setColor(EBullColor.BLACK);
+		positions.get(4).setColor(EBullColor.WHITE);
 
 		printBoard();
 	}
@@ -123,16 +123,11 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public boolean move(int pos1, int pos2) {
-		return move(positions.get(pos1), positions.get(pos2));
-	}
-
-	@Override
-	public boolean move(Position pos1, Position pos2) {
+	public boolean move(APosition pos1, APosition pos2) {
 		if (validate(pos1, pos2)) {
 			this.message = "";
 			pos2.setColor(pos1.getColor());
-			pos1.setColor(BullColor.NONE);
+			pos1.setColor(EBullColor.NONE);
 			this.totalMove++;
 
 			if (current == white)
@@ -142,7 +137,7 @@ public class FourBullsGame implements GameController {
 
 			changeState();
 
-			if (this.gameState == GameState.GAMEOVER) // set Winner back to current
+			if (this.gameState == EGameState.GAMEOVER) // set Winner back to current
 				if (current == white)
 					current = black;
 				else
@@ -157,18 +152,13 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public boolean undoMove(int pos1, int pos2, GameState state) {
-		return undoMove(positions.get(pos1), positions.get(pos2), state);
-	}
-
-	@Override
-	public boolean undoMove(Position pos1, Position pos2, GameState state) {
-		if (pos1.getColor().equals(BullColor.NONE)) {
+	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
+		if (pos1.getColor().equals(EBullColor.NONE)) {
 			pos1.setColor(pos2.getColor());
-			pos2.setColor(BullColor.NONE);
+			pos2.setColor(EBullColor.NONE);
 			this.totalMove--;
 
-			if (this.gameState != GameState.GAMEOVER)
+			if (this.gameState != EGameState.GAMEOVER)
 				if (current == white)
 					current = black;
 				else
@@ -187,28 +177,26 @@ public class FourBullsGame implements GameController {
 		return false;
 	}
 
-	@Override
-	public boolean validate(Position pos1, Position pos2) {
-		if (pos2.getColor() != BullColor.NONE || pos1.getColor() != current.getColor())
+	public boolean validate(APosition pos1, APosition pos2) {
+		if (pos2.getColor() != EBullColor.NONE || pos1.getColor() != current.getColor())
 			return false;
 		else {
 			return pos1.isNeighbor(pos2);
 		}
 	}
 
-	@Override
 	public void changeState() {
 		this.gameState = this.gameMode.changeState(positions, current);
 		this.message = this.gameMode.getMessage();
 	}
 
 	@Override
-	public boolean capture(Position pos) {
+	public boolean capture(APosition pos) {
 		if (pos.getColor().equals(current.getColor())) {
-			pos.setColor(BullColor.NONE);
+			pos.setColor(EBullColor.NONE);
 			current.decPieces();
 			this.message = "";
-			this.gameState = GameState.ACTIVE;
+			this.gameState = EGameState.ACTIVE;
 
 			if (current == white)
 				current = black;
@@ -222,8 +210,8 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public boolean undoCapture(Position pos, GameState state) {
-		if (pos.getColor().equals(BullColor.NONE)) {
+	public boolean undoCapture(APosition pos, EGameState state) {
+		if (pos.getColor().equals(EBullColor.NONE)) {
 			if (current == white)
 				current = black;
 			else

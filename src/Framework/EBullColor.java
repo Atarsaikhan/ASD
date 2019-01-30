@@ -1,11 +1,11 @@
 package Framework;
 
-public enum BullColor {
+public enum EBullColor {
 	WHITE("0"), BLACK("X"), NONE("?"); //buudal
 	
 	private String color;
 
-	BullColor(String color) {
+	EBullColor(String color) {
 		this.color = color;
 	}
 	

@@ -3,13 +3,13 @@ package Application;
 import java.util.List;
 import java.util.Stack;
 
-import Framework.BullColor;
-import Framework.Command;
-import Framework.CommandCapture;
-import Framework.GameController;
-import Framework.GameState;
-import Framework.CommandMove;
-import Framework.Position;
+import Framework.EBullColor;
+import Framework.ICommand;
+import Framework.CCmdCapture;
+import Framework.IGameController;
+import Framework.EGameState;
+import Framework.CCmdMove;
+import Framework.APosition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -19,36 +19,36 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class Drawer implements IDrawer {
+public class CDrawer implements IDrawer {
 
-	private GameController game;
-	private Stack<Command> commandsExecuted;
-	private List<Position> positions;
-	private Position activePos = null;
+	private IGameController game;
+	private Stack<ICommand> commandsExecuted;
+	private List<APosition> positions;
+	private APosition activePos = null;
 	private GraphicsContext gc;
 
-	Drawer(GameController game) {
+	CDrawer(IGameController game) {
 		this.game = game;
-		commandsExecuted = new Stack<Command>();
+		commandsExecuted = new Stack<ICommand>();
 		this.positions = game.getPositions();
 		//this.gc.setFill(FILL_COLOR);
 		//this.gc.setLineWidth(LINE_WIDTH);
 	}
 
 	public void processClick(int x, int y) {
-		if (game.getGameState() == GameState.ACTIVE) {
+		if (game.getGameState() == EGameState.ACTIVE) {
 			processMove(x, y);
-		} else if (game.getGameState() == GameState.NOMOVE) {
+		} else if (game.getGameState() == EGameState.NOMOVE) {
 			processCapture(x, y);
 		}
 	}
 
 	public void processCapture(int x, int y) {
-		for (Position pos : positions) {
+		for (APosition pos : positions) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2 && pos.getColor() == game.getCurrent().getColor()) {
 				
-				Command cmd = new CommandCapture(game, pos);
+				ICommand cmd = new CCmdCapture(game, pos);
 				if (cmd.execute()) {
 						this.commandsExecuted.push(cmd);
 						drawPos(pos, NORMAL_STROKE_COLOR);
@@ -58,10 +58,10 @@ public class Drawer implements IDrawer {
 	}
 
 	public void processMove(int x, int y) {
-		for (Position pos : positions) {
+		for (APosition pos : positions) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2) {
-				if (pos.getColor() != BullColor.NONE) { // activate
+				if (pos.getColor() != EBullColor.NONE) { // activate
 
 					if (activePos != null) {
 						drawPos(activePos, NORMAL_STROKE_COLOR);
@@ -90,9 +90,9 @@ public class Drawer implements IDrawer {
 
 	}
 
-	public boolean move(Position pos1, Position pos2) {
+	public boolean move(APosition pos1, APosition pos2) {
 		boolean ret = false;
-		Command cmd = new CommandMove(game, pos1, pos2);
+		ICommand cmd = new CCmdMove(game, pos1, pos2);
 		ret = cmd.execute();
 		if (ret)
 			this.commandsExecuted.push(cmd);
@@ -103,7 +103,7 @@ public class Drawer implements IDrawer {
 		boolean ret = false;
 		System.out.println("Undo");
 		if (!this.commandsExecuted.isEmpty()) {
-			Command cmd = this.commandsExecuted.pop();
+			ICommand cmd = this.commandsExecuted.pop();
 			ret = cmd.undo();
 			this.drawPos(cmd.getPos1(), NORMAL_STROKE_COLOR);
 			this.drawPos(cmd.getPos2(), NORMAL_STROKE_COLOR);
@@ -115,10 +115,10 @@ public class Drawer implements IDrawer {
 	}
 
 	public void updateStatus() {
-		if (game.getGameState() == GameState.GAMEOVER) {
+		if (game.getGameState() == EGameState.GAMEOVER) {
 			drawStatusText(game.getMessage());
 			drawGameOver();
-		} else if (game.getGameState() == GameState.NOMOVE) {
+		} else if (game.getGameState() == EGameState.NOMOVE) {
 			drawStatusText(game.getMessage());
 			// drawGameOver();
 		} else {
@@ -139,14 +139,14 @@ public class Drawer implements IDrawer {
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
 		gc.setFill(TEXT_COLOR);
-		if (game.getCurrent().getColor() == BullColor.BLACK)
+		if (game.getCurrent().getColor() == EBullColor.BLACK)
 			gc.fillText("Black won", 230, 300, 400);
 		else
 			gc.fillText("White won", 230, 300, 400);
 		gc.fillText("Game is over", 230, 320, 400);
 	}
 
-	public void drawCurrentPlayers(BullColor color) {
+	public void drawCurrentPlayers(EBullColor color) {
 		
 		String whiteURL = "resources/images/bull_blue.jpg";
 		String blackURL = "resources/images/bull_purple.jpg";
@@ -166,7 +166,7 @@ public class Drawer implements IDrawer {
 		int arrowBgSize = 90;
 		gc.fillRoundRect(300 - arrowBgSize / 2, 600 - arrowBgSize / 2, arrowBgSize, arrowBgSize, 20, 20);
 
-		if (color == BullColor.WHITE) {
+		if (color == EBullColor.WHITE) {
 			imA = new Image(arrowLeftUrl);
 			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
 		} else // if (game.getCurrent().getColor() == BullColor.WHITE)
@@ -184,28 +184,28 @@ public class Drawer implements IDrawer {
 		gc.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
 		
 		gc.setStroke(NORMAL_STROKE_COLOR);
-		for (Position pos : positions) {
+		for (APosition pos : positions) {
 			pos.setImage();
-			for (Position neighbor : pos.getNeighbors()) {
+			for (APosition neighbor : pos.getNeighbors()) {
 				gc.strokeLine(pos.getX(), pos.getY(), neighbor.getX(), neighbor.getY());
 			}
 		}
 
-		for (Position pos : positions) {
+		for (APosition pos : positions) {
 			drawPos(pos, NORMAL_STROKE_COLOR);
 		}
 
-		drawCurrentPlayers(BullColor.BLACK);
-		drawCurrentPlayers(BullColor.WHITE);
+		drawCurrentPlayers(EBullColor.BLACK);
+		drawCurrentPlayers(EBullColor.WHITE);
 
 	}
 
-	public void drawPos(Position pos, Color strokColor) {
+	public void drawPos(APosition pos, Color strokColor) {
 		gc.setStroke(strokColor);
 		gc.setFill(FILL_COLOR);
 		gc.fillOval(pos.getX() - P_SIZE / 2, pos.getY() - P_SIZE / 2, P_SIZE, P_SIZE);
 		gc.strokeOval(pos.getX() - P_SIZE / 2, pos.getY() - P_SIZE / 2, P_SIZE, P_SIZE);
-		if (pos.getColor() != BullColor.NONE) {
+		if (pos.getColor() != EBullColor.NONE) {
 			pos.setImage();
 			int w = (int) (pos.getImage().getWidth() / 2);
 			int h = (int) (pos.getImage().getHeight() / 2);
@@ -213,7 +213,7 @@ public class Drawer implements IDrawer {
 		}
 	}
 
-	public void animatePos(Position pos) {
+	public void animatePos(APosition pos) {
 		Color colors[] = { ACTIVE_STROKE_COLOR, NORMAL_STROKE_COLOR };
 		Timeline gameLoop = new Timeline();
 		gameLoop.setCycleCount(15);

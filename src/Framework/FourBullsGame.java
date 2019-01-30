@@ -5,17 +5,13 @@ import java.util.List;
 
 public class FourBullsGame implements GameController {
 	private GameState gameState;
-	private boolean isCaptureGame;
+	private GameMode gameMode;
 	private Player current;
 	private Player white;
 	private Player black;
 	private List<Position> positions;
 	private String message;
 	private int totalMove;
-
-	public boolean isCaptureGame() {
-		return isCaptureGame;
-	}
 
 	public int getTotalMove() {
 		return totalMove;
@@ -50,7 +46,11 @@ public class FourBullsGame implements GameController {
 	}
 
 	public FourBullsGame(Player white, Player black, boolean isCaptureGame) {
-		this.isCaptureGame = isCaptureGame;
+		if (isCaptureGame)
+			this.gameMode = new CaptureMode();
+		else
+			this.gameMode = new NoCaptureMode();
+
 		this.white = white;
 		this.black = black;
 
@@ -140,7 +140,7 @@ public class FourBullsGame implements GameController {
 			else
 				current = white;
 
-			check();
+			changeState();
 
 			if (this.gameState == GameState.GAMEOVER) // set Winner back to current
 				if (current == white)
@@ -178,7 +178,7 @@ public class FourBullsGame implements GameController {
 			this.message = "";
 
 			System.out.println(current.getColor().toString());
-			
+
 			printBoard();
 			return true;
 		}
@@ -197,23 +197,9 @@ public class FourBullsGame implements GameController {
 	}
 
 	@Override
-	public void check() {
-		GameState temp = GameState.NOMOVE;
-		for (Position pos : positions) {
-			if (pos.getColor().equals(current.getColor()) && pos.isMovable()) {
-				temp = GameState.ACTIVE;
-				break;
-			}
-		}
-		if (temp.equals(GameState.NOMOVE))
-			if (current.getCurrentPieces() > 1 && this.isCaptureGame) {
-				this.message = "No move!";
-				this.gameState = GameState.NOMOVE;
-			} else {
-				this.gameState = GameState.GAMEOVER;
-				this.message = "Game over!";
-			}
-
+	public void changeState() {
+		this.gameState = this.gameMode.changeState(positions, current);
+		this.message = this.gameMode.getMessage();
 	}
 
 	@Override

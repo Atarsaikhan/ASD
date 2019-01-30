@@ -14,7 +14,7 @@ public interface GameController {
 	public abstract boolean capture(Position pos);
 	public abstract boolean undoCapture(Position pos, GameState state);
 
-	public abstract void check();
+	public abstract void changeState();
 
 	public abstract List<Position> getPositions();
 

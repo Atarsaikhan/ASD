@@ -227,4 +227,16 @@ public class CFourBullsGame implements IGameController {
 			return false;
 		}
 	}
+
+	@Override
+	public void timeExpire() {
+		this.message = "Time is espired!";
+		this.gameState = EGameState.GAMEOVER;
+
+		if (current == white)
+			current = black;
+		else
+			current = white;
+		
+	}
 }

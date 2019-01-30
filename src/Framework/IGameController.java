@@ -18,4 +18,6 @@ public interface IGameController {
 	public abstract String getMessage();
 
 	public abstract void restart();
+	
+	public abstract void timeExpire();
 }

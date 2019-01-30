@@ -34,14 +34,14 @@ public class FourBulls extends Application {
         Menu m = new Menu("Menu"); 
   
         // create menuitems 
-        MenuItem mnuNewGame = new MenuItem("New game"); 
-        MenuItem mnuUndo = new MenuItem("Undo"); 
+        MenuItem mniNewGame = new MenuItem("New game"); 
+        MenuItem mniUndo = new MenuItem("Undo"); 
         MenuItem m2 = new MenuItem("Edit"); 
         MenuItem mniExit = new MenuItem("Exit"); 
   
         // add menu items to menu 
-        m.getItems().add(mnuNewGame); 
-        m.getItems().add(mnuUndo); 
+        m.getItems().add(mniNewGame); 
+        m.getItems().add(mniUndo); 
         m.getItems().add(m2); 
         m.getItems().add(mniExit); 
   
@@ -51,13 +51,6 @@ public class FourBulls extends Application {
         // add menu to menubar 
         mb.getMenus().add(m); 
         
-        mnuNewGame.setOnAction(new EventHandler<ActionEvent>() {
-            }
-        });
-        
-        mnuUndo.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                drawer.undo();
         // create a VBox 
         VBox topBar = new VBox(mb); 
         VBox containerBox = new VBox(mb); 
@@ -89,6 +82,12 @@ public class FourBulls extends Application {
             	
                 drawer.restartGame();
                 drawer.drawPositions();
+            }
+        });
+        
+        mniUndo.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                drawer.undo();
             }
         });
         

@@ -110,14 +110,14 @@ public class CDrawer implements IDrawer, IObserver {
 			ret = cmd.undo();
 			this.drawPos(cmd.getPos1(), NORMAL_STROKE_COLOR);
 			this.drawPos(cmd.getPos2(), NORMAL_STROKE_COLOR);
-			this.renderStatus();
+			this.drawStatus();
 			System.out.println(cmd.getPos1().getId() + "|"+cmd.getPos1().getColor());
 			System.out.println(cmd.getPos2().getId() + "|"+cmd.getPos2().getColor());
 		}
 		return ret;
 	}
 
-	public void renderStatus() {
+	public void drawStatus() {
 		if (game.getGameState() == EGameState.GAMEOVER) {
 			drawStatusText(game.getMessage());
 			drawGameOver();

@@ -45,7 +45,8 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 
 	@Override
 	public void initGameControl() {
-		bullScene.setDrawer( new CDrawer(new CFourBullsGame(bullScene.getPlayer1(), bullScene.getPlayer2(), true)) );
+		IGameFactory factory = new CGameFactoryImpl();
+		bullScene.setDrawer( new CDrawer(factory.createGame("FourBullsTrue")) );
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 			public void handle(MouseEvent e) {
 				if (bullScene.getDrawer() !=null) {
 					bullScene.getDrawer().processClick((int) e.getX(), (int) e.getY());
-					bullScene.getDrawer().renderStatus();
+					bullScene.getDrawer().drawStatus();
 				}
 			}
 		});

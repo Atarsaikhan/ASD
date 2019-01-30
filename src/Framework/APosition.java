@@ -37,7 +37,12 @@ public abstract class APosition {
 		return id;
 	}
 
-	APosition(int id, int x, int y, EBullColor color) {
+	public EGameState getGameState() {
+		return this.controller.getGameState();
+	}
+
+	APosition(int id, int x, int y, EBullColor color, IGameController controller) {
+		this.controller = controller;
 		this.id = id;
 		this.x = x;
 		this.y = y;
@@ -81,4 +86,21 @@ public abstract class APosition {
 		}
 		return false;
 	}
+
+	public boolean move(APosition pos) {
+		return controller.move(this, pos);
+	}
+
+	public boolean undoMove(APosition pos, EGameState state) {
+		return controller.undoMove(this, pos, state);
+	}
+
+	public boolean capture() {
+		return controller.capture(this);
+	}
+
+	public boolean undoCapture(EGameState state) {
+		return controller.undoCapture(this, state);
+	}
+
 }

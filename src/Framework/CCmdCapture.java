@@ -1,7 +1,6 @@
 package Framework;
 
 public class CCmdCapture implements ICommand {
-	private IGameController game;
 	private APosition pos;
 	private EGameState state;
 
@@ -13,20 +12,19 @@ public class CCmdCapture implements ICommand {
 		return pos;
 	}
 
-	public CCmdCapture(IGameController game, APosition pos) {
-		this.game = game;
-		this.state = game.getGameState();
+	public CCmdCapture(APosition pos) {
+		this.state = pos.getGameState();
 		this.pos = pos;
 	}
 
 	@Override
 	public boolean execute() {
-		return game.capture(pos);
+		return pos.capture();
 	}
 
 	@Override
 	public boolean undo() {
-		return game.undoCapture(pos, this.state);
+		return pos.undoCapture(this.state);
 	}
 
 }

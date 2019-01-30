@@ -48,7 +48,7 @@ public class CDrawer implements IDrawer {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2 && pos.getColor() == game.getCurrent().getColor()) {
 				
-				ICommand cmd = new CCmdCapture(game, pos);
+				ICommand cmd = new CCmdCapture(pos);
 				if (cmd.execute()) {
 						this.commandsExecuted.push(cmd);
 						drawPos(pos, NORMAL_STROKE_COLOR);
@@ -92,7 +92,7 @@ public class CDrawer implements IDrawer {
 
 	public boolean move(APosition pos1, APosition pos2) {
 		boolean ret = false;
-		ICommand cmd = new CCmdMove(game, pos1, pos2);
+		ICommand cmd = new CCmdMove(pos1, pos2);
 		ret = cmd.execute();
 		if (ret)
 			this.commandsExecuted.push(cmd);

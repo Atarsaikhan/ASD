@@ -61,11 +61,11 @@ public class CFourBullsGame implements IGameController {
 	private void initPositions() {
 
 		positions = new ArrayList<>();
-		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE);
-		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK);
-		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE);
-		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK);
-		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE);
+		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE, this);
+		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK, this);
+		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE, this);
+		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK, this);
+		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE, this);
 
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);

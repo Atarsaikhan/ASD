@@ -1,7 +1,6 @@
 package Framework;
 
 public class CCmdMove implements ICommand {
-	private IGameController game;
 	private APosition pos1;
 	private APosition pos2;
 	private EGameState state;
@@ -14,21 +13,20 @@ public class CCmdMove implements ICommand {
 		return pos2;
 	}
 
-	public CCmdMove(IGameController game, APosition pos1, APosition pos2) {
-		this.game = game;
-		this.state = game.getGameState();
+	public CCmdMove(APosition pos1, APosition pos2) {
+		this.state = pos1.getGameState();
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 	}
 
 	@Override
 	public boolean execute() {
-		return game.move(pos1, pos2);
+		return pos1.move(pos2);
 	}
 
 	@Override
 	public boolean undo() {
-		return game.undoMove(pos1, pos2, state);
+		return pos1.undoMove(pos2, state);
 	}
 
 }

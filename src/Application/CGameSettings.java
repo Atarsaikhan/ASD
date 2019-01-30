@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class SettingsGame {
+public class CGameSettings {
 
-	private static SettingsGame uniqueInstance = null;
+	private static CGameSettings uniqueInstance = null;
 
 	private double timer;
 	private double moveNumber;
@@ -23,7 +23,7 @@ public class SettingsGame {
 	}
 
 	Map<String, Object> settings = new HashMap<>();
-	List<SettingsGame> setting = new ArrayList<>();
+	List<CGameSettings> setting = new ArrayList<>();
 
 	public double getTimer() {
 		return timer;
@@ -45,9 +45,9 @@ public class SettingsGame {
 	 * Returns a reference to the single instance. Creates the instance if it does
 	 * not yet exist. (This is called lazy instantiation.)
 	 */
-	public static SettingsGame getInstance() {
+	public static CGameSettings getInstance() {
 		if (uniqueInstance == null)
-			uniqueInstance = new SettingsGame();
+			uniqueInstance = new CGameSettings();
 		return uniqueInstance;
 	}
 
@@ -55,7 +55,7 @@ public class SettingsGame {
 	 * The Singleton Constructor. Note that it is private! No client can instantiate
 	 * a Singleton object directly!
 	 */
-	private SettingsGame() {
+	private CGameSettings() {
 
 	}
 

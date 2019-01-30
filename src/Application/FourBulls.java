@@ -1,6 +1,10 @@
 package Application;
 
+import Framework.BullColor;
+import Framework.FourBullsGame;
+import Framework.Player;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -20,7 +24,6 @@ public class FourBulls extends Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
-
 	}
 
 	@Override
@@ -34,34 +37,27 @@ public class FourBulls extends Application {
         MenuItem mnuNewGame = new MenuItem("New game"); 
         MenuItem mnuUndo = new MenuItem("Undo"); 
         MenuItem m2 = new MenuItem("Edit"); 
-        MenuItem m3 = new MenuItem("Options"); 
+        MenuItem mniExit = new MenuItem("Exit"); 
   
         // add menu items to menu 
         m.getItems().add(mnuNewGame); 
         m.getItems().add(mnuUndo); 
         m.getItems().add(m2); 
-        m.getItems().add(m3); 
+        m.getItems().add(mniExit); 
   
         // create a menubar 
         MenuBar mb = new MenuBar(); 
   
         // add menu to menubar 
         mb.getMenus().add(m); 
-
         
         mnuNewGame.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                drawer.restartGame();
-                drawer.drawPositions();
             }
         });
         
         mnuUndo.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 drawer.undo();
-            }
-        });
-        
         // create a VBox 
         VBox topBar = new VBox(mb); 
         VBox containerBox = new VBox(mb); 
@@ -79,12 +75,29 @@ public class FourBulls extends Application {
 		containerBox.getChildren().add(canvas);
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		drawer = new Drawer(gc);
-		drawer.drawPositions();
 
 		// gc.drawImage(positions.get(0).getImage(), positions.get(0).getX(),
 		// positions.get(0).getY());
 
+		
+        mniNewGame.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+        		Player player1 = new Player("Player 1", 2, BullColor.WHITE);
+        		Player player2 = new Player("Player 2", 2, BullColor.BLACK);
+        		drawer = new Drawer(gc, new FourBullsGame(player1, player2, true));
+        		drawer.drawPositions();
+            	
+                drawer.restartGame();
+                drawer.drawPositions();
+            }
+        });
+        
+        mniExit.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	Platform.exit();
+            }
+        });
+		
 		canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				drawer.processClick((int) e.getX(), (int) e.getY());

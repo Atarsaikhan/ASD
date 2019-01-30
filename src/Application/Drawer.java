@@ -34,8 +34,8 @@ public class Drawer {
 	private Position activePos = null;
 	private GraphicsContext gc;
 
-	Drawer(GraphicsContext gc) {
-		game = new FourBullsGame();
+	Drawer(GraphicsContext gc, GameController game) {
+		this.game = game;
 		commandsExecuted = new Stack<Command>();
 		this.positions = game.getPositions();
 		this.gc = gc;
@@ -44,7 +44,24 @@ public class Drawer {
 	}
 
 	public void processClick(int x, int y) {
+		if (game.getGameState() == GameState.ACTIVE) {
+			processMove(x, y);
+		} else if (game.getGameState() == GameState.NOMOVE) {
+			processCapture(x, y);
+		}
+	}
 
+	public void processCapture(int x, int y) {
+		for (Position pos : positions) {
+			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
+			if (distance < P_SIZE / 2 && pos.getColor() == game.getCurrent().getColor()) {
+					game.capture(pos);
+					drawPos(pos, NORMAL_STROKE_COLOR);
+				}
+			}
+	}
+
+	public void processMove(int x, int y) {
 		for (Position pos : positions) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2) {
@@ -72,7 +89,6 @@ public class Drawer {
 
 					activePos = null;
 				}
-
 			}
 		}
 
@@ -98,10 +114,13 @@ public class Drawer {
 		}
 		return ret;
 	}
-
 	public void updateStatus() {
 		if (game.getGameState() == GameState.GAMEOVER) {
-			drawStatusText("Game over");
+			drawStatusText(game.getMessage());
+			drawGameOver();
+		} else if (game.getGameState() == GameState.NOMOVE) {
+			drawStatusText(game.getMessage());
+			// drawGameOver();
 		} else {
 			drawCurrentPlayer(game.getCurrent().getColor());
 			drawStatusText(game.getMessage());
@@ -114,6 +133,17 @@ public class Drawer {
 		gc.fillRoundRect(95, 645, 410, 30, 10, 10);
 		gc.setFill(TEXT_COLOR);
 		gc.fillText(text, 100, 660, 400);
+	}
+
+	private void drawGameOver() {
+		gc.setFill(BASE_COLOR);
+		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
+		gc.setFill(TEXT_COLOR);
+		if (game.getCurrent().getColor() == BullColor.BLACK)
+			gc.fillText("Black won", 230, 300, 400);
+		else
+			gc.fillText("White won", 230, 300, 400);
+		gc.fillText("Game is over", 230, 320, 400);
 	}
 
 	private void drawCurrentPlayer(BullColor color) {

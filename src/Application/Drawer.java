@@ -19,15 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class Drawer {
-	private static final int P_SIZE = 100;
-	private static final Color FILL_COLOR = Color.WHITE;
-	private static final Color BASE_COLOR = Color.CORNSILK;
-	private static final Color TEXT_COLOR = Color.RED;
-	private static final Color BUTTON_COLOR = Color.MEDIUMTURQUOISE;
-	private static final Color NORMAL_STROKE_COLOR = Color.BLACK;
-	private static final Color ACTIVE_STROKE_COLOR = Color.YELLOW;
-	private static final int LINE_WIDTH = 5;
+public class Drawer implements IDrawer {
 
 	private GameController game;
 	private Stack<Command> commandsExecuted;
@@ -135,7 +127,7 @@ public class Drawer {
 		}
 	}
 
-	private void drawStatusText(String text) {
+	public void drawStatusText(String text) {
 		// clear previous text
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(145, 15, 310, 30, 10, 10);
@@ -143,7 +135,7 @@ public class Drawer {
 		gc.fillText(text, 150, 30, 300);
 	}
 
-	private void drawGameOver() {
+	public void drawGameOver() {
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
 		gc.setFill(TEXT_COLOR);
@@ -154,7 +146,7 @@ public class Drawer {
 		gc.fillText("Game is over", 230, 320, 400);
 	}
 
-	private void drawCurrentPlayers(BullColor color) {
+	public void drawCurrentPlayers(BullColor color) {
 		
 		String whiteURL = "resources/images/bull_blue.jpg";
 		String blackURL = "resources/images/bull_purple.jpg";
@@ -208,7 +200,7 @@ public class Drawer {
 
 	}
 
-	private void drawPos(Position pos, Color strokColor) {
+	public void drawPos(Position pos, Color strokColor) {
 		gc.setStroke(strokColor);
 		gc.setFill(FILL_COLOR);
 		gc.fillOval(pos.getX() - P_SIZE / 2, pos.getY() - P_SIZE / 2, P_SIZE, P_SIZE);
@@ -221,7 +213,7 @@ public class Drawer {
 		}
 	}
 
-	private void animatePos(Position pos) {
+	public void animatePos(Position pos) {
 		Color colors[] = { ACTIVE_STROKE_COLOR, NORMAL_STROKE_COLOR };
 		Timeline gameLoop = new Timeline();
 		gameLoop.setCycleCount(15);
@@ -253,5 +245,4 @@ public class Drawer {
 	public void setGc(GraphicsContext gc) {
 		this.gc = gc;
 	}
-
 }

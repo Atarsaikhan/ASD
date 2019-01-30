@@ -1,0 +1,2 @@
+timer: 5.0
+movenumber: 10.0

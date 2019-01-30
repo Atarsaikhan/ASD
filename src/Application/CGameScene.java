@@ -7,9 +7,9 @@ import javafx.scene.Scene;
 public class CGameScene extends Scene {
 	Group root;
 //	GraphicsContext gc;
-	CDrawer drawer;
-	CPlayer player1;
-	CPlayer player2;
+	private CDrawer drawer;
+	private CPlayer player1;
+	private CPlayer player2;
 	
 	public CGameScene(Group root) {
 		super(root);

@@ -1,8 +1,10 @@
 package Application;
 
-import Framework.EBullColor;
+import java.util.Optional;
+
 import Framework.CFourBullsGame;
 import Framework.CPlayer;
+import Framework.EBullColor;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,11 +25,12 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 	CGameScene bullScene;
     MenuItem mniNewGame = new MenuItem("New game"); 
     MenuItem mniUndo = new MenuItem("Undo"); 
-    MenuItem m2 = new MenuItem("Edit"); 
+    MenuItem mniSettings = new MenuItem("Settings"); 
     MenuItem mniExit = new MenuItem("Exit"); 
     
     Button btnNew = new Button("New game");
     Button btnUndo = new Button("Undo"); 
+    Button btnSettings = new Button("Settings"); 
     Canvas canvas = new Canvas(600, 700);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 	
@@ -60,7 +63,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         // add menu items to menu 
         m.getItems().add(mniNewGame); 
         m.getItems().add(mniUndo); 
-        m.getItems().add(m2); 
+        m.getItems().add(mniSettings); 
         m.getItems().add(mniExit); 
   
         // create a menubar 
@@ -93,7 +96,14 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         AnchorPane.setRightAnchor(btnUndo, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
         controlsPane.getChildren().add(btnUndo);
-		
+        
+//      Button btnSettings = new Button("Settings"); 
+      AnchorPane.setTopAnchor(btnSettings, 280.0); 
+      AnchorPane.setLeftAnchor(btnSettings, 30.0); 
+      AnchorPane.setRightAnchor(btnSettings, 30.0); 
+      //AnchorPane.setBottomAnchor(btnSettings, 125.0); 
+      controlsPane.getChildren().add(btnSettings);
+      
 //		Canvas canvas = new Canvas(600, 700);
 		mainArea.getChildren().add(canvas);
 
@@ -137,6 +147,16 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
             }
         };
         
+        EventHandler<ActionEvent> settingsHandler = new EventHandler<ActionEvent>() {
+        	public void handle(ActionEvent t) {
+        		CSettingsDialog dialog = new CSettingsDialog();
+            	Optional<CSettingsGame> result = dialog.showAndWait();
+            	if (result.isPresent()) {
+            	    bullScene.getDrawer().setGameSettings(result.get());
+            	}
+        	}
+        };
+        
         mniExit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	Platform.exit();
@@ -149,6 +169,9 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 
         mniUndo.setOnAction(undoHandler);
         btnUndo.setOnAction(undoHandler);
+
+        mniSettings.setOnAction(settingsHandler);
+        btnSettings.setOnAction(settingsHandler);
 	}
 
 	@Override

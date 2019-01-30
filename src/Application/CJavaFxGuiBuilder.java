@@ -149,8 +149,8 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         
         EventHandler<ActionEvent> settingsHandler = new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent t) {
-        		CSettingsDialog dialog = new CSettingsDialog();
-            	Optional<CSettingsGame> result = dialog.showAndWait();
+        		CDialogSettings dialog = new CDialogSettings();
+            	Optional<CGameSettings> result = dialog.showAndWait();
             	if (result.isPresent()) {
             	    bullScene.getDrawer().setGameSettings(result.get());
             	}

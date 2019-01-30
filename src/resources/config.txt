@@ -1,2 +1,2 @@
-timer: 5.0
+timer: 66.0
 movenumber: 10.0

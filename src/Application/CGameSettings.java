@@ -17,30 +17,13 @@ public class CGameSettings {
 	private double moveNumber;
 	private String filename;
 
-	
-	private void SettingsGame() {
-		this.readSettings(this.filename);
+	/**
+	 * The Singleton Constructor. Note that it is private! No client can instantiate
+	 * a Singleton object directly!
+	 */
+	private CGameSettings() {
+
 	}
-
-	Map<String, Object> settings = new HashMap<>();
-	List<CGameSettings> setting = new ArrayList<>();
-
-	public double getTimer() {
-		return timer;
-	}
-
-	public void setTimer(int timer) {
-		this.timer = timer;
-	}
-
-	public double getMoveNumber() {
-		return moveNumber;
-	}
-
-	public void setMoveNumber(int moveNumber) {
-		this.moveNumber = moveNumber;
-	}
-
 	/**
 	 * Returns a reference to the single instance. Creates the instance if it does
 	 * not yet exist. (This is called lazy instantiation.)
@@ -50,25 +33,31 @@ public class CGameSettings {
 			uniqueInstance = new CGameSettings();
 		return uniqueInstance;
 	}
+	
+	public double getTimer() {
+		return timer;
+	}
 
-	/**
-	 * The Singleton Constructor. Note that it is private! No client can instantiate
-	 * a Singleton object directly!
-	 */
-	private CGameSettings() {
+	public void setTimer(double timer) {
+		this.timer = timer;
+	}
 
+	public double getMoveNumber() {
+		return moveNumber;
+	}
+
+	public void setMoveNumber(double moveNumber) {
+		this.moveNumber = moveNumber;
 	}
 
 	public void writeSettings(String fileName) {
-		settings.put("timer", this.timer);
-		settings.put("movenumber", this.moveNumber);
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(fileName);
-			for (String name : settings.keySet()) {
-				Object value = settings.get(name);
-				out.println(name + ": " + value);
-			}
+			
+			out.println("timer: " + this.timer);
+			out.println("movenumber: " + this.moveNumber);
+			
 			out.flush();
 			out.close();
 		} catch (IOException e) {
@@ -110,7 +99,7 @@ public class CGameSettings {
 		if (name.equals("timer")) {
 			this.timer = newvalue;
 		} else if (name.equals("movenumber")) {
-			this.timer = newvalue;
+			this.moveNumber = newvalue;
 		}
 	}
 

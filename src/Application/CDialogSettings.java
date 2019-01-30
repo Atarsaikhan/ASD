@@ -11,14 +11,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
-public class CSettingsDialog extends Dialog<CSettingsGame>{
+public class CDialogSettings extends Dialog<CGameSettings>{
 	public static final String SETTINGS_FILE=System.getProperty("user.dir") + File.separator + "src" + File.separator + "resources"
 			+ File.separator+"config.txt";
-	private CSettingsGame gameSettings;
+	private CGameSettings gameSettings;
 	
-	CSettingsDialog(){
+	CDialogSettings(){
 		super();
-		gameSettings = CSettingsGame.getInstance();
+		gameSettings = CGameSettings.getInstance();
 		gameSettings.readSettings(SETTINGS_FILE);
     	this.setTitle("Game Settings");
     	this.setHeaderText("Enter timer and move number \n" +
@@ -43,9 +43,9 @@ public class CSettingsDialog extends Dialog<CSettingsGame>{
     	this.getDialogPane().getButtonTypes().add(buttonTypeOk);
     	this.getDialogPane().getButtonTypes().add(buttonTypeCancel);
     	 
-    	this.setResultConverter(new Callback<ButtonType, CSettingsGame>() {
+    	this.setResultConverter(new Callback<ButtonType, CGameSettings>() {
     	    @Override
-    	    public CSettingsGame call(ButtonType b) {
+    	    public CGameSettings call(ButtonType b) {
     	 
     	        if (b == buttonTypeOk) {
     	        	

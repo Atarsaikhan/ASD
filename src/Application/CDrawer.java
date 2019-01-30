@@ -26,11 +26,11 @@ public class CDrawer implements IDrawer {
 	private List<APosition> positions;
 	private APosition activePos = null;
 	private GraphicsContext gc;
-	private CSettingsGame gameSettings; 
+	private CGameSettings gameSettings; 
 
 	CDrawer(IGameController game) {
 		this.game = game;
-		this.gameSettings = CSettingsGame.getInstance();
+		this.gameSettings = CGameSettings.getInstance();
 		commandsExecuted = new Stack<ICommand>();
 		this.positions = game.getPositions();
 		//this.gc.setFill(FILL_COLOR);
@@ -247,7 +247,7 @@ public class CDrawer implements IDrawer {
 		this.gc = gc;
 	}
 	
-	public void setGameSettings(CSettingsGame gameSettings) {
+	public void setGameSettings(CGameSettings gameSettings) {
 		this.gameSettings = gameSettings;
 	}
 }

@@ -148,13 +148,12 @@ public class CDrawer implements IDrawer {
 
 	public void drawCurrentPlayers(EBullColor color) {
 		
-		String whiteURL = "resources/images/bull_blue.jpg";
-		String blackURL = "resources/images/bull_purple.jpg";
+		String whiteURL = "resources/images/bull_purple.jpg";
+		String blackURL = "resources/images/bull_blue.jpg";
 		
-		Image imB;
-		imB = new Image(whiteURL);
-		imB = new Image(blackURL);
-		gc.drawImage(imB, 300 - imB.getWidth() / 2 + 150, 600 - imB.getHeight() / 2);
+		Image imW = new Image(whiteURL);
+		Image imB = new Image(blackURL);
+		gc.drawImage(imW, 300 - imW.getWidth() / 2 + 150, 600 - imW.getHeight() / 2);
 		gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
 		
 		String arrowLeftUrl = "resources/images/arrow_left.png";
@@ -178,7 +177,7 @@ public class CDrawer implements IDrawer {
 
 	public void drawPositions() {
 		//this.gc.setFill(FILL_COLOR);
-		//this.gc.setLineWidth(LINE_WIDTH);
+		this.gc.setLineWidth(LINE_WIDTH);
 		gc.setFill(BASE_COLOR);
 		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);

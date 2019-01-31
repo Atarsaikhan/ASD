@@ -1,9 +1,11 @@
 package Application;
 
+import gui.CDrawer;
+
 public class CObserverTime implements IObserverTime {
 	CDrawer drawer;
 	
-	CObserverTime(CDrawer drawer) {
+	public CObserverTime(CDrawer drawer) {
 		System.out.println("time observer created");
 		this.drawer = drawer;
 		drawer.attach(this);

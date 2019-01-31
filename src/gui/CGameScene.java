@@ -1,4 +1,4 @@
-package Application;
+package gui;
 
 import Framework.CPlayer;
 import javafx.scene.Group;

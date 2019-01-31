@@ -1,9 +1,17 @@
-package Framework;
+package Application;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Application.IObserverMoveNumber;
+import Framework.APosition;
+import Framework.CCaptureMode;
+import Framework.CNonCaptureMode;
+import Framework.CPlayer;
+import Framework.CPositionImpl;
+import Framework.EBullColor;
+import Framework.EGameState;
+import Framework.IGameController;
+import Framework.IGameMode;
 
 public class CFourBullsGame implements IGameController {
 	private EGameState gameState;

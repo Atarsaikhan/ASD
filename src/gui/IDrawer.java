@@ -1,4 +1,4 @@
-package Application;
+package gui;
 
 import Framework.APosition;
 import Framework.EBullColor;

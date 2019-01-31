@@ -1,9 +1,10 @@
-package Application;
+package gui;
 
 import javafx.scene.control.ButtonBar.ButtonData;
 
 import java.io.File;
 
+import Application.CGameSettings;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;

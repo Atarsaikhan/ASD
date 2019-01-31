@@ -1,8 +1,12 @@
-package Application;
+package gui;
 
 import java.util.Optional;
 
-import Framework.CFourBullsGame;
+import Application.CFourBullsGame;
+import Application.CGameFactoryImpl;
+import Application.CGameSettings;
+import Application.CObserverTime;
+import Application.IGameFactory;
 import Framework.CPlayer;
 import Framework.EBullColor;
 import Framework.IGameController;

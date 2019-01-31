@@ -1,10 +1,13 @@
-package Application;
+package gui;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import Application.CGameSettings;
+import Application.IObserverMoveNumber;
+import Application.IObserverTime;
 import Framework.APosition;
 import Framework.CCmdCapture;
 import Framework.CCmdMove;

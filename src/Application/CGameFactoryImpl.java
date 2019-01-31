@@ -1,6 +1,5 @@
 package Application;
 
-import Framework.CFourBullsGame;
 import Framework.IGameController;
 
 public class CGameFactoryImpl implements IGameFactory {

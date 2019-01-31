@@ -2,6 +2,8 @@ package Framework;
 
 import java.util.List;
 
+import Application.IObserverMoveNumber;
+
 public interface IGameController {
 	public abstract boolean move(APosition pos1, APosition pos2);
 	public abstract boolean undoMove(APosition pos1, APosition pos2, EGameState state);
@@ -20,4 +22,9 @@ public interface IGameController {
 	public abstract void restart();
 	
 	public abstract void timeExpire();
+	
+	//Observer methods
+	public abstract void attach(IObserverMoveNumber observer);
+	public void detach(IObserverMoveNumber observer);
+	public void notifyObservers();
 }

@@ -3,6 +3,8 @@ package Framework;
 import java.util.ArrayList;
 import java.util.List;
 
+import Application.IObserverMoveNumber;
+
 public class CFourBullsGame implements IGameController {
 	private EGameState gameState;
 	private IGameMode gameMode;
@@ -10,6 +12,8 @@ public class CFourBullsGame implements IGameController {
 	private CPlayer white;
 	private CPlayer black;
 	private List<APosition> positions;
+	private List<IObserverMoveNumber> observers;
+	private final Object MUTEX = new Object();
 	private String message;
 	private int totalMove;
 
@@ -55,6 +59,7 @@ public class CFourBullsGame implements IGameController {
 		this.black = black;
 
 		initPositions();
+		observers = new ArrayList<>();
 		restart();
 	}
 
@@ -135,7 +140,8 @@ public class CFourBullsGame implements IGameController {
 			else
 				current = white;
 
-			changeState();
+			this.changeState();
+			this.notifyObservers();
 
 			if (this.gameState == EGameState.GAMEOVER) // set Winner back to current
 				if (current == white)
@@ -157,6 +163,7 @@ public class CFourBullsGame implements IGameController {
 			pos1.setColor(pos2.getColor());
 			pos2.setColor(EBullColor.NONE);
 			this.totalMove--;
+			this.notifyObservers();
 
 			if (this.gameState != EGameState.GAMEOVER)
 				if (current == white)
@@ -198,6 +205,9 @@ public class CFourBullsGame implements IGameController {
 			this.message = "";
 			this.gameState = EGameState.ACTIVE;
 
+			this.totalMove++;
+			this.notifyObservers();
+
 			if (current == white)
 				current = black;
 			else
@@ -221,6 +231,9 @@ public class CFourBullsGame implements IGameController {
 			this.message = "";
 			this.gameState = state;
 
+			this.totalMove--;
+			this.notifyObservers();
+
 			return true;
 		} else {
 			this.message = "Move not allowed";
@@ -237,6 +250,34 @@ public class CFourBullsGame implements IGameController {
 			current = black;
 		else
 			current = white;
-		
+
+	}
+
+	// Observer methods
+	@Override
+	public void attach(IObserverMoveNumber observer) {
+		synchronized (MUTEX) {
+			if (!observers.contains(observer))
+				observers.add(observer);
+		}
+	}
+
+	@Override
+	public void detach(IObserverMoveNumber observer) {
+		synchronized (MUTEX) {
+			int i = observers.indexOf(observer);
+			if (i >= 0)
+				observers.remove(i);
+		}
+	}
+
+	@Override
+	public void notifyObservers() {
+		synchronized (MUTEX) {
+			for (IObserverMoveNumber observer : observers) {
+				observer.update(this.totalMove);
+			}
+		}
+
 	}
 }

@@ -21,7 +21,7 @@ public interface IGameController {
 
 	public abstract void restart();
 	
-	public abstract void timeExpire();
+	public abstract void timeExpired();
 	
 	//Observer methods
 	public abstract void attach(IObserverMoveNumber observer);

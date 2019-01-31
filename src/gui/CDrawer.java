@@ -283,7 +283,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	}
 
 	public void timeOut() {
-		game.timeExpire();
+		game.timeExpired();
 		drawStatus();
 		drawCurrentPlayers();
 		System.out.println(game.getGameState());

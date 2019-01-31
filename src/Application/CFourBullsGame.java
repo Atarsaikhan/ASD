@@ -250,7 +250,7 @@ public class CFourBullsGame implements IGameController {
 	}
 
 	@Override
-	public void timeExpire() {
+	public void timeExpired() {
 		this.message = "Time is espired!";
 		this.gameState = EGameState.GAMEOVER;
 

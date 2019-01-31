@@ -1,2 +1,2 @@
-timer: 66.0
-movenumber: 10.0
+timer: 3
+movenumber: 30

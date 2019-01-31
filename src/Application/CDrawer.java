@@ -1,15 +1,17 @@
 package Application;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import Framework.EBullColor;
-import Framework.ICommand;
-import Framework.CCmdCapture;
-import Framework.IGameController;
-import Framework.EGameState;
-import Framework.CCmdMove;
 import Framework.APosition;
+import Framework.CCmdCapture;
+import Framework.CCmdMove;
+import Framework.EBullColor;
+import Framework.EGameState;
+import Framework.ICommand;
+import Framework.IGameController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -17,25 +19,32 @@ import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
-public class CDrawer implements IDrawer, IObserver {
-
+public class CDrawer implements IDrawer, IObserverMoveNumber {
+	public static final String SETTINGS_FILE=System.getProperty("user.dir") + File.separator + "src" + File.separator + "resources"
+			+ File.separator+"config.txt";
 	private IGameController game;
 	private Stack<ICommand> commandsExecuted;
 	private List<APosition> positions;
 	private APosition activePos = null;
 	private GraphicsContext gc;
 	private CGameSettings gameSettings;
-//	private renderStatus
+	private boolean isTimed = true;
+	private Timeline timeLoop;
+	private List<IObserverTime> timeObservers;
+	private final Object MUTEX = new Object();
+	private int timerValue;
 
 	CDrawer(IGameController game) {
 		this.game = game;
 		this.gameSettings = CGameSettings.getInstance();
+		this.gameSettings.readSettings(SETTINGS_FILE);
 		commandsExecuted = new Stack<ICommand>();
 		this.positions = game.getPositions();
-		//this.gc.setFill(FILL_COLOR);
-		//this.gc.setLineWidth(LINE_WIDTH);
+		timeObservers = new ArrayList<>();
 	}
 
 	public void processClick(int x, int y) {
@@ -55,6 +64,9 @@ public class CDrawer implements IDrawer, IObserver {
 				if (cmd.execute()) {
 						this.commandsExecuted.push(cmd);
 						drawPos(pos, NORMAL_STROKE_COLOR);
+						if (isTimed) {
+							startTimer();
+						}
 					}
 				}
 			}
@@ -64,24 +76,23 @@ public class CDrawer implements IDrawer, IObserver {
 		for (APosition pos : positions) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2) {
-				if (pos.getColor() != EBullColor.NONE) { // activate
+				// activate
+				if (pos.getColor() != EBullColor.NONE) { 
 
 					if (activePos != null) {
 						drawPos(activePos, NORMAL_STROKE_COLOR);
 					}
 
-					if (pos == activePos // || pos.getColor() != game.getCurrent().getColor()
-					) {
+					if (pos == activePos) {
 						activePos = null;
-						// if (pos.getColor() != game.getCurrent().getColor()) {
-						// animatePos(pos);
-						// }
 					} else {
 						activePos = pos;
 						drawPos(activePos, ACTIVE_STROKE_COLOR);
 					}
-
-				} else if (activePos != null && activePos != pos && this.move(activePos, pos)) { // move
+				
+				} 
+				// move
+				else if (activePos != null && activePos != pos && this.move(activePos, pos)) { 
 
 					drawPos(pos, NORMAL_STROKE_COLOR);
 					drawPos(activePos, NORMAL_STROKE_COLOR);
@@ -97,8 +108,13 @@ public class CDrawer implements IDrawer, IObserver {
 		boolean ret = false;
 		ICommand cmd = new CCmdMove(pos1, pos2);
 		ret = cmd.execute();
-		if (ret)
+		if (ret) {
 			this.commandsExecuted.push(cmd);
+			if (isTimed) {
+				startTimer();
+			}
+		}
+		
 		return ret;
 	}
 
@@ -121,24 +137,27 @@ public class CDrawer implements IDrawer, IObserver {
 		if (game.getGameState() == EGameState.GAMEOVER) {
 			drawStatusText(game.getMessage());
 			drawGameOver();
+			stopTimer();
 		} else if (game.getGameState() == EGameState.NOMOVE) {
 			drawStatusText(game.getMessage());
 			// drawGameOver();
 		} else {
-			drawCurrentPlayers(game.getCurrent().getColor());
+			drawCurrentPlayers();
 			drawStatusText(game.getMessage());
 		}
 	}
 
 	public void drawStatusText(String text) {
+		gc.setFont(Font.font( "Helvetica", FontWeight.BOLD, 24 ));
 		// clear previous text
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(145, 15, 310, 30, 10, 10);
 		gc.setFill(TEXT_COLOR);
-		gc.fillText(text, 150, 30, 300);
+		gc.fillText(text, 150, 40, 300);
 	}
 
 	public void drawGameOver() {
+		gc.setFont(Font.font( "Helvetica", FontWeight.BOLD, 24 ));
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
 		gc.setFill(TEXT_COLOR);
@@ -146,10 +165,10 @@ public class CDrawer implements IDrawer, IObserver {
 			gc.fillText("Black won", 230, 300, 400);
 		else
 			gc.fillText("White won", 230, 300, 400);
-		gc.fillText("Game is over", 230, 320, 400);
+		gc.fillText("Game is over", 230, 340, 400);
 	}
 
-	public void drawCurrentPlayers(EBullColor color) {
+	public void drawCurrentPlayers() {
 		
 		String whiteURL = "resources/images/bull_purple.jpg";
 		String blackURL = "resources/images/bull_blue.jpg";
@@ -168,7 +187,7 @@ public class CDrawer implements IDrawer, IObserver {
 		int arrowBgSize = 90;
 		gc.fillRoundRect(300 - arrowBgSize / 2, 600 - arrowBgSize / 2, arrowBgSize, arrowBgSize, 20, 20);
 
-		if (color == EBullColor.WHITE) {
+		if (game.getCurrent().getColor() == EBullColor.WHITE) {
 			imA = new Image(arrowLeftUrl);
 			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
 		} else // if (game.getCurrent().getColor() == BullColor.WHITE)
@@ -197,8 +216,8 @@ public class CDrawer implements IDrawer, IObserver {
 			drawPos(pos, NORMAL_STROKE_COLOR);
 		}
 
-		drawCurrentPlayers(EBullColor.BLACK);
-		drawCurrentPlayers(EBullColor.WHITE);
+		drawCurrentPlayers();
+		stopTimer();
 
 	}
 
@@ -214,26 +233,56 @@ public class CDrawer implements IDrawer, IObserver {
 			gc.drawImage(pos.getImage(), pos.getX() - w, pos.getY() - h);
 		}
 	}
+	
+	public void stopTimer() {
+		if (timeLoop != null) {
+			timeLoop.stop();
+			timeLoop.getKeyFrames().clear();
+		}
+		drawTimer(0);
+	}
+	
+	public void drawTimer(int t) {
+		gc.setFont(Font.font( "Helvetica", FontWeight.BOLD, 24 ));
+		// clear previous text
+		gc.setFill(BASE_COLOR);
+		gc.fillRoundRect(240, 440, 120, 30, 10, 10);
+		gc.setFill(TEXT_COLOR);
+		gc.fillText("Timer: "+t, 245, 465, 110);
+	}
 
-	public void animatePos(APosition pos) {
-		Color colors[] = { ACTIVE_STROKE_COLOR, NORMAL_STROKE_COLOR };
-		Timeline gameLoop = new Timeline();
-		gameLoop.setCycleCount(15);
+	public void startTimer() {
+		int timeMax = gameSettings.getTimer();
+		drawTimer((int) (timeMax));
+		if (timeLoop == null)
+			timeLoop = new Timeline();
+		else {
+			timeLoop.stop();
+			timeLoop.getKeyFrames().clear();
+		}
+		timeLoop.setCycleCount(timeMax);
 
 		final long timeStart = System.currentTimeMillis();
 
-		KeyFrame kf = new KeyFrame(Duration.seconds(0.02), // 0.017 = 60 FPS, 0.02 = 50 FPS, 0.05 = 20 FPS
+		KeyFrame kf = new KeyFrame(Duration.seconds(1), // 0.017 = 60 FPS, 0.02 = 50 FPS, 0.05 = 20 FPS
 				new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent ae) {
-						double t = (System.currentTimeMillis() - timeStart) / 2.0;
-						int index = (int) ((t % (2 * 100)) / 100);
-						drawPos(pos, colors[index]);
-						// System.out.println("t:"+t+"index:"+index);
+						double t = (System.currentTimeMillis() - timeStart) / 1000;
+						timerValue = (int) (timeMax-t);
+						drawTimer(timerValue);
+						notifyTimeObservers();
 					}
 				});
 
-		gameLoop.getKeyFrames().add(kf);
-		gameLoop.play();
+		timeLoop.getKeyFrames().add(kf);
+		timeLoop.play();
+	}
+	
+	public void timeOut() {
+		game.timeExpire();
+		drawStatus();
+		drawCurrentPlayers();
+		System.out.println(game.getGameState());
 	}
 
 	public void restartGame() {
@@ -252,8 +301,41 @@ public class CDrawer implements IDrawer, IObserver {
 		this.gameSettings = gameSettings;
 	}
 	
-	@Override
-	public void update(double moveNumber) {
-		
+	public CGameSettings getGameSettings() {
+		return this.gameSettings;
 	}
+	
+	@Override
+	public void update(int moveNumber) {
+		if (moveNumber>=gameSettings.getMoveNumber()) {
+			isTimed = true;
+		} else {
+			isTimed = false;
+		}
+	}
+	
+	public void attach(IObserverTime timeObserver) {
+		synchronized(MUTEX) {
+			System.out.println("time observer attached");
+			if (!timeObservers.contains(timeObserver))
+				timeObservers.add(timeObserver);
+		}
+	}
+
+	public void detach(IObserverTime timeObserver) {
+		synchronized(MUTEX) {
+			int i = timeObservers.indexOf(timeObserver);
+			if (i>=0)
+				timeObservers.remove(i);
+		}
+	}
+	
+	public void notifyTimeObservers() {
+		synchronized (MUTEX) {
+			for (IObserverTime ob: timeObservers) {
+				ob.update(timerValue);
+			}
+		}
+	}
+	
 }

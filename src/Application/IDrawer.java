@@ -23,10 +23,10 @@ public interface IDrawer {
 	public void drawStatus();
 	public void drawStatusText(String text);
 	public void drawGameOver();
-	public void drawCurrentPlayers(EBullColor color);
+	public void drawCurrentPlayers();
 	public void drawPositions();
 	public void drawPos(APosition pos, Color strokColor);
-	public void animatePos(APosition pos);
+	public void startTimer();
 	public void restartGame();
 	public GraphicsContext getGc();
 	public void setGc(GraphicsContext gc);

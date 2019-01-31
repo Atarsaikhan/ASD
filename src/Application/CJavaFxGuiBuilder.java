@@ -5,6 +5,7 @@ import java.util.Optional;
 import Framework.CFourBullsGame;
 import Framework.CPlayer;
 import Framework.EBullColor;
+import Framework.IGameController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,7 +47,12 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 	@Override
 	public void initGameControl() {
 		IGameFactory factory = new CGameFactoryImpl();
-		bullScene.setDrawer( new CDrawer(factory.createGame("FourBullsTrue")) );
+		//FourBullsTrue, FourBullsFalse
+		IGameController gameController = factory.createGame("FourBullsTrue");
+		if (gameController != null)
+			bullScene.setDrawer( new CDrawer(gameController) );
+		else
+			throw new RuntimeException("Game type is not defined");
 	}
 
 	@Override
@@ -134,6 +140,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         		CPlayer player1 = new CPlayer("Player 1", 2, EBullColor.WHITE);
         		CPlayer player2 = new CPlayer("Player 2", 2, EBullColor.BLACK);
         		bullScene.setDrawer(new CDrawer(new CFourBullsGame(player1, player2, true)));
+        		new CObserverTime(bullScene.getDrawer());
         		bullScene.getDrawer().setGc(gc);
         		bullScene.getDrawer().drawPositions();
             }
@@ -150,7 +157,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         
         EventHandler<ActionEvent> settingsHandler = new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent t) {
-        		CDialogSettings dialog = new CDialogSettings();
+        		CDialogSettings dialog = new CDialogSettings(bullScene.getDrawer().SETTINGS_FILE);
             	Optional<CGameSettings> result = dialog.showAndWait();
             	if (result.isPresent()) {
             	    bullScene.getDrawer().setGameSettings(result.get());

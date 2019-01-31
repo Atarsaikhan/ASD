@@ -12,14 +12,13 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 public class CDialogSettings extends Dialog<CGameSettings>{
-	public static final String SETTINGS_FILE=System.getProperty("user.dir") + File.separator + "src" + File.separator + "resources"
-			+ File.separator+"config.txt";
+
 	private CGameSettings gameSettings;
 	
-	CDialogSettings(){
+	CDialogSettings(String configFileName){
 		super();
 		gameSettings = CGameSettings.getInstance();
-		gameSettings.readSettings(SETTINGS_FILE);
+		gameSettings.readSettings(configFileName);
     	this.setTitle("Game Settings");
     	this.setHeaderText("Enter timer and move number \n" +
     	    "press Okay (or click title bar 'X' for cancel).");
@@ -49,22 +48,22 @@ public class CDialogSettings extends Dialog<CGameSettings>{
     	 
     	        if (b == buttonTypeOk) {
     	        	
-    				Double doubleValue = null;
+    				Integer intgerValue = null;
     				try {
-    					doubleValue = Double.valueOf(text1.getText());
+    					intgerValue = Integer.valueOf(text1.getText());
     				} catch (NumberFormatException e) {
     				}
     	        	
-    	        	gameSettings.setTimer(doubleValue);
+    	        	gameSettings.setTimer(intgerValue);
     	        	
-    				doubleValue = null;
+    				intgerValue = null;
     				try {
-    					doubleValue = Double.valueOf(text2.getText());
+    					intgerValue = Integer.valueOf(text2.getText());
     				} catch (NumberFormatException e) {
     				}
-    	        	gameSettings.setMoveNumber(doubleValue);
+    	        	gameSettings.setMoveNumber(intgerValue);
     	        	
-    	        	gameSettings.writeSettings(SETTINGS_FILE);
+    	        	gameSettings.writeSettings(configFileName);
     	            return gameSettings;
     	        }
     	 

@@ -13,8 +13,8 @@ public class CGameSettings {
 
 	private static CGameSettings uniqueInstance = null;
 
-	private double timer;
-	private double moveNumber;
+	private int timer;
+	private int moveNumber;
 	private String filename;
 
 	/**
@@ -34,19 +34,19 @@ public class CGameSettings {
 		return uniqueInstance;
 	}
 	
-	public double getTimer() {
+	public int getTimer() {
 		return timer;
 	}
 
-	public void setTimer(double timer) {
+	public void setTimer(int timer) {
 		this.timer = timer;
 	}
 
-	public double getMoveNumber() {
+	public int getMoveNumber() {
 		return moveNumber;
 	}
 
-	public void setMoveNumber(double moveNumber) {
+	public void setMoveNumber(int moveNumber) {
 		this.moveNumber = moveNumber;
 	}
 
@@ -77,13 +77,13 @@ public class CGameSettings {
 				if (name.length() == 0)
 					continue;
 				String value = in.next();
-				Double doubleValue = null;
+				Integer integerValue = null;
 				try {
-					doubleValue = Double.valueOf(value);
+					integerValue = Integer.valueOf(value);
 				} catch (NumberFormatException e) {
 				}
-				if (doubleValue != null)
-					changeSetting(name, doubleValue);
+				if (integerValue != null)
+					changeSetting(name, integerValue);
 				else
 					changeSetting(name, value);
 			}
@@ -95,7 +95,7 @@ public class CGameSettings {
 		}
 	}
 
-	void changeSetting(String name, double newvalue) {
+	void changeSetting(String name, int newvalue) {
 		if (name.equals("timer")) {
 			this.timer = newvalue;
 		} else if (name.equals("movenumber")) {

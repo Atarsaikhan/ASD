@@ -14,7 +14,7 @@ public class CDialogSettings extends Dialog<CGameSettings>{
 
 	private CGameSettings gameSettings;
 	
-	CDialogSettings(String configFileName){
+	public CDialogSettings(String configFileName){
 		super();
 		gameSettings = CGameSettings.getInstance();
 		gameSettings.readSettings(configFileName);

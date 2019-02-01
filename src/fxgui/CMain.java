@@ -1,5 +1,6 @@
-package gui;
+package fxgui;
 
+import gui.CGuiDirector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

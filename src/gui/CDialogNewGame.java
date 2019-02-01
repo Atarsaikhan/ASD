@@ -89,7 +89,7 @@ public class CDialogNewGame {
         dialogStage.close();
     }
     
-    void setValues(String playerName1, String playerName2, boolean toCapture, int choiceIndex) {
+    public void setValues(String playerName1, String playerName2, boolean toCapture, int choiceIndex) {
     	this.playerName1 = playerName1;
     	this.playerName2 = playerName2;
     	this.toCapture = toCapture;

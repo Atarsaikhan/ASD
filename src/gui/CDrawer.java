@@ -37,7 +37,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	private final Object MUTEX = new Object();
 	private int timerValue;
 
-	CDrawer() {
+	public CDrawer() {
 		this.gameSettings = CGameSettings.getInstance();
 		this.gameSettings.readSettings(SETTINGS_FILE);
 		commandsExecuted = new Stack<ICommand>();

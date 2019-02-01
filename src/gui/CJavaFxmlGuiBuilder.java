@@ -11,13 +11,12 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class CJavaFxmlGuiBuilder implements IGuiBuilder {
 	private CGameScene bullScene;
-	private GraphicsContext gc;
-	private FXMLLoader fxmlLoader;
+	private GraphicsContext graphicsContext;
 	private CFXMLMainController mainWindowController;
 
 	CJavaFxmlGuiBuilder() {
 		try {
-			fxmlLoader = new FXMLLoader();
+			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/FXMLMain.fxml"));
 			Group root = fxmlLoader.load();
 			bullScene = new CGameScene(root);
@@ -41,7 +40,7 @@ public class CJavaFxmlGuiBuilder implements IGuiBuilder {
 
 	@Override
 	public void buildGuiControls() {
-		gc = mainWindowController.getGraphicsContext();
+		graphicsContext = mainWindowController.getGraphicsContext();
 	}
 
 	@Override

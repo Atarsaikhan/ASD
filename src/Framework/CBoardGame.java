@@ -12,6 +12,22 @@ public class CBoardGame {
 	private String message;
 	private int totalMove;
 
+	public CPlayer getWhite() {
+		return white;
+	}
+
+	public void setWhite(CPlayer white) {
+		this.white = white;
+	}
+
+	public CPlayer getBlack() {
+		return black;
+	}
+
+	public void setBlack(CPlayer black) {
+		this.black = black;
+	}
+
 	public int getTotalMove() {
 		return totalMove;
 	}

@@ -164,11 +164,11 @@ public class CFourBullsGame implements IGameController {
 	
 	@Override 
 	public CPlayer getWhite() {
-		return white;
+		return game.getWhite();
 	}
 
 	@Override
 	public CPlayer getBlack() {
-		return black;
+		return game.getBlack();
 	}
 }

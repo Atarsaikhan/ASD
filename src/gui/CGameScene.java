@@ -5,7 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 
 public class CGameScene extends Scene {
-	Group root;
+	public Group root;
 //	GraphicsContext gc;
 	private CDrawer drawer;
 	private CPlayer player1;

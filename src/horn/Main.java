@@ -19,7 +19,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Bull Horm");
 		
 		FXMLLoader fxmlLoader = new FXMLLoader();
-		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/FXMLMain.fxml"));
+		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/HornMain.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene (root);
 		

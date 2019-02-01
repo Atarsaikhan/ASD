@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Group xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="horn.HornMainController">
+   <children>
+      <VBox prefHeight="560.0" prefWidth="750.0">
+        <children>
+            <Pane>
+               <children>
+                  <HBox>
+                     <children>
+                        <AnchorPane prefWidth="150.0">
+                           <children>
+                              <Button fx:id="btnRestart" layoutX="25.0" layoutY="20.0" mnemonicParsing="false" onAction="#onRestart_Clicked" prefHeight="27.0" prefWidth="100.0" text="Restart" />
+                              <Button fx:id="btnUndo" layoutX="25.0" layoutY="57.0" mnemonicParsing="false" onAction="#onUndo_Clicked" prefHeight="27.0" prefWidth="100.0" text="Undo" />
+                           </children>
+                        </AnchorPane>
+                        <Canvas fx:id="canvas" height="553.0" width="600.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+        </children>
+      </VBox>
+   </children>
+</Group>

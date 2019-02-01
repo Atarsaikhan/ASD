@@ -21,20 +21,34 @@ public class CFourBullsGame implements IGameController {
 		return game.getTotalMove();
 	}
 
+	@Override
 	public CPlayer getCurrent() {
 		return game.getCurrent();
 	}
 
+	@Override
 	public String getMessage() {
 		return game.getMessage();
 	}
 
+	@Override
 	public EGameState getGameState() {
 		return game.getGameState();
 	}
 
+	@Override
 	public List<APosition> getPositions() {
 		return game.getPositions();
+	}
+
+	@Override
+	public CPlayer getWhite() {
+		return game.getWhite();
+	}
+
+	@Override
+	public CPlayer getBlack() {
+		return game.getBlack();
 	}
 
 	public CFourBullsGame(boolean isCaptureGame) {
@@ -174,13 +188,4 @@ public class CFourBullsGame implements IGameController {
 
 	}
 
-	@Override
-	public CPlayer getWhite() {
-		return game.getWhite();
-	}
-
-	@Override
-	public CPlayer getBlack() {
-		return game.getBlack();
-	}
 }

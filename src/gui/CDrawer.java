@@ -31,7 +31,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 			+ "resources" + File.separator + "config.txt";
 	private IGameController game;
 	private Stack<ICommand> commandsExecuted;
-	private List<APosition> positions;
+	//private List<APosition> positions;
 	private APosition activePos = null;
 	private GraphicsContext gc;
 	private CGameSettings gameSettings;
@@ -58,7 +58,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	}
 
 	public void processCapture(int x, int y) {
-		for (APosition pos : positions) {
+		for (APosition pos : game.getPositions()) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2 && pos.getColor() == game.getCurrent().getColor()) {
 
@@ -75,7 +75,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	}
 
 	public void processMove(int x, int y) {
-		for (APosition pos : positions) {
+		for (APosition pos : game.getPositions()) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2) {
 				// activate
@@ -192,14 +192,14 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		gc.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
 
 		gc.setStroke(NORMAL_STROKE_COLOR);
-		for (APosition pos : positions) {
+		for (APosition pos : game.getPositions()) {
 			pos.setImage();
 			for (APosition neighbor : pos.getNeighbors()) {
 				gc.strokeLine(pos.getX(), pos.getY(), neighbor.getX(), neighbor.getY());
 			}
 		}
 
-		for (APosition pos : positions) {
+		for (APosition pos : game.getPositions()) {
 			drawPos(pos, NORMAL_STROKE_COLOR);
 		}
 
@@ -303,7 +303,6 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		if (game != null) {
 			game.restart();
 			commandsExecuted = new Stack<ICommand>();
-			this.positions = game.getPositions();
 			drawBoard();
 		}
 		
@@ -313,7 +312,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	public void setGame(IGameController game) {
 		this.game = game;
 		commandsExecuted = new Stack<ICommand>();
-		this.positions = game.getPositions();
+		System.out.println("setGame invoked.");
 		game.attach(this);
 	}
 
@@ -340,6 +339,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 
 	@Override
 	public void update(int moveNumber) {
+		System.out.println("moveNumber obserer invoked");
 		if (moveNumber >= gameSettings.getMoveNumber()) {
 			isTimed = true;
 		} else {

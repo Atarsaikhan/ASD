@@ -2,6 +2,7 @@ package gui;
 
 import Framework.CPlayer;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 public class CGameScene extends Scene {

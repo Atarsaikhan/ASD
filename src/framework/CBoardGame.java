@@ -31,7 +31,7 @@ public class CBoardGame {
 	public int getTotalMove() {
 		return totalMove;
 	}
-	
+
 	public void setTotalMove(int totalMove) {
 		this.totalMove = totalMove;
 	}
@@ -80,12 +80,11 @@ public class CBoardGame {
 		restart(positions);
 	}
 
-	
-
 	public void restart(List<APosition> positions) {
 		this.gameState = EGameState.ACTIVE;
 		this.message = "";
 		this.positions = positions;
+		this.totalMove = 0;
 
 		this.current = white;
 		white.reset();
@@ -180,7 +179,7 @@ public class CBoardGame {
 			else
 				current = white;
 			pos.setColor(current.getColor());
-			
+
 			this.message = "";
 			this.gameState = state;
 

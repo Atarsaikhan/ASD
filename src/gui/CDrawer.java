@@ -41,22 +41,20 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	private final Object MUTEX = new Object();
 	private int timerValue;
 
-	CDrawer(IGameController game) {
-		this.game = game;
+	CDrawer() {
 		this.gameSettings = CGameSettings.getInstance();
 		this.gameSettings.readSettings(SETTINGS_FILE);
-		commandsExecuted = new Stack<ICommand>();
-		this.positions = game.getPositions();
 		timeObservers = new ArrayList<>();
-		game.attach(this);
+		commandsExecuted = new Stack<ICommand>();
 	}
 
 	public void processClick(int x, int y) {
-		if (game.getGameState() == EGameState.ACTIVE) {
-			processMove(x, y);
-		} else if (game.getGameState() == EGameState.NOMOVE) {
-			processCapture(x, y);
-		}
+		if (game != null)
+			if (game.getGameState() == EGameState.ACTIVE) {
+				processMove(x, y);
+			} else if (game.getGameState() == EGameState.NOMOVE) {
+				processCapture(x, y);
+			}
 	}
 
 	public void processCapture(int x, int y) {
@@ -128,25 +126,24 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		if (!this.commandsExecuted.isEmpty()) {
 			ICommand cmd = this.commandsExecuted.pop();
 			ret = cmd.undo();
-			this.drawPos(cmd.getPos1(), NORMAL_STROKE_COLOR);
-			this.drawPos(cmd.getPos2(), NORMAL_STROKE_COLOR);
-			this.drawStatus();
+			activePos = null;
+			drawBoard();
 			System.out.println(cmd.getPos1().getId() + "|" + cmd.getPos1().getColor());
 			System.out.println(cmd.getPos2().getId() + "|" + cmd.getPos2().getColor());
 		}
+
 		return ret;
 	}
 
 	public void drawStatus() {
-		if (game.getGameState() == EGameState.GAMEOVER) {
-			drawStatusText(game.getMessage());
-			drawGameOver();
-			stopTimer();
-		} else if (game.getGameState() == EGameState.NOMOVE) {
-			drawStatusText(game.getMessage());
-			// drawGameOver();
-		} else {
-			drawCurrentPlayers();
+		if (game != null) {
+			if (game.getGameState() == EGameState.GAMEOVER) {
+				// drawStatusText(game.getMessage());
+				drawGameOver();
+				stopTimer();
+			} else if (game.getGameState() == EGameState.ACTIVE) {
+				drawArrowToCurrent();
+			}
 			drawStatusText(game.getMessage());
 		}
 	}
@@ -165,43 +162,29 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
 		gc.setFill(TEXT_COLOR);
-		if (game.getCurrent().getColor() == EBullColor.BLACK)
-			gc.fillText("Black won", 230, 300, 400);
-		else
-			gc.fillText("White won", 230, 300, 400);
+		gc.fillText(game.getCurrent().getName() + " has won", 230, 290, 400);
 		gc.fillText("Game is over", 230, 340, 400);
 	}
 
-	public void drawCurrentPlayers() {
-
-		String whiteURL = "resources/images/bull_purple.jpg";
-		String blackURL = "resources/images/bull_blue.jpg";
-
-		Image imW = new Image(whiteURL);
-		Image imB = new Image(blackURL);
-		gc.drawImage(imW, 300 - imW.getWidth() / 2 + 150, 600 - imW.getHeight() / 2);
-		gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
+	public void drawArrowToCurrent() {
 
 		String arrowLeftUrl = "resources/images/arrow_left.png";
 		String arrowRightUrl = "resources/images/arrow_right.png";
-		Image imA;
 
 		// Clear previous arrow
 		gc.setFill(BASE_COLOR);
 		int arrowBgSize = 90;
 		gc.fillRoundRect(300 - arrowBgSize / 2, 600 - arrowBgSize / 2, arrowBgSize, arrowBgSize, 20, 20);
 
-		if (game.getCurrent().getColor() == EBullColor.WHITE) {
+		Image imA;
+		if (game.getCurrent().getColor() == EBullColor.WHITE)
 			imA = new Image(arrowLeftUrl);
-			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
-		} else // if (game.getCurrent().getColor() == BullColor.WHITE)
-		{
+		else
 			imA = new Image(arrowRightUrl);
-			gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
-		}
+		gc.drawImage(imA, 300 - imA.getWidth() / 2, 600 - imA.getHeight() / 2);
 	}
 
-	public void drawPositions() {
+	public void drawBoard() {
 		// this.gc.setFill(FILL_COLOR);
 		this.gc.setLineWidth(LINE_WIDTH);
 		gc.setFill(BASE_COLOR);
@@ -220,9 +203,9 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 			drawPos(pos, NORMAL_STROKE_COLOR);
 		}
 
-		drawCurrentPlayers();
+		drawPlayers();
+		drawArrowToCurrent();
 		stopTimer();
-
 	}
 
 	public void drawPos(APosition pos, Color strokColor) {
@@ -238,21 +221,47 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		}
 	}
 
+	public void drawPlayers() {
+		String whiteURL = "resources/images/bull_purple.jpg";
+		String blackURL = "resources/images/bull_blue.jpg";
+
+		Image imW = new Image(whiteURL);
+		Image imB = new Image(blackURL);
+		gc.drawImage(imW, 300 - imW.getWidth() / 2 + 150, 600 - imW.getHeight() / 2);
+		gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
+
+		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+		gc.setFill(Color.BISQUE);
+		gc.fillRoundRect(100, 635, 110, 25, 10, 10);
+		gc.fillRoundRect(400, 635, 110, 25, 10, 10);
+		gc.setFill(TEXT_COLOR);
+		gc.fillText(game.getWhite().getName(), 120, 655, 150);
+		gc.fillText(game.getBlack().getName(), 420, 655, 150);
+	}
+
 	public void stopTimer() {
 		if (timeLoop != null) {
 			timeLoop.stop();
 			timeLoop.getKeyFrames().clear();
 		}
-		drawTimer(0);
+		if (isTimed)
+			drawTimer(0);
+		else
+			drawTimer(null);
 	}
 
-	public void drawTimer(int t) {
+	public void drawTimer(Integer t) {
 		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
 		// clear previous text
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(240, 440, 120, 30, 10, 10);
+
 		gc.setFill(TEXT_COLOR);
-		gc.fillText("Timer: " + t, 245, 465, 110);
+		if (t != null) {
+			gc.fillText("Timer: " + t, 245, 465, 110);
+		} else {
+			gc.fillText("No timer", 245, 465, 110);
+		}
 	}
 
 	public void startTimer() {
@@ -285,12 +294,32 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	public void timeOut() {
 		game.timeExpired();
 		drawStatus();
-		drawCurrentPlayers();
+		drawArrowToCurrent();
 		System.out.println(game.getGameState());
 	}
 
+	@Override
 	public void restartGame() {
-		game.restart();
+		if (game != null) {
+			game.restart();
+			commandsExecuted = new Stack<ICommand>();
+			this.positions = game.getPositions();
+			drawBoard();
+		}
+		
+	}
+
+	@Override
+	public void setGame(IGameController game) {
+		this.game = game;
+		commandsExecuted = new Stack<ICommand>();
+		this.positions = game.getPositions();
+		game.attach(this);
+	}
+
+	@Override
+	public IGameController getGame() {
+		return game;
 	}
 
 	public GraphicsContext getGc() {

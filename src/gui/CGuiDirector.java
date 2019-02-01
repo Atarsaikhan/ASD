@@ -9,7 +9,7 @@ public class CGuiDirector {
 	}
 
 	public void constructGui() {
-		guiBuilder.buildPlayer("Player 1", "Player 2");
+		guiBuilder.buildPlayer("Blue", "Pink");
 		guiBuilder.initGameControl(); 
 		guiBuilder.buildGuiControls(); 
 		guiBuilder.buildHandlers();

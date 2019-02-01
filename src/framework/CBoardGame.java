@@ -2,12 +2,16 @@ package framework;
 
 import java.util.List;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class CBoardGame {
 	private EGameState gameState;
 	private IGameMode gameMode;
+	private GUIManager guiManager;
 	private CPlayer current;
 	private CPlayer white;
 	private CPlayer black;
+	private APosition active;
 	private List<APosition> positions;
 	private String message;
 	private int totalMove;
@@ -67,8 +71,13 @@ public class CBoardGame {
 	public void setPositions(List<APosition> positions) {
 		this.positions = positions;
 	}
+	
+	public void setGraphicsContext(GraphicsContext graphicsContext) {
+		this.guiManager.setGraphicsContext(graphicsContext);
+	}
 
 	public CBoardGame(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
+		guiManager = new GUIManager();
 		if (isCaptureGame)
 			this.gameMode = new CCaptureMode();
 		else
@@ -77,7 +86,9 @@ public class CBoardGame {
 		this.white = white;
 		this.black = black;
 
-		restart(positions);
+		active = null;
+
+		//restart(positions);
 	}
 
 	public void restart(List<APosition> positions) {
@@ -89,6 +100,31 @@ public class CBoardGame {
 		this.current = white;
 		white.reset();
 		black.reset();
+
+		guiManager.drawBoard(positions);
+	}
+
+	public boolean move(APosition pos) {
+		if (pos == null) {
+			guiManager.drawPos(active, guiManager.NORMAL_STROKE_COLOR);
+			active = null;
+			return true;
+		}
+		if (active != null) {
+			if (pos.isEmpty()) {
+				boolean ret = this.move(active, pos);
+				guiManager.drawBoard(positions);
+				return ret;
+			} else if (pos.isMovable()) {
+				guiManager.drawPos(active, guiManager.NORMAL_STROKE_COLOR);
+				active = pos;
+				guiManager.drawPos(active, guiManager.ACTIVE_STROKE_COLOR);
+			}
+		} else if (pos.isMovable()) {
+			active = pos;
+			guiManager.drawPos(active, guiManager.ACTIVE_STROKE_COLOR);
+		}
+		return false;
 	}
 
 	public boolean move(APosition pos1, APosition pos2) {
@@ -111,6 +147,7 @@ public class CBoardGame {
 				else
 					current = white;
 
+			guiManager.drawBoard(positions);
 			return true;
 		}
 		message = "Move not allowed!";

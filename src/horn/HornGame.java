@@ -1,7 +1,6 @@
 package horn;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -12,6 +11,7 @@ import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
 import framework.EGameState;
+import framework.GUIManager;
 import framework.IGameController;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -19,7 +19,6 @@ public class HornGame implements IGameController {
 
 	static final int P_SIZE = 100;
 	private CBoardGame game;
-	private APosition activePos;
 	private GUIManager guiMan;
 	private Stack<List<APosition>> moves;
 
@@ -55,11 +54,11 @@ public class HornGame implements IGameController {
 
 	HornGame(GraphicsContext graphicsContext) {
 		moves = new Stack<>();
-		activePos = null;
-		guiMan = new GUIManager();
-		guiMan.setGraphicsContext(graphicsContext);
+		
 		game = new CBoardGame(new CPlayer("Herder", 2, EBullColor.WHITE), new CPlayer("Bull", 1, EBullColor.BLACK),
 				false, initPositions());
+		game.setGraphicsContext(graphicsContext);
+		// guiMan.setBackImage("bullBackground.jpg");
 	}
 
 	private List<APosition> initPositions() {
@@ -104,7 +103,7 @@ public class HornGame implements IGameController {
 	public void undo() {
 		if (moves.isEmpty())
 			return;
-		
+
 		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
 		this.undoMove(move.get(0), move.get(1), game.getGameState());
 
@@ -117,39 +116,8 @@ public class HornGame implements IGameController {
 			return;
 
 		System.out.println("x,y: " + x + ", " + y);
-		APosition pos = findPosition(x, y);
-		if (pos != null) {
-			System.out.println("Pos: " + pos.getId());
-			if (activePos != null) {
-				if (pos.getColor().equals(EBullColor.NONE)) {
-					if (this.move(activePos, pos)) {
+		game.move(findPosition(x, y));
 
-						moves.push(new ArrayList<>(Arrays.asList(activePos, pos)));
-
-						guiMan.drawPos(pos, guiMan.NORMAL_STROKE_COLOR);
-						guiMan.drawPos(activePos, guiMan.NORMAL_STROKE_COLOR);
-						activePos = null;
-
-						if (game.getGameState().equals(EGameState.GAMEOVER)) {
-							System.out.println("Message: " + game.getMessage());
-						}
-					} else
-						System.out.println("Message: " + game.getMessage());
-				} else if (pos.getColor().equals(game.getCurrent().getColor())) {
-					guiMan.drawPos(activePos, guiMan.NORMAL_STROKE_COLOR);
-					activePos = pos;
-					guiMan.drawPos(activePos, guiMan.ACTIVE_STROKE_COLOR);
-				}
-			} else if (activePos == null) {
-				if (pos.getColor().equals(game.getCurrent().getColor())) {
-					activePos = pos;
-					guiMan.drawPos(activePos, guiMan.ACTIVE_STROKE_COLOR);
-				}
-			}
-		} else if (activePos != null) {
-			guiMan.drawPos(activePos, guiMan.NORMAL_STROKE_COLOR);
-			activePos = null;
-		}
 	}
 
 	private APosition findPosition(int x, int y) {

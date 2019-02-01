@@ -80,11 +80,20 @@ public abstract class APosition {
 	}
 
 	public boolean isMovable() {
-		for (APosition pos : neighbors) {
-			if (pos.getColor().equals(EBullColor.NONE))
-				return true;
-		}
+		if (this.color.equals(this.controller.getCurrent().getColor()))
+			for (APosition pos : neighbors) {
+				if (pos.getColor().equals(EBullColor.NONE))
+					return true;
+			}
 		return false;
+	}
+
+	public boolean isEmpty() {
+		return this.color.equals(EBullColor.NONE);
+	}
+
+	public boolean isCurrent() {
+		return this.color.equals(this.controller.getCurrent().getColor());
 	}
 
 	public boolean move(APosition pos) {

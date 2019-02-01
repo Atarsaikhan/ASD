@@ -1,24 +1,30 @@
-package horn;
+package framework;
 
 import java.util.List;
 
-import framework.APosition;
-import framework.EBullColor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class GUIManager {
-	static final int P_SIZE = 100;
-	static final Color FILL_COLOR = Color.WHITE;
-	static final Color BASE_COLOR = Color.CORNSILK;
-	static final Color TEXT_COLOR = Color.RED;
-	static final Color BUTTON_COLOR = Color.MEDIUMTURQUOISE;
-	static final Color NORMAL_STROKE_COLOR = Color.BLACK;
-	static final Color ACTIVE_STROKE_COLOR = Color.YELLOW;
-	static final int LINE_WIDTH = 5;
+	private int P_SIZE = 100;
+	private int LINE_WIDTH = 5;
+	public final Color FILL_COLOR = Color.WHITE;
+	public final Color BASE_COLOR = Color.CORNSILK;
+	public final Color NORMAL_STROKE_COLOR = Color.BLACK;
+	public final Color MOVABLE_STROKE_COLOR = Color.YELLOW;
+	public final Color ACTIVE_STROKE_COLOR = Color.RED;
 
+	private String backImage="";
 	private GraphicsContext graphicsContext;
+
+	public String getBackImage() {
+		return backImage;
+	}
+
+	public void setBackImage(String backImage) {
+		this.backImage = "resources/images/" + backImage;
+	}
 
 	public GraphicsContext getGraphicsContext() {
 		return graphicsContext;
@@ -28,14 +34,18 @@ public class GUIManager {
 		this.graphicsContext = graphicsContext;
 	}
 
+	public GUIManager() {
+
+	}
+
 	public void drawBoard(List<APosition> positions) {
-		// this.gc.setFill(FILL_COLOR);
-		this.graphicsContext.setLineWidth(LINE_WIDTH);
+		graphicsContext.setLineWidth(LINE_WIDTH);
 		graphicsContext.setFill(BASE_COLOR);
 		graphicsContext.fillRect(0, 0, graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight());
-		graphicsContext.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
-
+		if (backImage.length() > 0)
+			graphicsContext.drawImage(new Image(backImage), 0, 0);
 		graphicsContext.setStroke(NORMAL_STROKE_COLOR);
+
 		for (APosition pos : positions) {
 			pos.setImage();
 			for (APosition neighbor : pos.getNeighbors()) {
@@ -43,13 +53,17 @@ public class GUIManager {
 			}
 		}
 
-		for (APosition pos : positions) {
-			drawPos(pos, NORMAL_STROKE_COLOR);
-		}
+		drawPositions(positions);
 
-//		drawPlayers();
-//		drawArrowToCurrent();
-//		stopTimer();
+	}
+
+	public void drawPositions(List<APosition> positions) {
+		for (APosition pos : positions) {
+			if (pos.isMovable())
+				drawPos(pos, this.MOVABLE_STROKE_COLOR);
+			else
+				drawPos(pos, this.NORMAL_STROKE_COLOR);
+		}
 	}
 
 	public void drawPos(APosition pos, Color strokColor) {

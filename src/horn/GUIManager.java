@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class GUIManager {
-	static final int P_SIZE = 100;
+	static final int P_SIZE = 50;
 	static final Color FILL_COLOR = Color.WHITE;
 	static final Color BASE_COLOR = Color.CORNSILK;
 	static final Color TEXT_COLOR = Color.RED;
@@ -33,7 +33,7 @@ public class GUIManager {
 		this.graphicsContext.setLineWidth(LINE_WIDTH);
 		graphicsContext.setFill(BASE_COLOR);
 		graphicsContext.fillRect(0, 0, graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight());
-		graphicsContext.drawImage(new Image("resources/images/bullBackground.jpg"), 0, 0);
+		graphicsContext.drawImage(new Image("resources/images/bullhorn2.png"), 0, 0);
 
 		graphicsContext.setStroke(NORMAL_STROKE_COLOR);
 		for (APosition pos : positions) {

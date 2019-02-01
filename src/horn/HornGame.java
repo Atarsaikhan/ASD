@@ -17,7 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class HornGame implements IGameController {
 
-	static final int P_SIZE = 100;
+	static final int P_SIZE = 50;
 	private CBoardGame game;
 	private APosition activePos;
 	private GUIManager guiMan;
@@ -66,36 +66,62 @@ public class HornGame implements IGameController {
 
 		List<APosition> positions = new ArrayList<>();
 
-		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE, this);
-		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK, this);
-		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE, this);
-		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK, this);
-		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE, this);
-
+		APosition pos0 = new CPositionImpl(0, 180, 51, EBullColor.NONE, this);
+		APosition pos1 = new CPositionImpl(1, 192, 124, EBullColor.NONE, this);
+		APosition pos2 = new CPositionImpl(2, 325, 161, EBullColor.NONE, this);
+		APosition pos3 = new CPositionImpl(3, 192, 223, EBullColor.NONE, this);
+		APosition pos4 = new CPositionImpl(4, 348, 246, EBullColor.NONE, this);
+		APosition pos5 = new CPositionImpl(5, 180, 327, EBullColor.WHITE, this);
+		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.WHITE, this);
+		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this);
+		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.BLACK, this);
+		
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
-		pos0.addNeighbor(pos3);
 
 		pos1.addNeighbor(pos0);
 		pos1.addNeighbor(pos2);
-
+		pos1.addNeighbor(pos3);
+		
 		pos2.addNeighbor(pos0);
 		pos2.addNeighbor(pos1);
 		pos2.addNeighbor(pos3);
 		pos2.addNeighbor(pos4);
-
-		pos3.addNeighbor(pos0);
+		
+		pos3.addNeighbor(pos1);
 		pos3.addNeighbor(pos2);
 		pos3.addNeighbor(pos4);
-
+		pos3.addNeighbor(pos5);
+		
 		pos4.addNeighbor(pos2);
 		pos4.addNeighbor(pos3);
-
+		pos4.addNeighbor(pos5);
+		pos4.addNeighbor(pos6);
+		
+		pos5.addNeighbor(pos3);
+		pos5.addNeighbor(pos4);
+		pos5.addNeighbor(pos6);
+		pos5.addNeighbor(pos7);
+		
+		pos6.addNeighbor(pos4);
+		pos6.addNeighbor(pos5);
+		pos6.addNeighbor(pos8);
+		
+		pos7.addNeighbor(pos5);
+		pos7.addNeighbor(pos8);
+		
+		pos8.addNeighbor(pos6);
+		pos8.addNeighbor(pos7);
+		
 		positions.add(pos0);
 		positions.add(pos1);
 		positions.add(pos2);
 		positions.add(pos3);
 		positions.add(pos4);
+		positions.add(pos5);
+		positions.add(pos6);
+		positions.add(pos7);
+		positions.add(pos8);
 
 		return positions;
 

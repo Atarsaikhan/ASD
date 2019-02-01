@@ -10,6 +10,9 @@ public interface IGameController {
 
 	public abstract boolean capture(APosition pos);
 	public abstract boolean undoCapture(APosition pos, EGameState state);
+	
+	public abstract void timeExpired();
+	public abstract void restart();
 
 	public abstract List<APosition> getPositions();
 
@@ -18,10 +21,6 @@ public interface IGameController {
 	public abstract CPlayer getCurrent();
 
 	public abstract String getMessage();
-
-	public abstract void restart();
-	
-	public abstract void timeExpired();
 	
 	//Observer methods
 	public abstract void attach(IObserverMoveNumber observer);

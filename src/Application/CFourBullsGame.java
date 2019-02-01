@@ -4,45 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Framework.APosition;
-import Framework.CCaptureMode;
-import Framework.CNonCaptureMode;
+import Framework.CBoardGame;
 import Framework.CPlayer;
 import Framework.CPositionImpl;
 import Framework.EBullColor;
 import Framework.EGameState;
 import Framework.IGameController;
-import Framework.IGameMode;
 
 public class CFourBullsGame implements IGameController {
-	private EGameState gameState;
-	private IGameMode gameMode;
-	private CPlayer current;
-	private CPlayer white;
-	private CPlayer black;
-	private List<APosition> positions;
+
+	private CBoardGame game;
 	private List<IObserverMoveNumber> observers;
 	private final Object MUTEX = new Object();
-	private String message;
-	private int totalMove;
 
 	public int getTotalMove() {
-		return totalMove;
+		return game.getTotalMove();
 	}
 
 	public CPlayer getCurrent() {
-		return current;
+		return game.getCurrent();
 	}
 
 	public String getMessage() {
-		return message;
+		return game.getMessage();
 	}
 
 	public EGameState getGameState() {
-		return gameState;
+		return game.getGameState();
 	}
 
 	public List<APosition> getPositions() {
-		return positions;
+		return game.getPositions();
 	}
 
 	public CFourBullsGame(boolean isCaptureGame) {
@@ -58,22 +50,14 @@ public class CFourBullsGame implements IGameController {
 	}
 
 	public CFourBullsGame(CPlayer white, CPlayer black, boolean isCaptureGame) {
-		if (isCaptureGame)
-			this.gameMode = new CCaptureMode();
-		else
-			this.gameMode = new CNonCaptureMode();
-
-		this.white = white;
-		this.black = black;
-
-		initPositions();
 		observers = new ArrayList<>();
-		restart();
+		game = new CBoardGame(white, black, isCaptureGame, initPositions());
 	}
 
-	private void initPositions() {
+	private List<APosition> initPositions() {
 
-		positions = new ArrayList<>();
+		List<APosition> positions = new ArrayList<>();
+
 		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE, this);
 		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK, this);
 		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE, this);
@@ -105,26 +89,15 @@ public class CFourBullsGame implements IGameController {
 		positions.add(pos3);
 		positions.add(pos4);
 
+		return positions;
+
 	}
 
 	public void restart() {
-		this.gameState = EGameState.ACTIVE;
-		this.message = "";
-
-		this.current = white;
-		white.reset();
-		black.reset();
-
-		positions.get(0).setColor(EBullColor.WHITE);
-		positions.get(1).setColor(EBullColor.BLACK);
-		positions.get(2).setColor(EBullColor.NONE);
-		positions.get(3).setColor(EBullColor.BLACK);
-		positions.get(4).setColor(EBullColor.WHITE);
-
-		printBoard();
+		game.restart(initPositions());
 	}
 
-	private void printBoard() {
+	private void printBoard(List<APosition> positions) {
 
 		System.out.println(" " + positions.get(0).getColor().value() + " - - - " + positions.get(1).getColor().value());
 		System.out.println(" | \\   / ");
@@ -132,132 +105,32 @@ public class CFourBullsGame implements IGameController {
 		System.out.println(" | /   \\ ");
 		System.out.println(" " + positions.get(3).getColor().value() + " - - - " + positions.get(4).getColor().value());
 
-		System.out.println(current.getColor().toString() + " to move, insert positions: ");
+		System.out.println(this.getCurrent().getColor().toString() + " to move, insert positions: ");
 	}
 
 	@Override
 	public boolean move(APosition pos1, APosition pos2) {
-		if (validate(pos1, pos2)) {
-			this.message = "";
-			pos2.setColor(pos1.getColor());
-			pos1.setColor(EBullColor.NONE);
-			this.totalMove++;
-
-			if (current == white)
-				current = black;
-			else
-				current = white;
-
-			this.changeState();
-			this.notifyObservers();
-
-			if (this.gameState == EGameState.GAMEOVER) // set Winner back to current
-				if (current == white)
-					current = black;
-				else
-					current = white;
-
-			printBoard();
-			return true;
-		}
-		message = "Move not allowed!";
-		System.out.println(message);
-		return false;
+		return game.move(pos1, pos2);
 	}
 
 	@Override
 	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
-		if (pos1.getColor().equals(EBullColor.NONE)) {
-			pos1.setColor(pos2.getColor());
-			pos2.setColor(EBullColor.NONE);
-			this.totalMove--;
-			this.notifyObservers();
-
-			if (this.gameState != EGameState.GAMEOVER)
-				if (current == white)
-					current = black;
-				else
-					current = white;
-
-			this.gameState = state;
-			this.message = "";
-
-			System.out.println(current.getColor().toString());
-
-			printBoard();
-			return true;
-		}
-		message = "Undo not allowed!";
-		System.out.println(message);
-		return false;
-	}
-
-	public boolean validate(APosition pos1, APosition pos2) {
-		if (pos2.getColor() != EBullColor.NONE || pos1.getColor() != current.getColor())
-			return false;
-		else {
-			return pos1.isNeighbor(pos2);
-		}
-	}
-
-	public void changeState() {
-		this.gameState = this.gameMode.changeState(positions, current);
-		this.message = this.gameMode.getMessage();
+		return game.undoMove(pos1, pos2, state);
 	}
 
 	@Override
 	public boolean capture(APosition pos) {
-		if (pos.getColor().equals(current.getColor())) {
-			pos.setColor(EBullColor.NONE);
-			current.decPieces();
-			this.message = "";
-			this.gameState = EGameState.ACTIVE;
-
-			this.totalMove++;
-			this.notifyObservers();
-
-			if (current == white)
-				current = black;
-			else
-				current = white;
-			return true;
-		} else {
-			this.message = "Move not allowed";
-			return false;
-		}
+		return game.capture(pos);
 	}
 
 	@Override
 	public boolean undoCapture(APosition pos, EGameState state) {
-		if (pos.getColor().equals(EBullColor.NONE)) {
-			if (current == white)
-				current = black;
-			else
-				current = white;
-			pos.setColor(current.getColor());
-			current.incPieces();
-			this.message = "";
-			this.gameState = state;
-
-			this.totalMove--;
-			this.notifyObservers();
-
-			return true;
-		} else {
-			this.message = "Move not allowed";
-			return false;
-		}
+		return game.undoCapture(pos, state);
 	}
 
 	@Override
 	public void timeExpired() {
-		this.message = "Time is espired!";
-		this.gameState = EGameState.GAMEOVER;
-
-		if (current == white)
-			current = black;
-		else
-			current = white;
+		game.timeExpired();
 
 	}
 
@@ -283,7 +156,7 @@ public class CFourBullsGame implements IGameController {
 	public void notifyObservers() {
 		synchronized (MUTEX) {
 			for (IObserverMoveNumber observer : observers) {
-				observer.update(this.totalMove);
+				observer.update(this.getTotalMove());
 			}
 		}
 

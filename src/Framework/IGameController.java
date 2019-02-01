@@ -27,4 +27,6 @@ public interface IGameController {
 	public abstract void attach(IObserverMoveNumber observer);
 	public void detach(IObserverMoveNumber observer);
 	public void notifyObservers();
+	CPlayer getWhite();
+	CPlayer getBlack();
 }

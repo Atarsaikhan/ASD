@@ -13,7 +13,10 @@ import Framework.IGameController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,6 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class CJavaFxGuiBuilder implements IGuiBuilder {
 	CGameScene bullScene;
@@ -45,18 +50,19 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 	
 	public void buildPlayer(String playerName1, String playerName2) {
 		bullScene.setPlayer1(new CPlayer(playerName1, 2, EBullColor.WHITE));
-		bullScene.setPlayer2(new CPlayer(playerName1, 2, EBullColor.BLACK));
+		bullScene.setPlayer2(new CPlayer(playerName2, 2, EBullColor.BLACK));
 	}
 
 	@Override
 	public void initGameControl() {
-		IGameFactory factory = new CGameFactoryImpl();
-		//FourBullsTrue, FourBullsFalse
-		IGameController gameController = factory.createGame("FourBullsTrue");
-		if (gameController != null)
-			bullScene.setDrawer( new CDrawer(gameController) );
-		else
-			throw new RuntimeException("Game type is not defined");
+		bullScene.setDrawer(new CDrawer());
+//		IGameFactory factory = new CGameFactoryImpl();
+//		//FourBullsTrue, FourBullsFalse
+//		IGameController gameController = factory.createGame("FourBullsTrue");
+//		if (gameController != null)
+//			bullScene.setDrawer( new CDrawer(gameController) );
+//		else
+//			throw new RuntimeException("Game type is not defined");
 	}
 
 	@Override
@@ -139,14 +145,57 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 		
 		EventHandler<ActionEvent> newHandler = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-//              drawer.restartGame();
-//              drawer.drawPositions();
-        		CPlayer player1 = new CPlayer("Player 1", 2, EBullColor.WHITE);
-        		CPlayer player2 = new CPlayer("Player 2", 2, EBullColor.BLACK);
-        		bullScene.setDrawer(new CDrawer(new CFourBullsGame(player1, player2, true)));
-        		new CObserverTime(bullScene.getDrawer());
-        		bullScene.getDrawer().setGc(gc);
-        		bullScene.getDrawer().drawPositions();
+            	
+            	try {
+            		FXMLLoader fxmlLoader = new FXMLLoader();
+            		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/DialogNewGame.fxml"));
+					Parent root = fxmlLoader.load();
+					Scene scene = new Scene (root);
+					Stage dialogStage = new Stage();
+					dialogStage.setTitle("Start new game");
+					dialogStage.setScene(scene);
+				    dialogStage.initModality(Modality.WINDOW_MODAL);
+				    dialogStage.initOwner( bullScene.getWindow() );
+
+//				    Set the values into the controller.
+			        CDialogNewGame dialogController = fxmlLoader.getController();
+			        dialogController.setDialogStage(dialogStage);
+			        
+			        dialogController.setValues(bullScene.getPlayer1().getName(), bullScene.getPlayer2().getName()
+			        		, true, 0);
+				    
+				    dialogStage.showAndWait();
+				    
+				    if (dialogController.isNewGameClicked())  {
+//		              drawer.restartGame();
+//		              drawer.drawPositions();
+		        		IGameFactory factory = new CGameFactoryImpl();
+		        		IGameController gameController;
+		        		String gameType;
+		        		if (dialogController.isToCapture()) {
+		        			gameType = "FourBullsTrue";
+		        		}
+		        		else {
+		        			gameType = "FourBullsFalse";
+		        		}
+		        		gameController = factory.createGame(gameType, dialogController.getPlayerName1(), dialogController.getPlayerName2());
+	        			if (gameController != null)
+	        				bullScene.getDrawer().setGame( gameController);
+	        			else
+	        				throw new RuntimeException("Game type is not supported");
+		        		new CObserverTime(bullScene.getDrawer());
+		        		bullScene.getDrawer().setGc(gc);
+		        		bullScene.getDrawer().drawBoard();
+				    }
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Error on the dialog window \n"
+							+getClass().getClassLoader().getResource("resources/DialogNewGame.fxml")+"\n"
+							+e.getMessage());
+				}
+            	
+
             }
         };
 		
@@ -154,7 +203,6 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
             public void handle(ActionEvent t) {
             	if (bullScene.getDrawer() !=null) {
             		bullScene.getDrawer().undo();
-            		bullScene.getDrawer().drawPositions();
                 }
             }
         };

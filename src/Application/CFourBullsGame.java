@@ -288,4 +288,14 @@ public class CFourBullsGame implements IGameController {
 		}
 
 	}
+	
+	@Override 
+	public CPlayer getWhite() {
+		return white;
+	}
+
+	@Override
+	public CPlayer getBlack() {
+		return black;
+	}
 }

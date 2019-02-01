@@ -2,6 +2,7 @@ package gui;
 
 import Framework.APosition;
 import Framework.EBullColor;
+import Framework.IGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -23,11 +24,13 @@ public interface IDrawer {
 	public void drawStatus();
 	public void drawStatusText(String text);
 	public void drawGameOver();
-	public void drawCurrentPlayers();
-	public void drawPositions();
+	public void drawArrowToCurrent();
+	public void drawBoard();
 	public void drawPos(APosition pos, Color strokColor);
 	public void startTimer();
 	public void restartGame();
 	public GraphicsContext getGc();
 	public void setGc(GraphicsContext gc);
+	IGameController getGame();
+	void setGame(IGameController game);
 }

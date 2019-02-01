@@ -2,10 +2,8 @@ package gui;
 
 import java.util.Optional;
 
-import application.CFourBullsGame;
 import application.CGameFactoryImpl;
 import application.CGameSettings;
-import application.CObserverTime;
 import application.IGameFactory;
 import framework.CPlayer;
 import framework.EBullColor;
@@ -15,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -193,7 +190,6 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 	        				bullScene.getDrawer().setGame( gameController);
 	        			else
 	        				throw new RuntimeException("Game type is not supported");
-		        		new CObserverTime(bullScene.getDrawer());
 		        		bullScene.getDrawer().setGc(gc);
 		        		bullScene.getDrawer().drawBoard();
 				    }

@@ -1,7 +1,6 @@
 package gui;
 
 import framework.APosition;
-import framework.EBullColor;
 import framework.IGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import application.CGameFactoryImpl;
 import application.CGameSettings;
-import application.CObserverTime;
 import application.IGameFactory;
 import framework.IGameController;
 import javafx.application.Platform;
@@ -112,7 +111,6 @@ public class CFXMLMainController {
 							bullScene.getDrawer().setGame(gameController);
 						else
 							throw new RuntimeException("Game type is not supported");
-						new CObserverTime(bullScene.getDrawer());
 						bullScene.getDrawer().setGc(getGraphicsContext());
 						bullScene.getDrawer().drawBoard();
 					}

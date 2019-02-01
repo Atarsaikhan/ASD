@@ -2,8 +2,6 @@ package gui;
 
 import javafx.scene.control.ButtonBar.ButtonData;
 
-import java.io.File;
-
 import application.CGameSettings;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

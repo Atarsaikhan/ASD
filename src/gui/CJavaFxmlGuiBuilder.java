@@ -1,36 +1,13 @@
 package gui;
 
 import java.io.IOException;
-import java.util.Optional;
 
-import application.CFourBullsGame;
-import application.CGameFactoryImpl;
-import application.CGameSettings;
-import application.CObserverTime;
-import application.IGameFactory;
 import framework.CPlayer;
 import framework.EBullColor;
-import framework.IGameController;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class CJavaFxmlGuiBuilder implements IGuiBuilder {
 	private CGameScene bullScene;

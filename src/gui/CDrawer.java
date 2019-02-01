@@ -1,13 +1,10 @@
 package gui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import application.CGameSettings;
 import application.IObserverMoveNumber;
-import application.IObserverTime;
 import framework.APosition;
 import framework.CCmdCapture;
 import framework.CCmdMove;
@@ -37,14 +34,12 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 	private CGameSettings gameSettings;
 	private boolean isTimed;
 	private Timeline timeLoop;
-	private List<IObserverTime> timeObservers;
 	private final Object MUTEX = new Object();
 	private int timerValue;
 
 	CDrawer() {
 		this.gameSettings = CGameSettings.getInstance();
 		this.gameSettings.readSettings(SETTINGS_FILE);
-		timeObservers = new ArrayList<>();
 		commandsExecuted = new Stack<ICommand>();
 	}
 
@@ -283,19 +278,22 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 						double t = (System.currentTimeMillis() - timeStart) / 1000;
 						timerValue = (int) (timeMax - t);
 						drawTimer(timerValue);
-						notifyTimeObservers();
+						checkTime();
 					}
 				});
 
 		timeLoop.getKeyFrames().add(kf);
 		timeLoop.play();
 	}
-
-	public void timeOut() {
-		game.timeExpired();
-		drawStatus();
-		drawArrowToCurrent();
-		System.out.println(game.getGameState());
+	
+	public void checkTime() {
+		if (timerValue<=0) {
+			System.out.println("time is expired");
+			game.timeExpired();
+			drawStatus();
+			drawArrowToCurrent();
+			System.out.println(game.getGameState());
+		}
 	}
 
 	@Override
@@ -344,30 +342,6 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 			isTimed = true;
 		} else {
 			isTimed = false;
-		}
-	}
-
-	public void attach(IObserverTime timeObserver) {
-		synchronized (MUTEX) {
-			System.out.println("time observer attached");
-			if (!timeObservers.contains(timeObserver))
-				timeObservers.add(timeObserver);
-		}
-	}
-
-	public void detach(IObserverTime timeObserver) {
-		synchronized (MUTEX) {
-			int i = timeObservers.indexOf(timeObserver);
-			if (i >= 0)
-				timeObservers.remove(i);
-		}
-	}
-
-	public void notifyTimeObservers() {
-		synchronized (MUTEX) {
-			for (IObserverTime ob : timeObservers) {
-				ob.update(timerValue);
-			}
 		}
 	}
 

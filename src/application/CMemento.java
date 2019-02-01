@@ -1,6 +1,6 @@
-package Application;
+package application;
 
-import Framework.IGameController;
+import framework.IGameController;
 
 class CMemento {
 	private IGameController gameSnapshot;

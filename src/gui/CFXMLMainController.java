@@ -2,11 +2,11 @@ package gui;
 
 import java.util.Optional;
 
-import Application.CGameFactoryImpl;
-import Application.CGameSettings;
-import Application.CObserverTime;
-import Application.IGameFactory;
-import Framework.IGameController;
+import application.CGameFactoryImpl;
+import application.CGameSettings;
+import application.CObserverTime;
+import application.IGameFactory;
+import framework.IGameController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

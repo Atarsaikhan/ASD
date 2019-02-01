@@ -1,4 +1,4 @@
-package Framework;
+package framework;
 
 public class CCmdMove implements ICommand {
 	private APosition pos1;

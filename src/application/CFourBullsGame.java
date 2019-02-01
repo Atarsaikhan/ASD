@@ -1,15 +1,15 @@
-package Application;
+package application;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Framework.APosition;
-import Framework.CBoardGame;
-import Framework.CPlayer;
-import Framework.CPositionImpl;
-import Framework.EBullColor;
-import Framework.EGameState;
-import Framework.IGameController;
+import framework.APosition;
+import framework.CBoardGame;
+import framework.CPlayer;
+import framework.CPositionImpl;
+import framework.EBullColor;
+import framework.EGameState;
+import framework.IGameController;
 
 public class CFourBullsGame implements IGameController {
 
@@ -110,22 +110,34 @@ public class CFourBullsGame implements IGameController {
 
 	@Override
 	public boolean move(APosition pos1, APosition pos2) {
-		return game.move(pos1, pos2);
+		boolean ret = game.move(pos1, pos2);
+		if (ret)
+			this.notifyObservers();
+		return ret;
 	}
 
 	@Override
 	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
-		return game.undoMove(pos1, pos2, state);
+		boolean ret = game.undoMove(pos1, pos2, state);
+		if (ret)
+			this.notifyObservers();
+		return ret;
 	}
 
 	@Override
 	public boolean capture(APosition pos) {
-		return game.capture(pos);
+		boolean ret = game.capture(pos);
+		if (ret)
+			this.notifyObservers();
+		return ret;
 	}
 
 	@Override
 	public boolean undoCapture(APosition pos, EGameState state) {
-		return game.undoCapture(pos, state);
+		boolean ret = game.undoCapture(pos, state);
+		if (ret)
+			this.notifyObservers();
+		return ret;
 	}
 
 	@Override
@@ -161,8 +173,8 @@ public class CFourBullsGame implements IGameController {
 		}
 
 	}
-	
-	@Override 
+
+	@Override
 	public CPlayer getWhite() {
 		return game.getWhite();
 	}

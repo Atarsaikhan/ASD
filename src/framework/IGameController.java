@@ -1,8 +1,8 @@
-package Framework;
+package framework;
 
 import java.util.List;
 
-import Application.IObserverMoveNumber;
+import application.IObserverMoveNumber;
 
 public interface IGameController {
 	public abstract boolean move(APosition pos1, APosition pos2);

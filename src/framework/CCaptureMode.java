@@ -1,14 +1,14 @@
-package Framework;
+package framework;
 
 import java.util.List;
 
-public class CNonCaptureMode implements IGameMode {
+public class CCaptureMode implements IGameMode {
 	private String message;
 
 	@Override
 	public EGameState changeState(List<APosition> positions, CPlayer current) {
-		EGameState temp = EGameState.GAMEOVER;
-		this.message = "Game over!";
+		EGameState temp = EGameState.NOMOVE;
+		this.message = "No move!";
 		for (APosition pos : positions) {
 			if (pos.getColor().equals(current.getColor()) && pos.isMovable()) {
 				temp = EGameState.ACTIVE;
@@ -16,6 +16,9 @@ public class CNonCaptureMode implements IGameMode {
 				return temp;
 			}
 		}
+		if (current.getCurrentPieces() < 2)
+			temp = EGameState.GAMEOVER;
+		
 		return temp;
 	}
 

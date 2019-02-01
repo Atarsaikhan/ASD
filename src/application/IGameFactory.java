@@ -1,6 +1,6 @@
-package Application;
+package application;
 
-import Framework.IGameController;
+import framework.IGameController;
 
 public interface IGameFactory {
 	public IGameController createGame(String type, String playerName1, String playerName2);

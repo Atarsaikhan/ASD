@@ -1,4 +1,4 @@
-package Framework;
+package framework;
 
 import java.util.ArrayList;
 import java.util.List;

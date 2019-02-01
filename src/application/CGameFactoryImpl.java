@@ -1,8 +1,8 @@
-package Application;
+package application;
 
-import Framework.CPlayer;
-import Framework.EBullColor;
-import Framework.IGameController;
+import framework.CPlayer;
+import framework.EBullColor;
+import framework.IGameController;
 
 public class CGameFactoryImpl implements IGameFactory {
 

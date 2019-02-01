@@ -3,3 +3,5 @@
 /resources/
 /.DS_Store
 /gui/
+/application/
+/framework/

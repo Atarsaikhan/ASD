@@ -1,6 +1,6 @@
 package gui;
 
-import Framework.CPlayer;
+import framework.CPlayer;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -1,4 +1,4 @@
-package Framework;
+package framework;
 
 public class CCmdCapture implements ICommand {
 	private APosition pos;

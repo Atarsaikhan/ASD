@@ -131,23 +131,21 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 			System.out.println(cmd.getPos1().getId() + "|" + cmd.getPos1().getColor());
 			System.out.println(cmd.getPos2().getId() + "|" + cmd.getPos2().getColor());
 		}
-		
+
 		return ret;
 	}
 
 	public void drawStatus() {
-		if (game != null)
+		if (game != null) {
 			if (game.getGameState() == EGameState.GAMEOVER) {
-				drawStatusText(game.getMessage());
+				// drawStatusText(game.getMessage());
 				drawGameOver();
 				stopTimer();
-			} else if (game.getGameState() == EGameState.NOMOVE) {
-				drawStatusText(game.getMessage());
-				// drawGameOver();
-			} else {
+			} else if (game.getGameState() == EGameState.ACTIVE) {
 				drawArrowToCurrent();
-				drawStatusText(game.getMessage());
 			}
+			drawStatusText(game.getMessage());
+		}
 	}
 
 	public void drawStatusText(String text) {
@@ -164,12 +162,12 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		gc.setFill(BASE_COLOR);
 		gc.fillRoundRect(200, 200, 200, 200, 30, 30);
 		gc.setFill(TEXT_COLOR);
-		gc.fillText(game.getCurrent().getName()+" has won", 230, 290, 400);
+		gc.fillText(game.getCurrent().getName() + " has won", 230, 290, 400);
 		gc.fillText("Game is over", 230, 340, 400);
 	}
 
 	public void drawArrowToCurrent() {
-		
+
 		String arrowLeftUrl = "resources/images/arrow_left.png";
 		String arrowRightUrl = "resources/images/arrow_right.png";
 
@@ -222,7 +220,7 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 			gc.drawImage(pos.getImage(), pos.getX() - w, pos.getY() - h);
 		}
 	}
-	
+
 	public void drawPlayers() {
 		String whiteURL = "resources/images/bull_purple.jpg";
 		String blackURL = "resources/images/bull_blue.jpg";
@@ -232,14 +230,13 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		gc.drawImage(imW, 300 - imW.getWidth() / 2 + 150, 600 - imW.getHeight() / 2);
 		gc.drawImage(imB, 300 - imB.getWidth() / 2 - 150, 600 - imB.getHeight() / 2);
 
-		
 		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
 		gc.setFill(Color.BISQUE);
 		gc.fillRoundRect(100, 635, 110, 25, 10, 10);
 		gc.fillRoundRect(400, 635, 110, 25, 10, 10);
 		gc.setFill(TEXT_COLOR);
-		gc.fillText( game.getWhite().getName() , 120, 655, 150);
-		gc.fillText( game.getBlack().getName() , 420, 655, 150);
+		gc.fillText(game.getWhite().getName(), 120, 655, 150);
+		gc.fillText(game.getBlack().getName(), 420, 655, 150);
 	}
 
 	public void stopTimer() {
@@ -301,8 +298,15 @@ public class CDrawer implements IDrawer, IObserverMoveNumber {
 		System.out.println(game.getGameState());
 	}
 
+	@Override
 	public void restartGame() {
-		game.restart();
+		if (game != null) {
+			game.restart();
+			commandsExecuted = new Stack<ICommand>();
+			this.positions = game.getPositions();
+			drawBoard();
+		}
+		
 	}
 
 	@Override

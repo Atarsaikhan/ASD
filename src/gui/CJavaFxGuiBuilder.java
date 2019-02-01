@@ -34,11 +34,13 @@ import javafx.stage.Stage;
 public class CJavaFxGuiBuilder implements IGuiBuilder {
 	CGameScene bullScene;
     MenuItem mniNewGame = new MenuItem("New game"); 
+    MenuItem mniRestart = new MenuItem("Restart"); 
     MenuItem mniUndo = new MenuItem("Undo"); 
     MenuItem mniSettings = new MenuItem("Settings"); 
-    MenuItem mniExit = new MenuItem("Exit"); 
+    MenuItem mniQuit = new MenuItem("Quit"); 
     
-    Button btnNew = new Button("New game");
+    Button btnNewGame = new Button("New game");
+    Button btnRestart = new Button("Restart");
     Button btnUndo = new Button("Undo"); 
     Button btnSettings = new Button("Settings"); 
     Canvas canvas = new Canvas(600, 700);
@@ -79,9 +81,10 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
   
         // add menu items to menu 
         m.getItems().add(mniNewGame); 
+        m.getItems().add(mniRestart); 
         m.getItems().add(mniUndo); 
         m.getItems().add(mniSettings); 
-        m.getItems().add(mniExit); 
+        m.getItems().add(mniQuit); 
   
         // create a menubar 
         MenuBar mb = new MenuBar(); 
@@ -101,21 +104,28 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         controlBox.getChildren().add(controlsPane);
 
 //        Button btnNew = new Button("New game"); 
-        AnchorPane.setTopAnchor(btnNew, 200.0); 
-        AnchorPane.setLeftAnchor(btnNew, 30.0); 
-        AnchorPane.setRightAnchor(btnNew, 30.0); 
+        AnchorPane.setTopAnchor(btnNewGame, 200.0); 
+        AnchorPane.setLeftAnchor(btnNewGame, 30.0); 
+        AnchorPane.setRightAnchor(btnNewGame, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
-        controlsPane.getChildren().add(btnNew);
+        controlsPane.getChildren().add(btnNewGame);
+        
+//        Button btnUndo = new Button("Restart"); 
+        AnchorPane.setTopAnchor(btnRestart, 240.0); 
+        AnchorPane.setLeftAnchor(btnRestart, 30.0); 
+        AnchorPane.setRightAnchor(btnRestart, 30.0); 
+        //AnchorPane.setBottomAnchor(button, 125.0); 
+        controlsPane.getChildren().add(btnRestart);
         
 //        Button btnUndo = new Button("Undo"); 
-        AnchorPane.setTopAnchor(btnUndo, 240.0); 
+        AnchorPane.setTopAnchor(btnUndo, 280.0); 
         AnchorPane.setLeftAnchor(btnUndo, 30.0); 
         AnchorPane.setRightAnchor(btnUndo, 30.0); 
         //AnchorPane.setBottomAnchor(button, 125.0); 
         controlsPane.getChildren().add(btnUndo);
         
 //      Button btnSettings = new Button("Settings"); 
-      AnchorPane.setTopAnchor(btnSettings, 280.0); 
+      AnchorPane.setTopAnchor(btnSettings, 320.0); 
       AnchorPane.setLeftAnchor(btnSettings, 30.0); 
       AnchorPane.setRightAnchor(btnSettings, 30.0); 
       //AnchorPane.setBottomAnchor(btnSettings, 125.0); 
@@ -198,6 +208,14 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 
             }
         };
+        
+        EventHandler<ActionEvent> restartHandler = new EventHandler<ActionEvent>() {
+        	public void handle(ActionEvent t) {
+        		if (bullScene.getDrawer() !=null) {
+        			bullScene.getDrawer().restartGame();
+        		}
+        	}
+        };
 		
 		EventHandler<ActionEvent> undoHandler = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -217,7 +235,7 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
         	}
         };
         
-        mniExit.setOnAction(new EventHandler<ActionEvent>() {
+        mniQuit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	Platform.exit();
             }
@@ -225,7 +243,10 @@ public class CJavaFxGuiBuilder implements IGuiBuilder {
 
         
         mniNewGame.setOnAction(newHandler);
-        btnNew.setOnAction(newHandler);
+        btnNewGame.setOnAction(newHandler);
+        
+        mniRestart.setOnAction(restartHandler);
+        btnRestart.setOnAction(restartHandler);
 
         mniUndo.setOnAction(undoHandler);
         btnUndo.setOnAction(undoHandler);

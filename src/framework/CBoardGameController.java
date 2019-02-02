@@ -147,7 +147,6 @@ public class CBoardGameController {
 	}
 
 	public void activate(APosition pos1, APosition pos2) {
-		System.out.println("Acitivate: " + pos1.getId());
 		guiManager.drawPos(pos1, guiManager.ACTIVE_STROKE_COLOR);
 		guiManager.drawPos(pos2, guiManager.MOVABLE_STROKE_COLOR);
 	}

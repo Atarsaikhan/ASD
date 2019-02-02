@@ -120,7 +120,7 @@ public class HornGame implements IBoardGame {
 				if (pos.isEmpty()) {
 					active.move(pos);
 					active = null;
-				} else if (pos.isMovable()) {
+				} else if (active != pos && pos.isMovable()) {
 					pos.activate(active);
 					active = pos;
 				}

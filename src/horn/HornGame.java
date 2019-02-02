@@ -70,10 +70,10 @@ public class HornGame implements IGameController {
 		APosition pos2 = new CPositionImpl(2, 325, 161, EBullColor.NONE, this);
 		APosition pos3 = new CPositionImpl(3, 192, 223, EBullColor.NONE, this);
 		APosition pos4 = new CPositionImpl(4, 348, 246, EBullColor.NONE, this);
-		APosition pos5 = new CPositionImpl(5, 180, 327, EBullColor.WHITE, this);
-		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.WHITE, this);
+		APosition pos5 = new CPositionImpl(5, 180, 327, EBullColor.BLACK, this);
+		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.BLACK, this);
 		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this);
-		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.BLACK, this);
+		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.WHITE, this);
 		
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);

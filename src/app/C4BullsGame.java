@@ -1,6 +1,7 @@
-package application;
+package app;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,44 +12,22 @@ import framework.CPositionImpl;
 import framework.EBullColor;
 import framework.EGameState;
 import framework.IBoardGame;
-import framework.IGameController;
 import javafx.scene.canvas.GraphicsContext;
 
-public class CFourBullsGame implements IBoardGame {
+public class C4BullsGame  implements IBoardGame {
 
+	static final int P_SIZE = 50;
 	private CBoardGameController gameController;
 	private APosition active;
 	private Stack<List<APosition>> moves;
-	private List<IObserverMoveNumber> observers;
-	private final Object MUTEX = new Object();
 
-	public int getTotalMove() {
-		return gameController.getTotalMove();
-	}
-
-	@Override
-	public CPlayer getCurrent() {
-		return gameController.getCurrent();
-	}
-
-	@Override
-	public String getMessage() {
-		return gameController.getMessage();
-	}
-
-	@Override
-	public EGameState getGameState() {
-		return gameController.getGameState();
-	}
-
-	public CFourBullsGame(GraphicsContext graphicsContext, CPlayer white, CPlayer black, boolean isCaptureGame) {
-		observers = new ArrayList<>();
+	C4BullsGame(GraphicsContext graphicsContext) {
 		moves = new Stack<>();
 		active = null;
 
 		gameController = new CBoardGameController();
 		gameController.setPlayers(new CPlayer("Bull", 1, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
-		gameController.setGUIManager(graphicsContext, "bullhorn2.png");
+		gameController.setGUIManager(graphicsContext, "bullBackground.jpg");
 		gameController.startGame(false, initPositions());
 	}
 
@@ -91,6 +70,52 @@ public class CFourBullsGame implements IBoardGame {
 
 	}
 
+	public void undo() {
+		System.out.println("undo");
+		if (moves.isEmpty()) {
+			System.out.println("empty");
+			return;
+		}
+
+		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
+		this.undoMove(move.get(0), move.get(1), gameController.getGameState());
+
+	}
+
+	public void handle(int x, int y) {
+
+		if (gameController.getGameState().equals(EGameState.GAMEOVER))
+			return;
+
+		System.out.println("x,y: " + x + ", " + y);
+		APosition pos = findPosition(x, y);
+		if (pos != null) {
+			if (active != null) {
+				if (pos.isEmpty()) {
+					active.move(pos);
+					active = null;
+				} else if (pos.isMovable()) {
+					pos.activate(active);
+					active = pos;
+				}
+			} else if (pos.isMovable()) {
+				active = pos;
+				pos.activate(null);
+			}
+		}
+
+	}
+
+	private APosition findPosition(int x, int y) {
+		for (APosition pos : gameController.getPositions()) {
+			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
+			if (distance < P_SIZE / 2) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
 	public void restart() {
 		gameController.restart(initPositions());
 	}
@@ -98,82 +123,54 @@ public class CFourBullsGame implements IBoardGame {
 	@Override
 	public boolean move(APosition pos1, APosition pos2) {
 		boolean ret = gameController.move(pos1, pos2);
-		if (ret)
-			this.notifyObservers();
+		if (ret) {
+			moves.push(new ArrayList<APosition>(Arrays.asList(pos1, pos2)));
+			System.out.println("push");
+		}
 		return ret;
 	}
 
 	@Override
 	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
 		boolean ret = gameController.undoMove(pos1, pos2, state);
-		if (ret)
-			this.notifyObservers();
 		return ret;
-	}
-
-	@Override
-	public boolean capture(APosition pos) {
-		boolean ret = gameController.capture(pos);
-		if (ret)
-			this.notifyObservers();
-		return ret;
-	}
-
-	@Override
-	public boolean undoCapture(APosition pos, EGameState state) {
-		boolean ret = gameController.undoCapture(pos, state);
-		if (ret)
-			this.notifyObservers();
-		return ret;
-	}
-
-	@Override
-	public void timeExpired() {
-		gameController.timeExpired();
-
-	}
-
-	// Observer methods
-	public void attach(IObserverMoveNumber observer) {
-		synchronized (MUTEX) {
-			if (!observers.contains(observer))
-				observers.add(observer);
-		}
-	}
-
-	public void detach(IObserverMoveNumber observer) {
-		synchronized (MUTEX) {
-			int i = observers.indexOf(observer);
-			if (i >= 0)
-				observers.remove(i);
-		}
-	}
-
-	public void notifyObservers() {
-		synchronized (MUTEX) {
-			for (IObserverMoveNumber observer : observers) {
-				observer.update(this.getTotalMove());
-			}
-		}
-
 	}
 
 	@Override
 	public void activate(APosition pos1, APosition pos2) {
+		gameController.activate(pos1, pos2);
+	}
+
+	@Override
+	public boolean capture(APosition pos) {
+		return true;
+	}
+
+	@Override
+	public boolean undoCapture(APosition pos, EGameState state) {
+		return true;
+	}
+
+	@Override
+	public void timeExpired() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void handle(int x, int y) {
-		// TODO Auto-generated method stub
-		
+	public EGameState getGameState() {
+		return this.gameController.getGameState();
 	}
 
 	@Override
-	public void undo() {
+	public CPlayer getCurrent() {
+		return this.gameController.getCurrent();
+	}
+
+	@Override
+	public String getMessage() {
 		// TODO Auto-generated method stub
-		
+		return this.gameController.getMessage();
 	}
 
 }

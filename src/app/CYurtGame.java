@@ -1,4 +1,4 @@
-package yurt;
+package app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,20 +14,20 @@ import framework.EGameState;
 import framework.IBoardGame;
 import javafx.scene.canvas.GraphicsContext;
 
-public class YurtGame implements IBoardGame {
+public class CYurtGame implements IBoardGame {
 
 	static final int P_SIZE = 50;
 	private CBoardGameController gameController;
 	private APosition active;
 	private Stack<List<APosition>> moves;
 
-	YurtGame(GraphicsContext graphicsContext) {
+	CYurtGame(GraphicsContext graphicsContext) {
 		moves = new Stack<>();
 		active = null;
 
 		gameController = new CBoardGameController();
 		gameController.setPlayers(new CPlayer("Bull", 1, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
-		gameController.setGUIManager(graphicsContext, "bullhorn2.png");
+		gameController.setGUIManager(graphicsContext, "toono.png");
 		gameController.startGame(false, initPositions());
 	}
 

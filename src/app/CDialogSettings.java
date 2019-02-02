@@ -1,4 +1,4 @@
-package application;
+package app;
 
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;

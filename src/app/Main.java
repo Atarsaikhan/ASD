@@ -1,4 +1,4 @@
-package application;
+package app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class CMain extends Application {
+public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
@@ -14,15 +14,18 @@ public class CMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("4 Bulls");
-		
 		FXMLLoader fxmlLoader = new FXMLLoader();
-		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/FXMLMain.fxml"));
+		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/MainWindow.fxml"));
+		
 		Parent root = fxmlLoader.load();
+		
+		MainWindowController cont = (MainWindowController ) fxmlLoader.getController();
+		cont.setStage(primaryStage);
+		
 		Scene scene = new Scene (root);
 		
 	
-		primaryStage.setTitle("Board Game - 4 Bulls");
+		primaryStage.setTitle("Board Game - Yurt");
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();

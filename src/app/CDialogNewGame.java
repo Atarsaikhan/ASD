@@ -1,4 +1,4 @@
-package application;
+package app;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,8 +33,8 @@ public class CDialogNewGame {
     private boolean newGameClicked = false;
     private String playerName1;
     private String playerName2;
-    private boolean toCapture;
-    private int choiceIndex;
+    private boolean isCaptureGame;
+    private int selectedGame;
     
     /**
      * Initializes the controller class. This method is automatically called
@@ -82,8 +82,8 @@ public class CDialogNewGame {
     void onStartNewGameClick(ActionEvent event) {
     	this.playerName1 = txtPlayerName1.getText();
     	this.playerName2 = txtPlayerName2.getText();
-    	this.toCapture = chkToCapture.isSelected();
-    	this.choiceIndex = chsGameType.getSelectionModel().getSelectedIndex();
+    	this.isCaptureGame = chkToCapture.isSelected();
+    	this.selectedGame = chsGameType.getSelectionModel().getSelectedIndex();
     	
         newGameClicked = true;
         dialogStage.close();
@@ -92,8 +92,8 @@ public class CDialogNewGame {
     public void setValues(String playerName1, String playerName2, boolean toCapture, int choiceIndex) {
     	this.playerName1 = playerName1;
     	this.playerName2 = playerName2;
-    	this.toCapture = toCapture;
-    	this.choiceIndex = choiceIndex;
+    	this.isCaptureGame = toCapture;
+    	this.selectedGame = choiceIndex;
 
     	txtPlayerName1.setText(playerName1);
     	txtPlayerName2.setText(playerName2);
@@ -109,12 +109,12 @@ public class CDialogNewGame {
 		return playerName2;
 	}
 
-	public boolean isToCapture() {
-		return toCapture;
+	public boolean isCaptureGame() {
+		return isCaptureGame;
 	}
 
-	public int getChoiceIndex() {
-		return choiceIndex;
+	public int selectedGame() {
+		return selectedGame;
 	}
 
 }

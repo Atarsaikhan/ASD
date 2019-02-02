@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 
+import application.CFXMLMainController;
 import framework.CPlayer;
 import framework.EBullColor;
 import javafx.fxml.FXMLLoader;

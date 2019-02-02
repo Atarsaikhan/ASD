@@ -2,14 +2,14 @@ package fxgui;
 
 import java.util.Optional;
 
+import application.CDialogNewGame;
+import application.CDialogSettings;
 import application.CGameFactoryImpl;
 import application.CGameSettings;
 import application.IGameFactory;
 import framework.CPlayer;
 import framework.EBullColor;
 import framework.IGameController;
-import gui.CDialogNewGame;
-import gui.CDialogSettings;
 import gui.CDrawer;
 import gui.CGameScene;
 import gui.IGuiBuilder;

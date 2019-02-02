@@ -1,4 +1,4 @@
-package horn;
+package application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class CMain extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
@@ -14,15 +14,15 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Bull Horn");
+		primaryStage.setTitle("4 Bulls");
 		
 		FXMLLoader fxmlLoader = new FXMLLoader();
-		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/HornWindow.fxml"));
+		fxmlLoader.setLocation(getClass().getClassLoader().getResource("resources/FXMLMain.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene (root);
 		
 	
-		primaryStage.setTitle("Board Game - Bull horn");
+		primaryStage.setTitle("Board Game - 4 Bulls");
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();

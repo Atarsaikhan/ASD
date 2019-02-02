@@ -12,7 +12,6 @@ public class CBoardGameController {
 	private CPlayer current;
 	private CPlayer white;
 	private CPlayer black;
-	private APosition active;
 	private List<APosition> positions;
 	private String message;
 	private int totalMove;
@@ -78,7 +77,7 @@ public class CBoardGameController {
 	}
 
 	public CBoardGameController() {
-		active = null;
+		
 	}
 
 	public CBoardGameController(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
@@ -145,29 +144,6 @@ public class CBoardGameController {
 		black.reset();
 
 		guiManager.drawBoard(positions);
-	}
-
-	public boolean move(APosition pos) {
-		if (pos == null) {
-			guiManager.drawPos(active, guiManager.NORMAL_STROKE_COLOR);
-			active = null;
-			return true;
-		}
-		if (active != null) {
-			if (pos.isEmpty()) {
-				boolean ret = this.move(active, pos);
-				guiManager.drawBoard(positions);
-				return ret;
-			} else if (pos.isMovable()) {
-				guiManager.drawPos(active, guiManager.NORMAL_STROKE_COLOR);
-				active = pos;
-				guiManager.drawPos(active, guiManager.ACTIVE_STROKE_COLOR);
-			}
-		} else if (pos.isMovable()) {
-			active = pos;
-			guiManager.drawPos(active, guiManager.ACTIVE_STROKE_COLOR);
-		}
-		return false;
 	}
 
 	public void activate(APosition pos1, APosition pos2) {

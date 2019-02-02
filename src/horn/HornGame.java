@@ -144,6 +144,7 @@ public class HornGame implements IBoardGame {
 
 	public void restart() {
 		gameController.restart(initPositions());
+		moves.clear();
 	}
 
 	@Override

@@ -1,11 +1,9 @@
-package gui;
+package application;
 
 import java.util.Optional;
 
-import application.CGameFactoryImpl;
-import application.CGameSettings;
-import application.IGameFactory;
 import framework.IGameController;
+import gui.CGameScene;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

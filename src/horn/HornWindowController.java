@@ -1,6 +1,5 @@
 package horn;
 
-import framework.EBullColor;
 import framework.EGameState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

@@ -14,6 +14,7 @@ public class CBoardGame {
 
 	public CPlayer getWhite() {
 		return white;
+		
 	}
 
 	public void setWhite(CPlayer white) {

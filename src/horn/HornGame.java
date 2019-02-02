@@ -108,7 +108,7 @@ public class HornGame implements IBoardGame {
 
 	}
 
-	public void eventHandler(int x, int y) {
+	public void handle(int x, int y) {
 
 		if (gameController.getGameState().equals(EGameState.GAMEOVER))
 			return;

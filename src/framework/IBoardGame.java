@@ -1,8 +1,10 @@
 package framework;
 
-import java.util.List;
-
 public interface IBoardGame {
+	public void handle(int x, int y);
+
+	public void undo();
+
 	public boolean move(APosition pos1, APosition pos2);
 
 	public boolean undoMove(APosition pos1, APosition pos2, EGameState state);

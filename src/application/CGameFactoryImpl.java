@@ -25,7 +25,7 @@ public class CGameFactoryImpl implements IGameFactory {
 	private IGameController createFourBulls(String playerName1, String playerName2, boolean isCaptureGame) {
     	CPlayer player1 = new CPlayer(playerName1, 2, EBullColor.WHITE);
 		CPlayer player2 = new CPlayer(playerName2, 2, EBullColor.BLACK);
-		IGameController game = new CFourBullsGame(player1, player2, isCaptureGame);
+		IGameController game = null;// new CFourBullsGame( player1, player2, isCaptureGame);
 		return game;
 	}
 }

@@ -164,4 +164,16 @@ public class CFourBullsGame implements IBoardGame {
 
 	}
 
+	@Override
+	public void handle(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

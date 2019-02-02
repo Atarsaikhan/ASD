@@ -1,6 +1,7 @@
 package horn;
 
 import framework.EGameState;
+import framework.IBoardGame;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,7 +24,7 @@ public class HornWindowController {
 	@FXML
 	private Canvas canvas;
 
-	HornGame game;
+	IBoardGame game;
 
 	@FXML
 	void onRestart_Clicked(ActionEvent event) {
@@ -47,7 +48,7 @@ public class HornWindowController {
 		canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				System.out.println("canvas handle");
-				game.eventHandler((int) e.getX(), (int) e.getY());
+				game.handle((int) e.getX(), (int) e.getY());
 
 				if (game.getGameState().equals(EGameState.GAMEOVER)) {
 					lblTopLine.setText(game.getCurrent().getName() + " won." + "\nClick \"New Game\" to start a game.");

@@ -1,5 +1,6 @@
 package yurt;
 
+import framework.IBoardGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,7 +29,7 @@ public class YurtWindowController {
     @FXML
     private Button btnQuit;
     
-    YurtGame game;
+    IBoardGame game;
     
 	@FXML
 	private void initialize() {
@@ -37,7 +38,7 @@ public class YurtWindowController {
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				System.out.println("canvas handle");
-				game.eventHandler((int) e.getX(), (int) e.getY());
+				game.handle((int) e.getX(), (int) e.getY());
 
 			}
 		});

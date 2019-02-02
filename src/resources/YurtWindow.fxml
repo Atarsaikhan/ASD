@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<Group xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yurt.YurtWindowController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Canvas fx:id="gameCanvas" height="600.0" width="600.0" />
+               </children>
+            </HBox>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                <Button fx:id="btnNewGame" mnemonicParsing="false" onAction="#onNewGameClick" text="New game" />
+                  <Button fx:id="btnRestart" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#onRestartClick" text="Restart" />
+                  <Button fx:id="btnUndo" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#onUndoClick" text="Undo move" />
+                  <Button fx:id="btnSettings" layoutX="190.0" layoutY="17.0" mnemonicParsing="false" onAction="#onSettingsClick" text="Settings" />
+                  <Button fx:id="btnQuit" layoutX="270.0" layoutY="17.0" mnemonicParsing="false" onAction="#onQuitClick" text="Quit" />
+              </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </children>
+</Group>

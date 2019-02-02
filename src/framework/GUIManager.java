@@ -7,13 +7,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class GUIManager {
-	private int P_SIZE = 50;
-	private int LINE_WIDTH = 5;
-	public final Color FILL_COLOR = Color.WHITE;
-	public final Color BASE_COLOR = Color.CORNSILK;
-	public final Color NORMAL_STROKE_COLOR = Color.BLACK;
-	public final Color MOVABLE_STROKE_COLOR = Color.YELLOW;
-	public final Color ACTIVE_STROKE_COLOR = Color.RED;
+	int P_SIZE = 50;
+	int LINE_WIDTH = 5;
+	Color FILL_COLOR = Color.WHITE;
+	Color BASE_COLOR = Color.CORNSILK;
+	Color NORMAL_STROKE_COLOR = Color.BLACK;
+	Color MOVABLE_STROKE_COLOR = Color.YELLOW;
+	Color ACTIVE_STROKE_COLOR = Color.RED;
 
 	private String backImage="";
 	private GraphicsContext graphicsContext;

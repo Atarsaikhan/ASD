@@ -3,6 +3,7 @@ package framework;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class CBoardGame {
 	private EGameState gameState;
@@ -71,13 +72,17 @@ public class CBoardGame {
 	public void setPositions(List<APosition> positions) {
 		this.positions = positions;
 	}
-	
+
 	public void setGraphicsContext(GraphicsContext graphicsContext) {
 		this.guiManager.setGraphicsContext(graphicsContext);
 	}
 
+	public CBoardGame() {
+		active = null;
+	}
+
 	public CBoardGame(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
-		guiManager = new GUIManager();
+
 		if (isCaptureGame)
 			this.gameMode = new CCaptureMode();
 		else
@@ -86,12 +91,49 @@ public class CBoardGame {
 		this.white = white;
 		this.black = black;
 
-		active = null;
-
-		//restart(positions);
+		this.setGUIManager("bullhorn2.png");
 	}
 
 	public void restart(List<APosition> positions) {
+		this.gameState = EGameState.ACTIVE;
+		this.message = "";
+		this.positions = positions;
+		this.totalMove = 0;
+
+		this.current = white;
+		white.reset();
+		black.reset();
+
+		guiManager.drawBoard(positions);
+	}
+
+	public void setPlayers(CPlayer white, CPlayer black) {
+		this.white = white;
+		this.black = black;
+	}
+
+	public void setGUIManager(String backImage) {
+		guiManager = new GUIManager();
+		guiManager.setBackImage(backImage);
+	}
+
+	public void setObjectProperties(int pawnSize, int lineWidth, Color fillColor, Color baseColor, Color normalStroke,
+			Color movableStroke, Color activeColor) {
+		guiManager.P_SIZE = pawnSize;
+		guiManager.LINE_WIDTH = lineWidth;
+		guiManager.FILL_COLOR = fillColor;
+		guiManager.BASE_COLOR = baseColor;
+		guiManager.NORMAL_STROKE_COLOR = normalStroke;
+		guiManager.MOVABLE_STROKE_COLOR = movableStroke;
+		guiManager.ACTIVE_STROKE_COLOR = activeColor;
+	}
+
+	public void restart(boolean isCaptureGame, List<APosition> positions) {
+		if (isCaptureGame)
+			this.gameMode = new CCaptureMode();
+		else
+			this.gameMode = new CNonCaptureMode();
+
 		this.gameState = EGameState.ACTIVE;
 		this.message = "";
 		this.positions = positions;

@@ -133,8 +133,6 @@ public class HornGame implements IGameController {
 		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
 		this.undoMove(move.get(0), move.get(1), game.getGameState());
 
-		guiMan.drawPos(move.get(0), guiMan.NORMAL_STROKE_COLOR);
-		guiMan.drawPos(move.get(1), guiMan.NORMAL_STROKE_COLOR);
 	}
 
 	public void eventHandler(int x, int y) {

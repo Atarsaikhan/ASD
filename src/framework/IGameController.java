@@ -13,6 +13,8 @@ public interface IGameController {
 
 	public abstract boolean undoCapture(APosition pos, EGameState state);
 
+	public abstract void activate(APosition pos1, APosition pos2);
+
 	public abstract void timeExpired();
 
 	public abstract void restart();

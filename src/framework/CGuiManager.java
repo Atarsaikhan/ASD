@@ -6,7 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class GUIManager {
+public class CGuiManager {
 	int P_SIZE = 50;
 	int LINE_WIDTH = 5;
 	Color FILL_COLOR = Color.WHITE;
@@ -15,7 +15,7 @@ public class GUIManager {
 	Color MOVABLE_STROKE_COLOR = Color.YELLOW;
 	Color ACTIVE_STROKE_COLOR = Color.RED;
 
-	private String backImage="";
+	private String backImage = "";
 	private GraphicsContext graphicsContext;
 
 	public String getBackImage() {
@@ -34,7 +34,7 @@ public class GUIManager {
 		this.graphicsContext = graphicsContext;
 	}
 
-	public GUIManager() {
+	public CGuiManager() {
 
 	}
 
@@ -67,6 +67,8 @@ public class GUIManager {
 	}
 
 	public void drawPos(APosition pos, Color strokColor) {
+		if (pos == null)
+			return;
 		graphicsContext.setStroke(strokColor);
 		graphicsContext.setFill(FILL_COLOR);
 		graphicsContext.fillOval(pos.getX() - P_SIZE / 2, pos.getY() - P_SIZE / 2, P_SIZE, P_SIZE);

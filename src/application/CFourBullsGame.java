@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import framework.APosition;
-import framework.CBoardGame;
+import framework.CBoardGameController;
 import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
@@ -13,7 +13,7 @@ import framework.IGameController;
 
 public class CFourBullsGame implements IGameController {
 
-	private CBoardGame game;
+	private CBoardGameController game;
 	private List<IObserverMoveNumber> observers;
 	private final Object MUTEX = new Object();
 
@@ -65,43 +65,43 @@ public class CFourBullsGame implements IGameController {
 
 	public CFourBullsGame(CPlayer white, CPlayer black, boolean isCaptureGame) {
 		observers = new ArrayList<>();
-		game = new CBoardGame(white, black, isCaptureGame, initPositions());
+		game = new CBoardGameController(white, black, isCaptureGame, initPositions());
 	}
 
 	private List<APosition> initPositions() {
 
 		List<APosition> positions = new ArrayList<>();
-
-		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE, this);
-		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK, this);
-		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE, this);
-		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK, this);
-		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE, this);
-
-		pos0.addNeighbor(pos1);
-		pos0.addNeighbor(pos2);
-		pos0.addNeighbor(pos3);
-
-		pos1.addNeighbor(pos0);
-		pos1.addNeighbor(pos2);
-
-		pos2.addNeighbor(pos0);
-		pos2.addNeighbor(pos1);
-		pos2.addNeighbor(pos3);
-		pos2.addNeighbor(pos4);
-
-		pos3.addNeighbor(pos0);
-		pos3.addNeighbor(pos2);
-		pos3.addNeighbor(pos4);
-
-		pos4.addNeighbor(pos2);
-		pos4.addNeighbor(pos3);
-
-		positions.add(pos0);
-		positions.add(pos1);
-		positions.add(pos2);
-		positions.add(pos3);
-		positions.add(pos4);
+//
+//		APosition pos0 = new CPositionImpl(0, 100, 100, EBullColor.WHITE, this);
+//		APosition pos1 = new CPositionImpl(1, 500, 100, EBullColor.BLACK, this);
+//		APosition pos2 = new CPositionImpl(2, 300, 300, EBullColor.NONE, this);
+//		APosition pos3 = new CPositionImpl(3, 100, 500, EBullColor.BLACK, this);
+//		APosition pos4 = new CPositionImpl(4, 500, 500, EBullColor.WHITE, this);
+//
+//		pos0.addNeighbor(pos1);
+//		pos0.addNeighbor(pos2);
+//		pos0.addNeighbor(pos3);
+//
+//		pos1.addNeighbor(pos0);
+//		pos1.addNeighbor(pos2);
+//
+//		pos2.addNeighbor(pos0);
+//		pos2.addNeighbor(pos1);
+//		pos2.addNeighbor(pos3);
+//		pos2.addNeighbor(pos4);
+//
+//		pos3.addNeighbor(pos0);
+//		pos3.addNeighbor(pos2);
+//		pos3.addNeighbor(pos4);
+//
+//		pos4.addNeighbor(pos2);
+//		pos4.addNeighbor(pos3);
+//
+//		positions.add(pos0);
+//		positions.add(pos1);
+//		positions.add(pos2);
+//		positions.add(pos3);
+//		positions.add(pos4);
 
 		return positions;
 
@@ -186,6 +186,12 @@ public class CFourBullsGame implements IGameController {
 			}
 		}
 
+	}
+
+	@Override
+	public void activate(APosition pos1, APosition pos2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

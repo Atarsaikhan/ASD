@@ -1,64 +1,34 @@
 package horn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import application.IObserverMoveNumber;
 import framework.APosition;
-import framework.CBoardGame;
+import framework.CBoardGameController;
 import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
 import framework.EGameState;
-import framework.GUIManager;
-import framework.IGameController;
+import framework.IBoardGame;
 import javafx.scene.canvas.GraphicsContext;
 
-public class HornGame implements IGameController {
+public class HornGame implements IBoardGame {
 
 	static final int P_SIZE = 50;
-	private CBoardGame game;
-	private GUIManager guiMan;
+	private CBoardGameController gameController;
+	private APosition active;
 	private Stack<List<APosition>> moves;
-
-	@Override
-	public CPlayer getCurrent() {
-		return game.getCurrent();
-	}
-
-	@Override
-	public String getMessage() {
-		return game.getMessage();
-	}
-
-	@Override
-	public EGameState getGameState() {
-		return game.getGameState();
-	}
-
-	@Override
-	public List<APosition> getPositions() {
-		return game.getPositions();
-	}
-
-	@Override
-	public CPlayer getWhite() {
-		return game.getWhite();
-	}
-
-	@Override
-	public CPlayer getBlack() {
-		return game.getBlack();
-	}
 
 	HornGame(GraphicsContext graphicsContext) {
 		moves = new Stack<>();
-		
-		game = new CBoardGame(new CPlayer("Herder", 2, EBullColor.WHITE), new CPlayer("Bull", 1, EBullColor.BLACK),
-				false, initPositions());
-		game.setGraphicsContext(graphicsContext);
-		// guiMan.setBackImage("bullBackground.jpg");
+		active = null;
+
+		gameController = new CBoardGameController();
+		gameController.setPlayers(new CPlayer("Bull", 1, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
+		gameController.setGUIManager(graphicsContext, "bullhorn2.png");
+		gameController.startGame(false, initPositions());
 	}
 
 	private List<APosition> initPositions() {
@@ -74,44 +44,44 @@ public class HornGame implements IGameController {
 		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.BLACK, this);
 		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this);
 		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.WHITE, this);
-		
+
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
 
 		pos1.addNeighbor(pos0);
 		pos1.addNeighbor(pos2);
 		pos1.addNeighbor(pos3);
-		
+
 		pos2.addNeighbor(pos0);
 		pos2.addNeighbor(pos1);
 		pos2.addNeighbor(pos3);
 		pos2.addNeighbor(pos4);
-		
+
 		pos3.addNeighbor(pos1);
 		pos3.addNeighbor(pos2);
 		pos3.addNeighbor(pos4);
 		pos3.addNeighbor(pos5);
-		
+
 		pos4.addNeighbor(pos2);
 		pos4.addNeighbor(pos3);
 		pos4.addNeighbor(pos5);
 		pos4.addNeighbor(pos6);
-		
+
 		pos5.addNeighbor(pos3);
 		pos5.addNeighbor(pos4);
 		pos5.addNeighbor(pos6);
 		pos5.addNeighbor(pos7);
-		
+
 		pos6.addNeighbor(pos4);
 		pos6.addNeighbor(pos5);
 		pos6.addNeighbor(pos8);
-		
+
 		pos7.addNeighbor(pos5);
 		pos7.addNeighbor(pos8);
-		
+
 		pos8.addNeighbor(pos6);
 		pos8.addNeighbor(pos7);
-		
+
 		positions.add(pos0);
 		positions.add(pos1);
 		positions.add(pos2);
@@ -127,25 +97,43 @@ public class HornGame implements IGameController {
 	}
 
 	public void undo() {
-		if (moves.isEmpty())
+		System.out.println("undo");
+		if (moves.isEmpty()) {
+			System.out.println("empty");
 			return;
+		}
 
 		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
-		this.undoMove(move.get(0), move.get(1), game.getGameState());
+		this.undoMove(move.get(0), move.get(1), gameController.getGameState());
 
 	}
 
 	public void eventHandler(int x, int y) {
-		if (game.getGameState().equals(EGameState.GAMEOVER))
+
+		if (gameController.getGameState().equals(EGameState.GAMEOVER))
 			return;
 
 		System.out.println("x,y: " + x + ", " + y);
-		game.move(findPosition(x, y));
+		APosition pos = findPosition(x, y);
+		if (pos != null) {
+			if (active != null) {
+				if (pos.isEmpty()) {
+					active.move(pos);
+					active = null;
+				} else if (pos.isMovable()) {
+					pos.activate(active);
+					active = pos;
+				}
+			} else if (pos.isMovable()) {
+				active = pos;
+				pos.activate(null);
+			}
+		}
 
 	}
 
 	private APosition findPosition(int x, int y) {
-		for (APosition pos : game.getPositions()) {
+		for (APosition pos : gameController.getPositions()) {
 			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
 			if (distance < P_SIZE / 2) {
 				return pos;
@@ -155,23 +143,28 @@ public class HornGame implements IGameController {
 	}
 
 	public void restart() {
-		game.restart(initPositions());
+		gameController.restart(initPositions());
 	}
 
 	@Override
 	public boolean move(APosition pos1, APosition pos2) {
-		boolean ret = game.move(pos1, pos2);
-		if (ret)
-			this.notifyObservers();
+		boolean ret = gameController.move(pos1, pos2);
+		if (ret) {
+			moves.push(new ArrayList<APosition>(Arrays.asList(pos1, pos2)));
+			System.out.println("push");
+		}
 		return ret;
 	}
 
 	@Override
 	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
-		boolean ret = game.undoMove(pos1, pos2, state);
-		if (ret)
-			this.notifyObservers();
+		boolean ret = gameController.undoMove(pos1, pos2, state);
 		return ret;
+	}
+
+	@Override
+	public void activate(APosition pos1, APosition pos2) {
+		gameController.activate(pos1, pos2);
 	}
 
 	@Override
@@ -186,24 +179,24 @@ public class HornGame implements IGameController {
 
 	@Override
 	public void timeExpired() {
-		//
-	}
-
-	@Override
-	public void attach(IObserverMoveNumber observer) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void detach(IObserverMoveNumber observer) {
-		// TODO Auto-generated method stub
-
+	public EGameState getGameState() {
+		return this.gameController.getGameState();
 	}
 
 	@Override
-	public void notifyObservers() {
-		// TODO Auto-generated method stub
-
+	public CPlayer getCurrent() {
+		return this.gameController.getCurrent();
 	}
+
+	@Override
+	public String getMessage() {
+		// TODO Auto-generated method stub
+		return this.gameController.getMessage();
+	}
+
 }

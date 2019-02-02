@@ -5,10 +5,10 @@ import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CBoardGame {
+public class CBoardGameController {
 	private EGameState gameState;
 	private IGameMode gameMode;
-	private GUIManager guiManager;
+	private CGuiManager guiManager;
 	private CPlayer current;
 	private CPlayer white;
 	private CPlayer black;
@@ -77,11 +77,11 @@ public class CBoardGame {
 		this.guiManager.setGraphicsContext(graphicsContext);
 	}
 
-	public CBoardGame() {
+	public CBoardGameController() {
 		active = null;
 	}
 
-	public CBoardGame(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
+	public CBoardGameController(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
 
 		if (isCaptureGame)
 			this.gameMode = new CCaptureMode();
@@ -91,7 +91,7 @@ public class CBoardGame {
 		this.white = white;
 		this.black = black;
 
-		this.setGUIManager("bullhorn2.png");
+		this.setGUIManager(null, "bullhorn2.png");
 	}
 
 	public void restart(List<APosition> positions) {
@@ -112,8 +112,9 @@ public class CBoardGame {
 		this.black = black;
 	}
 
-	public void setGUIManager(String backImage) {
-		guiManager = new GUIManager();
+	public void setGUIManager(GraphicsContext graphicsContext, String backImage) {
+		guiManager = new CGuiManager();
+		guiManager.setGraphicsContext(graphicsContext);
 		guiManager.setBackImage(backImage);
 	}
 
@@ -128,7 +129,7 @@ public class CBoardGame {
 		guiManager.ACTIVE_STROKE_COLOR = activeColor;
 	}
 
-	public void restart(boolean isCaptureGame, List<APosition> positions) {
+	public void startGame(boolean isCaptureGame, List<APosition> positions) {
 		if (isCaptureGame)
 			this.gameMode = new CCaptureMode();
 		else
@@ -167,6 +168,12 @@ public class CBoardGame {
 			guiManager.drawPos(active, guiManager.ACTIVE_STROKE_COLOR);
 		}
 		return false;
+	}
+
+	public void activate(APosition pos1, APosition pos2) {
+		System.out.println("Acitivate: " + pos1.getId());
+		guiManager.drawPos(pos1, guiManager.ACTIVE_STROKE_COLOR);
+		guiManager.drawPos(pos2, guiManager.MOVABLE_STROKE_COLOR);
 	}
 
 	public boolean move(APosition pos1, APosition pos2) {
@@ -210,6 +217,8 @@ public class CBoardGame {
 
 			this.gameState = state;
 			this.message = "";
+			
+			guiManager.drawBoard(positions);
 
 			return true;
 		}

@@ -6,7 +6,7 @@ import java.util.List;
 import javafx.scene.image.Image;
 
 public abstract class APosition {
-	protected IGameController controller;
+	protected IBoardGame boardGame;
 	protected int id;
 	private int x;
 	private int y;
@@ -38,11 +38,11 @@ public abstract class APosition {
 	}
 
 	public EGameState getGameState() {
-		return this.controller.getGameState();
+		return this.boardGame.getGameState();
 	}
 
-	APosition(int id, int x, int y, EBullColor color, IGameController controller) {
-		this.controller = controller;
+	APosition(int id, int x, int y, EBullColor color, IBoardGame boardGame) {
+		this.boardGame = boardGame;
 		this.id = id;
 		this.x = x;
 		this.y = y;
@@ -80,7 +80,7 @@ public abstract class APosition {
 	}
 
 	public boolean isMovable() {
-		if (this.color.equals(this.controller.getCurrent().getColor()))
+		if (this.color.equals(this.boardGame.getCurrent().getColor()))
 			for (APosition pos : neighbors) {
 				if (pos.getColor().equals(EBullColor.NONE))
 					return true;
@@ -93,23 +93,27 @@ public abstract class APosition {
 	}
 
 	public boolean isCurrent() {
-		return this.color.equals(this.controller.getCurrent().getColor());
+		return this.color.equals(this.boardGame.getCurrent().getColor());
 	}
 
 	public boolean move(APosition pos) {
-		return controller.move(this, pos);
+		return boardGame.move(this, pos);
 	}
 
 	public boolean undoMove(APosition pos, EGameState state) {
-		return controller.undoMove(this, pos, state);
+		return boardGame.undoMove(this, pos, state);
 	}
 
 	public boolean capture() {
-		return controller.capture(this);
+		return boardGame.capture(this);
 	}
 
 	public boolean undoCapture(EGameState state) {
-		return controller.undoCapture(this, state);
+		return boardGame.undoCapture(this, state);
+	}
+	
+	public void activate(APosition pos) {
+		boardGame.activate(this, pos);
 	}
 
 }

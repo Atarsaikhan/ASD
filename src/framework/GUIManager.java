@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class GUIManager {
-	private int P_SIZE = 100;
+	private int P_SIZE = 50;
 	private int LINE_WIDTH = 5;
 	public final Color FILL_COLOR = Color.WHITE;
 	public final Color BASE_COLOR = Color.CORNSILK;

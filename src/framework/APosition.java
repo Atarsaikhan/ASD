@@ -13,8 +13,8 @@ public abstract class APosition {
 	protected EBullColor color;
 	private List<APosition> neighbors;
 	private Image image;
-	private String whiteURL = "resources/images/bull_blue.jpg";
-	private String blackURL = "resources/images/bull_purple.jpg";
+	private String whiteURL = "resources/images/pawnWhite.png";
+	private String blackURL = "resources/images/pawnBlack.png";
 
 	public int getX() {
 		return x;

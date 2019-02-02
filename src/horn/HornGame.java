@@ -158,7 +158,6 @@ public class HornGame implements IGameController {
 
 	public void restart() {
 		game.restart(initPositions());
-		guiMan.drawBoard(game.getPositions());
 	}
 
 	@Override

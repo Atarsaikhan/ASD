@@ -143,6 +143,7 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 			pos2.setColor(pos1.getColor());
 			pos1.setColor(EBullColor.NONE);
 			this.totalMove++;
+			this.notifyObservers();
 
 			if (current == white)
 				current = black;
@@ -170,6 +171,7 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 			pos1.setColor(pos2.getColor());
 			pos2.setColor(EBullColor.NONE);
 			this.totalMove--;
+			this.notifyObservers();
 
 			if (this.gameState != EGameState.GAMEOVER)
 				if (current == white)
@@ -210,6 +212,7 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 			this.gameState = EGameState.ACTIVE;
 
 			this.totalMove++;
+			this.notifyObservers();
 
 			if (current == white)
 				current = black;
@@ -238,6 +241,7 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 
 			this.current.incPieces();
 			this.totalMove--;
+			this.notifyObservers();
 
 			guiManager.drawPositions(positions);
 

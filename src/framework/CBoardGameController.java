@@ -1,11 +1,12 @@
 package framework;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CBoardGameController implements IGameMediator, IGameSubject {
+public class CBoardGameController implements IGameMediator {
 	private EGameState gameState;
 	private IGameMode gameMode;
 	private CGuiManager guiManager;
@@ -15,6 +16,10 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 	private List<APosition> positions;
 	private String message;
 	private int totalMove;
+
+	public CBoardGameController() {
+		observers = new ArrayList<IGameObserver>();
+	}
 
 	public CPlayer getWhite() {
 		return white;
@@ -74,9 +79,6 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 
 	public void setGraphicsContext(GraphicsContext graphicsContext) {
 		this.guiManager.setGraphicsContext(graphicsContext);
-	}
-
-	public CBoardGameController() {
 	}
 
 	public void restart(List<APosition> positions) {

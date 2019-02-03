@@ -15,14 +15,16 @@ public class CGameSettings {
 
 	private int timer;
 	private int moveNumber;
-	private String filename;
+	private String fileName;
 
 	/**
 	 * The Singleton Constructor. Note that it is private! No client can instantiate
 	 * a Singleton object directly!
 	 */
 	private CGameSettings() {
-
+		fileName = System.getProperty("user.dir") + File.separator + "src" + File.separator
+				+ "resources" + File.separator + "config.txt";
+		this.readSettings(fileName);
 	}
 	/**
 	 * Returns a reference to the single instance. Creates the instance if it does
@@ -50,7 +52,7 @@ public class CGameSettings {
 		this.moveNumber = moveNumber;
 	}
 
-	public void writeSettings(String fileName) {
+	private void writeSettings(String fileName) {
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(fileName);
@@ -68,7 +70,7 @@ public class CGameSettings {
 		}
 	}
 
-	public void readSettings(String fileName) {
+	private void readSettings(String fileName) {
 		Scanner in = null;
 		try {
 			in = new Scanner(new File(fileName)).useDelimiter("\\s+|\\s*:\\s*");
@@ -105,5 +107,9 @@ public class CGameSettings {
 
 	void changeSetting(String name, String newvalue) {
 
+	}
+	
+	public void save() {
+		this.writeSettings(fileName);
 	}
 }

@@ -107,5 +107,13 @@ public abstract class ABoardGame {
 		// TODO Auto-generated method stub
 		return this.gameController.getMessage();
 	}
+	
+	public void attach(IGameObserver observer) {
+		this.gameController.attach(observer);
+	}
+
+	public void detach(IGameObserver observer) {
+		this.gameController.detach(observer);
+	}
 
 }

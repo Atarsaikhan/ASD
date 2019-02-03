@@ -12,10 +12,9 @@ public class CDialogSettings extends Dialog<CGameSettings>{
 
 	private CGameSettings gameSettings;
 	
-	public CDialogSettings(String configFileName){
+	public CDialogSettings(){
 		super();
 		gameSettings = CGameSettings.getInstance();
-		gameSettings.readSettings(configFileName);
     	this.setTitle("Game Settings");
     	this.setHeaderText("Enter timer and move number \n" +
     	    "press Okay (or click title bar 'X' for cancel).");
@@ -60,7 +59,7 @@ public class CDialogSettings extends Dialog<CGameSettings>{
     				}
     	        	gameSettings.setMoveNumber(intgerValue);
     	        	
-    	        	gameSettings.writeSettings(configFileName);
+    	        	gameSettings.save();
     	            return gameSettings;
     	        }
     	 

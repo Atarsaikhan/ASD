@@ -1,8 +1,12 @@
 package app;
 
+import java.util.Optional;
+
 import framework.ABoardGame;
 import framework.EGameState;
 import framework.IGameFactory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,6 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainWindowController {
 
@@ -57,6 +62,8 @@ public class MainWindowController {
 	private Button btnQuit;
 
 	ABoardGame game;
+	CGameSettings settings;
+	CTimerController timer;
 
 	private Stage stage;
 
@@ -66,16 +73,23 @@ public class MainWindowController {
 
 	@FXML
 	private void initialize() {
+		settings = CGameSettings.getInstance();
+
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				if(game == null)
+				if (game == null)
 					return;
 				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
 				btnRestart.setDisable(false);
-				drawStatusText("Click a piece to activate and click again on an empty position." + "\nTurn: "
-						+ game.getCurrent().getName() + "\n" + game.getMessage()
-						+ (game.getGameState().equals(EGameState.NOMOVE) ? " Remove one piece." : ""));
+				if (game.getGameState().equals(EGameState.ACTIVE))
+					drawStatusText("Click a piece to activate and click again on an empty position." + "\nTurn: "
+							+ game.getCurrent().getName() + "\n" + game.getMessage());
+				else if (game.getGameState().equals(EGameState.NOMOVE))
+					drawStatusText(
+							game.getMessage() + "\n" + game.getCurrent().getName() + " has to remove one piece.");
+				else
+					drawStatusText(game.getMessage());
 			}
 		});
 
@@ -135,6 +149,8 @@ public class MainWindowController {
 
 				this.game = factory.createGame(gameType, dialogController.getPlayerName1(),
 						dialogController.getPlayerName2(), gameCanvas.getGraphicsContext2D());
+				if (settings.getMoveNumber() != 0)
+					this.timer = new CTimerController(gameCanvas, game, settings, this);
 
 				btnRestart.setDisable(false);
 				btnUndo.setDisable(false);
@@ -170,7 +186,11 @@ public class MainWindowController {
 
 	@FXML
 	void onSettingsClick(ActionEvent event) {
-
+		CDialogSettings dialog = new CDialogSettings();
+		Optional<CGameSettings> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			settings = result.get();
+		}
 	}
 
 	@FXML
@@ -179,25 +199,25 @@ public class MainWindowController {
 	}
 
 	void drawStatusText(String text) {
+		drawTopText(text);
 		if (game != null && game.getGameState().equals(EGameState.GAMEOVER)) {
-			drawBigText(game.getCurrent().getName() + " won." + "\nGame is over."
-					+ "\nClick \"New Game\" or \"Restart\" to start a new game");
+			timer.stopTimer();
+			drawBigText(game.getCurrent().getName() + " won." + "\n\nGame is over."
+					+ "\n\nClick \"New game\" or \"Restart\" to start a new game");
 			btnUndo.setDisable(true);
-		} else {
-			drawTopText(text);
 		}
 	}
 
 	void drawBigText(String text) {
 		GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
-		gc.strokeRoundRect(100, 100, 400, 400, 100, 100);
+		gc.strokeRoundRect(150, 150, 300, 300, 100, 100);
 		gc.setFill(Color.WHITE);
-		gc.fillRoundRect(100, 100, 400, 400, 100, 100);
+		gc.fillRoundRect(150, 150, 300, 300, 100, 100);
 
 		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 16));
 		gc.setFill(Color.web("#00254d"));
-		gc.fillText(text, 120, 300, 340);
+		gc.fillText(text, 160, 300, 280);
 
 	}
 
@@ -211,5 +231,4 @@ public class MainWindowController {
 		gc.setFill(Color.web("#00254d"));
 		gc.fillText(text, 100, 20, 400);
 	}
-
 }

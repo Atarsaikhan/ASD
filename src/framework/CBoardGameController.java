@@ -77,7 +77,6 @@ public class CBoardGameController {
 	}
 
 	public CBoardGameController() {
-		
 	}
 
 	public CBoardGameController(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
@@ -193,7 +192,7 @@ public class CBoardGameController {
 
 			this.gameState = state;
 			this.message = "";
-			
+
 			guiManager.drawBoard(positions);
 
 			return true;

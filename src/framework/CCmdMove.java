@@ -21,7 +21,7 @@ public class CCmdMove implements ICommand {
 
 	@Override
 	public boolean execute() {
-		return pos1.move(pos2);
+		return pos1.move(pos2); 
 	}
 
 	@Override

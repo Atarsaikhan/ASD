@@ -23,7 +23,6 @@ public class Main extends Application {
 		cont.setStage(primaryStage);
 		
 		Scene scene = new Scene (root);
-		
 	
 		primaryStage.setTitle("Board Game - Yurt");
 		primaryStage.setScene(scene);

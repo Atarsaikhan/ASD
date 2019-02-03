@@ -35,15 +35,15 @@ public class HornGame implements IBoardGame {
 
 		List<APosition> positions = new ArrayList<>();
 
-		APosition pos0 = new CPositionImpl(0, 180, 51, EBullColor.NONE, this);
-		APosition pos1 = new CPositionImpl(1, 192, 124, EBullColor.NONE, this);
-		APosition pos2 = new CPositionImpl(2, 325, 161, EBullColor.NONE, this);
-		APosition pos3 = new CPositionImpl(3, 192, 223, EBullColor.NONE, this);
-		APosition pos4 = new CPositionImpl(4, 348, 246, EBullColor.NONE, this);
-		APosition pos5 = new CPositionImpl(5, 180, 327, EBullColor.BLACK, this);
-		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.BLACK, this);
-		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this);
-		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.WHITE, this);
+		APosition pos0 = new CPositionImpl(0, 180, 51, EBullColor.NONE, this.gameController);
+		APosition pos1 = new CPositionImpl(1, 192, 124, EBullColor.NONE, this.gameController);
+		APosition pos2 = new CPositionImpl(2, 325, 161, EBullColor.NONE, this.gameController);
+		APosition pos3 = new CPositionImpl(3, 192, 223, EBullColor.NONE, this.gameController);
+		APosition pos4 = new CPositionImpl(4, 348, 246, EBullColor.NONE, this.gameController);
+		APosition pos5 = new CPositionImpl(5, 180, 327, EBullColor.BLACK, this.gameController);
+		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.BLACK, this.gameController);
+		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this.gameController);
+		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.WHITE, this.gameController);
 
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
@@ -104,7 +104,7 @@ public class HornGame implements IBoardGame {
 		}
 
 		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
-		this.undoMove(move.get(0), move.get(1), gameController.getGameState());
+		gameController.undoMove(move.get(0), move.get(1), gameController.getGameState());
 
 	}
 
@@ -158,24 +158,8 @@ public class HornGame implements IBoardGame {
 	}
 
 	@Override
-	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
-		boolean ret = gameController.undoMove(pos1, pos2, state);
-		return ret;
-	}
-
-	@Override
-	public void activate(APosition pos1, APosition pos2) {
-		gameController.activate(pos1, pos2);
-	}
-
-	@Override
 	public boolean capture(APosition pos) {
-		return true;
-	}
-
-	@Override
-	public boolean undoCapture(APosition pos, EGameState state) {
-		return true;
+		return false;
 	}
 
 	@Override

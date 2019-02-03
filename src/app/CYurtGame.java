@@ -7,11 +7,13 @@ import java.util.Stack;
 
 import framework.APosition;
 import framework.CBoardGameController;
+import framework.CCmdMove;
 import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
 import framework.EGameState;
 import framework.IBoardGame;
+import framework.ICommand;
 import javafx.scene.canvas.GraphicsContext;
 
 public class CYurtGame implements IBoardGame {
@@ -19,7 +21,7 @@ public class CYurtGame implements IBoardGame {
 	static final int P_SIZE = 50;
 	private CBoardGameController gameController;
 	private APosition active;
-	private Stack<List<APosition>> moves;
+	private Stack<ICommand> moves;
 
 	CYurtGame(GraphicsContext graphicsContext) {
 		moves = new Stack<>();
@@ -35,13 +37,13 @@ public class CYurtGame implements IBoardGame {
 
 		List<APosition> positions = new ArrayList<>();
 
-		APosition pos0 = new CPositionImpl(0, 300, 100, EBullColor.WHITE, this); // top 0 tsagaan
-		APosition pos1 = new CPositionImpl(1, 100, 200, EBullColor.NONE, this);	 // zuun deed 1 hooson
-		APosition pos2 = new CPositionImpl(2, 500, 200, EBullColor.WHITE, this); // baruun deed 2 tsagaan
-		APosition pos3 = new CPositionImpl(3, 300, 300, EBullColor.BLACK, this); // gol 3	har
-		APosition pos4 = new CPositionImpl(4, 100, 400, EBullColor.BLACK, this); // zuun dood 4 har
-		APosition pos5 = new CPositionImpl(5, 500, 400, EBullColor.BLACK, this); // baruun dood 5 har
-		APosition pos6 = new CPositionImpl(6, 300, 500, EBullColor.WHITE, this); // dood 6 tsagaan
+		APosition pos0 = new CPositionImpl(0, 300, 100, EBullColor.WHITE, this.gameController); // top 0 tsagaan
+		APosition pos1 = new CPositionImpl(1, 100, 200, EBullColor.NONE, this.gameController);	 // zuun deed 1 hooson
+		APosition pos2 = new CPositionImpl(2, 500, 200, EBullColor.WHITE, this.gameController); // baruun deed 2 tsagaan
+		APosition pos3 = new CPositionImpl(3, 300, 300, EBullColor.BLACK, this.gameController); // gol 3	har
+		APosition pos4 = new CPositionImpl(4, 100, 400, EBullColor.BLACK, this.gameController); // zuun dood 4 har
+		APosition pos5 = new CPositionImpl(5, 500, 400, EBullColor.BLACK, this.gameController); // baruun dood 5 har
+		APosition pos6 = new CPositionImpl(6, 300, 500, EBullColor.WHITE, this.gameController); // dood 6 tsagaan
 
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
@@ -87,15 +89,13 @@ public class CYurtGame implements IBoardGame {
 	}
 
 	public void undo() {
-		System.out.println("undo");
 		if (moves.isEmpty()) {
 			System.out.println("empty");
 			return;
 		}
 
-		ArrayList<APosition> move = (ArrayList<APosition>) moves.pop();
-		this.undoMove(move.get(0), move.get(1), gameController.getGameState());
-
+		ICommand cmd = moves.pop();
+		cmd.undo();
 	}
 
 	public void handle(int x, int y) {
@@ -138,23 +138,12 @@ public class CYurtGame implements IBoardGame {
 
 	@Override
 	public boolean move(APosition pos1, APosition pos2) {
-		boolean ret = gameController.move(pos1, pos2);
+		ICommand cmd = new CCmdMove(pos1, pos2);
+		boolean ret = cmd.execute();
 		if (ret) {
-			moves.push(new ArrayList<APosition>(Arrays.asList(pos1, pos2)));
-			System.out.println("push");
+			moves.push(cmd);
 		}
 		return ret;
-	}
-
-	@Override
-	public boolean undoMove(APosition pos1, APosition pos2, EGameState state) {
-		boolean ret = gameController.undoMove(pos1, pos2, state);
-		return ret;
-	}
-
-	@Override
-	public void activate(APosition pos1, APosition pos2) {
-		gameController.activate(pos1, pos2);
 	}
 
 	@Override
@@ -163,14 +152,8 @@ public class CYurtGame implements IBoardGame {
 	}
 
 	@Override
-	public boolean undoCapture(APosition pos, EGameState state) {
-		return true;
-	}
-
-	@Override
 	public void timeExpired() {
-		// TODO Auto-generated method stub
-
+		this.gameController.timeExpired();
 	}
 
 	@Override

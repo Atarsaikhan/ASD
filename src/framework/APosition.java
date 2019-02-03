@@ -6,7 +6,7 @@ import java.util.List;
 import javafx.scene.image.Image;
 
 public abstract class APosition {
-	protected IBoardGame boardGame;
+	protected CBoardGameController gameController;
 	protected int id;
 	private int x;
 	private int y;
@@ -38,16 +38,7 @@ public abstract class APosition {
 	}
 
 	public EGameState getGameState() {
-		return this.boardGame.getGameState();
-	}
-
-	APosition(int id, int x, int y, EBullColor color, IBoardGame boardGame) {
-		this.boardGame = boardGame;
-		this.id = id;
-		this.x = x;
-		this.y = y;
-		this.setColor(color);
-		this.neighbors = new ArrayList<APosition>();
+		return this.gameController.getGameState();
 	}
 
 	public Image getImage() {
@@ -80,7 +71,7 @@ public abstract class APosition {
 	}
 
 	public boolean isMovable() {
-		if (this.color.equals(this.boardGame.getCurrent().getColor()))
+		if (this.color.equals(this.gameController.getCurrent().getColor()))
 			for (APosition pos : neighbors) {
 				if (pos.getColor().equals(EBullColor.NONE))
 					return true;
@@ -93,27 +84,36 @@ public abstract class APosition {
 	}
 
 	public boolean isCurrent() {
-		return this.color.equals(this.boardGame.getCurrent().getColor());
+		return this.color.equals(this.gameController.getCurrent().getColor());
+	}
+
+	APosition(int id, int x, int y, EBullColor color, CBoardGameController gameController) {
+		this.gameController = gameController;
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.setColor(color);
+		this.neighbors = new ArrayList<APosition>();
 	}
 
 	public boolean move(APosition pos) {
-		return boardGame.move(this, pos);
+		return gameController.move(this, pos);
 	}
 
 	public boolean undoMove(APosition pos, EGameState state) {
-		return boardGame.undoMove(this, pos, state);
+		return gameController.undoMove(this, pos, state);
 	}
 
 	public boolean capture() {
-		return boardGame.capture(this);
+		return gameController.capture(this);
 	}
 
 	public boolean undoCapture(EGameState state) {
-		return boardGame.undoCapture(this, state);
+		return gameController.undoCapture(this, state);
 	}
-	
+
 	public void activate(APosition pos) {
-		boardGame.activate(this, pos);
+		gameController.activate(this, pos);
 	}
 
 }

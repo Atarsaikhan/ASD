@@ -11,12 +11,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainWindowController {
+	
+    @FXML
+    private MenuItem mniNewGame;
 
+    @FXML
+    private MenuItem mniRestart;
+
+    @FXML
+    private MenuItem mniQuit;
+
+    @FXML
+    private MenuItem mniUndo;
+
+    @FXML
+    private MenuItem mniSettings;
+    
 	@FXML
 	private Canvas gameCanvas;
 
@@ -49,6 +65,7 @@ public class MainWindowController {
 
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
+				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
 
 			}

@@ -24,7 +24,7 @@ public class Main extends Application {
 		
 		Scene scene = new Scene (root);
 	
-		primaryStage.setTitle("Board Game - Four Bulls");
+		primaryStage.setTitle("Mongolian Board Game");
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();

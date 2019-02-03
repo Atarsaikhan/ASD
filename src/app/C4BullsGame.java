@@ -17,9 +17,9 @@ public class C4BullsGame extends ABoardGame {
 		super();
 
 		gameController = new CBoardGameController();
-		gameController.setPlayers(new CPlayer("Bull", 1, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
+		gameController.setPlayers(new CPlayer("Bull", 2, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
 		gameController.setGUIManager(graphicsContext, "bullBackground.jpg");
-		gameController.startGame(false, initPositions());
+		gameController.startGame(true, initPositions());
 	}
 
 	protected List<APosition> initPositions() {

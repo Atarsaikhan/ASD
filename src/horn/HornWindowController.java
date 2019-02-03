@@ -24,7 +24,7 @@ public class HornWindowController {
 	@FXML
 	private Canvas canvas;
 
-	IBoardGame game;
+	HornGame game;
 
 	@FXML
 	void onRestart_Clicked(ActionEvent event) {
@@ -51,9 +51,9 @@ public class HornWindowController {
 				game.handle((int) e.getX(), (int) e.getY());
 
 				if (game.getGameState().equals(EGameState.GAMEOVER)) {
-					lblTopLine.setText(game.getCurrent().getName() + " won." + "\nClick \"New Game\" to start a game.");
+					lblTopLine.setText(game.msgWin);
 				} else {
-					lblTopLine.setText(((!game.getMessage().equals("")) ? ("Message: " + game.getMessage() + "\n") : "")
+					lblTopLine.setText(((!game.getMessage().equals("")) ? ("Message: " + game.getMessage() + "\n") : "") 
 							+ game.getCurrent().getName() + " to move."
 							+ "\nClick a piece to activate and click again on an empty position.");
 				}

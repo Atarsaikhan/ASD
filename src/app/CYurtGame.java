@@ -17,7 +17,7 @@ public class CYurtGame extends ABoardGame {
 		super();
 
 		this.gameController = new CBoardGameController();
-		this.gameController.setPlayers(new CPlayer("Bull", 1, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
+		this.gameController.setPlayers(new CPlayer("Bull", 2, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
 		this.gameController.setGUIManager(graphicsContext, "toono.png");
 		this.gameController.startGame(false, initPositions());
 	}

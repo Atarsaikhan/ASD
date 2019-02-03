@@ -19,6 +19,8 @@ public class HornGame implements IBoardGame {
 	static final int P_SIZE = 50;
 	private CBoardGameController gameController;
 	private APosition active;
+	private APosition posToWin;
+	String msgWin;
 	private Stack<List<APosition>> moves;
 
 	HornGame(GraphicsContext graphicsContext) {
@@ -44,6 +46,8 @@ public class HornGame implements IBoardGame {
 		APosition pos6 = new CPositionImpl(6, 354, 327, EBullColor.BLACK, this.gameController);
 		APosition pos7 = new CPositionImpl(7, 132, 403, EBullColor.NONE, this.gameController);
 		APosition pos8 = new CPositionImpl(8, 354, 403, EBullColor.WHITE, this.gameController);
+
+		this.posToWin = pos0;
 
 		pos0.addNeighbor(pos1);
 		pos0.addNeighbor(pos2);
@@ -119,8 +123,14 @@ public class HornGame implements IBoardGame {
 			if (active != null) {
 				if (pos.isEmpty()) {
 					active.move(pos);
+					if (gameController.getGameState().equals(EGameState.GAMEOVER)) {
+						if (this.posToWin.getColor().equals(EBullColor.WHITE))
+							msgWin = this.getCurrent().getName() + " won." + "\nClick \"New Game\" to start a game.";
+						else
+							msgWin = this.getCurrent().getName() + " lose." + "\nClick \"New Game\" to start a game.";
+					}
 					active = null;
-				} else if (active !=pos && pos.isMovable()) {
+				} else if (active != pos && pos.isMovable()) {
 					pos.activate(active);
 					active = pos;
 				}

@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public abstract class ABoardGame {
 
-	private final int P_SIZE = 50;
+	private final int P_SIZE = 70;
 	protected CBoardGameController gameController;
 	protected APosition active;
 	protected Stack<ICommand> moves;

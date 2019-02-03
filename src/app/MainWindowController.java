@@ -68,6 +68,8 @@ public class MainWindowController {
 	private void initialize() {
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
+				if(game == null)
+					return;
 				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
 				btnRestart.setDisable(false);
@@ -203,11 +205,11 @@ public class MainWindowController {
 		GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 		// clear previous text
 		gc.setFill(Color.web("#e6f2ff"));
-		gc.fillRoundRect(95, 10, 410, 60, 10, 10);
+		gc.fillRoundRect(95, 5, 410, 55, 10, 10);
 
 		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 16));
 		gc.setFill(Color.web("#00254d"));
-		gc.fillText(text, 100, 30, 400);
+		gc.fillText(text, 100, 20, 400);
 	}
 
 }

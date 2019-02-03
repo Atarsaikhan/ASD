@@ -3,8 +3,6 @@ package framework;
 import java.util.List;
 import java.util.Stack;
 
-import javafx.scene.canvas.GraphicsContext;
-
 public abstract class ABoardGame {
 
 	private final int P_SIZE = 50;
@@ -33,25 +31,31 @@ public abstract class ABoardGame {
 
 	public void handle(int x, int y) {
 
-		if (gameController.getGameState().equals(EGameState.GAMEOVER))
+		if (gameController.getGameState().equals(EGameState.GAMEOVER)) {
+			System.out.println(this.getMessage() +" - " +this.getGameState());
 			return;
-
-		System.out.println("x,y: " + x + ", " + y);
-		APosition pos = findPosition(x, y);
-		if (pos != null) {
-			if (active != null) {
-				if (pos.isEmpty()) {
-					this.move(active, pos);
-					active = null;
-				} else if (pos.isMovable()) {
-					pos.activate(active);
-					active = pos;
-				}
-			} else if (pos.isMovable()) {
-				active = pos;
-				pos.activate(null);
-			}
 		}
+
+		APosition pos = findPosition(x, y);
+		if (pos != null)
+			if (gameController.getGameState().equals(EGameState.NOMOVE)) {
+				if (pos.isCurrent())
+					this.capture(pos);
+			} else {
+				if (active != null) {
+					if (pos.isEmpty()) {
+						this.move(active, pos);
+						active = null;
+						System.out.println(this.getMessage() +" " +this.getGameState());
+					} else if (pos.isMovable()) {
+						pos.activate(active);
+						active = pos;
+					}
+				} else if (pos.isMovable()) {
+					active = pos;
+					pos.activate(null);
+				}
+			}
 
 	}
 
@@ -79,7 +83,12 @@ public abstract class ABoardGame {
 	}
 
 	public boolean capture(APosition pos) {
-		return true;
+		ICommand cmd = new CCmdCapture(pos);
+		boolean ret = cmd.execute();
+		if (ret) {
+			moves.push(cmd);
+		}
+		return ret;
 	}
 
 	public void timeExpired() {

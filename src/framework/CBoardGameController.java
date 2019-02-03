@@ -146,7 +146,6 @@ public class CBoardGameController {
 	}
 
 	public void activate(APosition pos1, APosition pos2) {
-		System.out.println("Acitivate: " + pos1.getId());
 		guiManager.drawPos(pos1, guiManager.ACTIVE_STROKE_COLOR);
 		guiManager.drawPos(pos2, guiManager.MOVABLE_STROKE_COLOR);
 	}
@@ -171,7 +170,8 @@ public class CBoardGameController {
 				else
 					current = white;
 
-			guiManager.drawBoard(positions);
+			guiManager.drawPositions(positions);
+			
 			return true;
 		}
 		message = "Move not allowed!";
@@ -193,7 +193,7 @@ public class CBoardGameController {
 			this.gameState = state;
 			this.message = "";
 
-			guiManager.drawBoard(positions);
+			guiManager.drawPositions(positions);
 
 			return true;
 		}
@@ -228,6 +228,9 @@ public class CBoardGameController {
 				current = black;
 			else
 				current = white;
+			
+			guiManager.drawPositions(positions);
+			
 			return true;
 		} else {
 			this.message = "Move not allowed";
@@ -249,6 +252,8 @@ public class CBoardGameController {
 			this.current.incPieces();
 			this.totalMove--;
 
+			guiManager.drawPositions(positions);
+			
 			return true;
 		} else {
 			this.message = "Move not allowed";

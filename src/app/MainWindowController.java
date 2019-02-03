@@ -49,7 +49,6 @@ public class MainWindowController {
 
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
 
 			}

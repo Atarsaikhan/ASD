@@ -3,7 +3,6 @@ package app;
 import framework.ABoardGame;
 import framework.CPlayer;
 import framework.EBullColor;
-import framework.IBoardGame;
 import framework.IGameFactory;
 
 public class CGameFactoryImpl implements IGameFactory {

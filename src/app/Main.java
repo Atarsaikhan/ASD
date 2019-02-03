@@ -24,10 +24,11 @@ public class Main extends Application {
 		
 		Scene scene = new Scene (root);
 	
-		primaryStage.setTitle("Board Game - Yurt");
+		primaryStage.setTitle("Board Game - Four Bulls");
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();
+		cont.onNewGameClick(null);
 	}
 
 }

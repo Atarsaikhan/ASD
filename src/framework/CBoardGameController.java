@@ -277,10 +277,10 @@ public class CBoardGameController implements IGameMediator, IGameSubject {
 		}
 	}
 
-	public void notifyObservers(EDataType type, Object data) {
+	public void notifyObservers() {
 		synchronized (MUTEX) {
 			for (IGameObserver observer : observers) {
-				observer.update(type, data);
+				observer.update(this.totalMove);
 			}
 		}
 

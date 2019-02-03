@@ -33,7 +33,7 @@ public class CGameFactoryImpl implements IGameFactory {
 
 		IGameBuilder gameBuilder = new CYurtGameBuilder();
 		gameBuilder.buildPlayers(playerName1, playerName2);
-		gameBuilder.buildGuiManager(graphicsContext, "bullBackground.jpg");
+		gameBuilder.buildGuiManager(graphicsContext, "toono.png");
 		gameBuilder.buildGameController(isCaptureGame);
 
 		return gameBuilder.getBoardGame();

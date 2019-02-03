@@ -14,7 +14,7 @@ public class CYurtGameBuilder  implements IGameBuilder {
 
 	@Override
 	public void buildPlayers(String name1, String name2) {
-		game.setPlayers(new CPlayer(name1, 2, EBullColor.WHITE), new CPlayer(name2, 2, EBullColor.BLACK));
+		game.setPlayers(new CPlayer(name1, 3, EBullColor.WHITE), new CPlayer(name2, 3, EBullColor.BLACK));
 	}
 
 	@Override

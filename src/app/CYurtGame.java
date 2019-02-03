@@ -24,7 +24,7 @@ public class CYurtGame extends ABoardGame {
 	}
 
 	public void setGUIManager(GraphicsContext graphicsContext, String backImage) {
-		this.setGUIManager(graphicsContext, backImage);
+		this.gameController.setGUIManager(graphicsContext, backImage);
 	}
 
 	public void setObjectProperties(int pawnSize, int lineWidth, Color fillColor, Color baseColor, Color normalStroke,

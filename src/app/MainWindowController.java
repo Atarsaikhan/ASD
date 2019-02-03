@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
@@ -61,8 +62,6 @@ public class MainWindowController {
 
 	@FXML
 	private void initialize() {
-		game = new C4BullsGame(gameCanvas.getGraphicsContext2D());
-
 		gameCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				System.out.println("canvas handle");
@@ -108,8 +107,8 @@ public class MainWindowController {
 					gameType += "False";
 				
 				this.game = factory.createGame(gameType, dialogController.getPlayerName1(),
-						dialogController.getPlayerName2());
-
+						dialogController.getPlayerName2(), gameCanvas.getGraphicsContext2D());
+				
 //				if (gameController != null)
 //					bullScene.getDrawer().setGame(gameController);
 //				else

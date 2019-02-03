@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CBoardGameController {
+public class CBoardGameController implements IGameMediator, IGameSubject {
 	private EGameState gameState;
 	private IGameMode gameMode;
 	private CGuiManager guiManager;
@@ -158,7 +158,7 @@ public class CBoardGameController {
 					current = white;
 
 			guiManager.drawPositions(positions);
-			
+
 			return true;
 		}
 		message = "Move not allowed!";
@@ -215,9 +215,9 @@ public class CBoardGameController {
 				current = black;
 			else
 				current = white;
-			
+
 			guiManager.drawPositions(positions);
-			
+
 			return true;
 		} else {
 			this.message = "Move not allowed";
@@ -240,7 +240,7 @@ public class CBoardGameController {
 			this.totalMove--;
 
 			guiManager.drawPositions(positions);
-			
+
 			return true;
 		} else {
 			this.message = "Move not allowed";
@@ -256,6 +256,34 @@ public class CBoardGameController {
 			current = black;
 		else
 			current = white;
+	}
+
+	// Observer methods
+	private List<IGameObserver> observers;
+	private final Object MUTEX = new Object();
+
+	public void attach(IGameObserver observer) {
+		synchronized (MUTEX) {
+			if (!observers.contains(observer))
+				observers.add(observer);
+		}
+	}
+
+	public void detach(IGameObserver observer) {
+		synchronized (MUTEX) {
+			int i = observers.indexOf(observer);
+			if (i >= 0)
+				observers.remove(i);
+		}
+	}
+
+	public void notifyObservers(EDataType type, Object data) {
+		synchronized (MUTEX) {
+			for (IGameObserver observer : observers) {
+				observer.update(type, data);
+			}
+		}
+
 	}
 
 }

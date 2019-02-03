@@ -1,16 +1,16 @@
 package app;
 
-import framework.IBoardGame;
+import framework.ABoardGame;
 
 class CMemento {
-	private IBoardGame gameSnapshot;
+	private ABoardGame gameSnapshot;
 	
-	public CMemento(IBoardGame gameSnapshot) {
+	public CMemento(ABoardGame gameSnapshot) {
 		this.gameSnapshot = gameSnapshot;
 	
 	}
 
-	public IBoardGame getGameSnapshot() {
+	public ABoardGame getGameSnapshot() {
 		return gameSnapshot;
 	}
 }

@@ -79,19 +79,6 @@ public class CBoardGameController {
 	public CBoardGameController() {
 	}
 
-	public CBoardGameController(CPlayer white, CPlayer black, boolean isCaptureGame, List<APosition> positions) {
-
-		if (isCaptureGame)
-			this.gameMode = new CCaptureMode();
-		else
-			this.gameMode = new CNonCaptureMode();
-
-		this.white = white;
-		this.black = black;
-
-		this.setGUIManager(null, "bullhorn2.png");
-	}
-
 	public void restart(List<APosition> positions) {
 		this.gameState = EGameState.ACTIVE;
 		this.message = "";

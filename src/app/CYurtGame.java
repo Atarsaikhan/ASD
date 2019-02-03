@@ -10,16 +10,30 @@ import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class CYurtGame extends ABoardGame {
 
-	CYurtGame(GraphicsContext graphicsContext) {
+	CYurtGame() {
 		super();
+		gameController = new CBoardGameController();
+	}
 
-		this.gameController = new CBoardGameController();
-		this.gameController.setPlayers(new CPlayer("Bull", 2, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
-		this.gameController.setGUIManager(graphicsContext, "toono.png");
-		this.gameController.startGame(false, initPositions());
+	public void setPlayers(CPlayer white, CPlayer black) {
+		this.gameController.setPlayers(white, black);
+	}
+
+	public void setGUIManager(GraphicsContext graphicsContext, String backImage) {
+		this.setGUIManager(graphicsContext, backImage);
+	}
+
+	public void setObjectProperties(int pawnSize, int lineWidth, Color fillColor, Color baseColor, Color normalStroke,
+			Color movableStroke, Color activeColor) {
+		this.setObjectProperties(pawnSize, lineWidth, fillColor, baseColor, normalStroke, movableStroke, activeColor);
+	}
+
+	public void startGame(boolean isCaptureGame) {
+		this.gameController.startGame(isCaptureGame, initPositions());
 	}
 
 	protected List<APosition> initPositions() {

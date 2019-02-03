@@ -6,20 +6,35 @@ import java.util.List;
 import framework.ABoardGame;
 import framework.APosition;
 import framework.CBoardGameController;
+import framework.CGuiManager;
 import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class C4BullsGame extends ABoardGame {
 
-	C4BullsGame(GraphicsContext graphicsContext) {
+	C4BullsGame() {
 		super();
-
 		gameController = new CBoardGameController();
-		gameController.setPlayers(new CPlayer("Bull", 2, EBullColor.WHITE), new CPlayer("Cowboy", 2, EBullColor.BLACK));
-		gameController.setGUIManager(graphicsContext, "bullBackground.jpg");
-		gameController.startGame(true, initPositions());
+	}
+
+	public void setPlayers(CPlayer white, CPlayer black) {
+		this.gameController.setPlayers(white, black);
+	}
+
+	public void setGUIManager(GraphicsContext graphicsContext, String backImage) {
+		this.setGUIManager(graphicsContext, backImage);
+	}
+
+	public void setObjectProperties(int pawnSize, int lineWidth, Color fillColor, Color baseColor, Color normalStroke,
+			Color movableStroke, Color activeColor) {
+		this.setObjectProperties(pawnSize, lineWidth, fillColor, baseColor, normalStroke, movableStroke, activeColor);
+	}
+
+	public void startGame(boolean isCaptureGame) {
+		this.gameController.startGame(isCaptureGame, initPositions());
 	}
 
 	protected List<APosition> initPositions() {

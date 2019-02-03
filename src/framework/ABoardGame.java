@@ -1,0 +1,102 @@
+package framework;
+
+import java.util.List;
+import java.util.Stack;
+
+import javafx.scene.canvas.GraphicsContext;
+
+public abstract class ABoardGame {
+
+	private final int P_SIZE = 50;
+	protected CBoardGameController gameController;
+	protected APosition active;
+	protected Stack<ICommand> moves;
+	protected int blackStones = 2;
+	protected int whiteStones = 2;
+
+	protected ABoardGame() {
+		moves = new Stack<>();
+		active = null;
+	}
+
+	protected abstract List<APosition> initPositions();
+
+	public void undo() {
+		if (moves.isEmpty()) {
+			System.out.println("empty");
+			return;
+		}
+
+		ICommand cmd = moves.pop();
+		cmd.undo();
+	}
+
+	public void handle(int x, int y) {
+
+		if (gameController.getGameState().equals(EGameState.GAMEOVER))
+			return;
+
+		System.out.println("x,y: " + x + ", " + y);
+		APosition pos = findPosition(x, y);
+		if (pos != null) {
+			if (active != null) {
+				if (pos.isEmpty()) {
+					this.move(active, pos);
+					active = null;
+				} else if (pos.isMovable()) {
+					pos.activate(active);
+					active = pos;
+				}
+			} else if (pos.isMovable()) {
+				active = pos;
+				pos.activate(null);
+			}
+		}
+
+	}
+
+	protected APosition findPosition(int x, int y) {
+		for (APosition pos : gameController.getPositions()) {
+			double distance = Math.sqrt(Math.pow(x - pos.getX(), 2) + Math.pow(y - pos.getY(), 2));
+			if (distance < P_SIZE / 2) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
+	public void restart() {
+		gameController.restart(initPositions());
+	}
+
+	public boolean move(APosition pos1, APosition pos2) {
+		ICommand cmd = new CCmdMove(pos1, pos2);
+		boolean ret = cmd.execute();
+		if (ret) {
+			moves.push(cmd);
+		}
+		return ret;
+	}
+
+	public boolean capture(APosition pos) {
+		return true;
+	}
+
+	public void timeExpired() {
+		this.gameController.timeExpired();
+	}
+
+	public EGameState getGameState() {
+		return this.gameController.getGameState();
+	}
+
+	public CPlayer getCurrent() {
+		return this.gameController.getCurrent();
+	}
+
+	public String getMessage() {
+		// TODO Auto-generated method stub
+		return this.gameController.getMessage();
+	}
+
+}

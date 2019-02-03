@@ -1,6 +1,6 @@
 package app;
 
-import framework.IBoardGame;
+import framework.ABoardGame;
 import framework.IGameFactory;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -35,7 +35,7 @@ public class MainWindowController {
 	@FXML
 	private Button btnQuit;
 
-	IBoardGame game;
+	ABoardGame game;
 
 	private Stage stage;
 

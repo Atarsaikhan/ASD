@@ -10,9 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -66,9 +67,29 @@ public class MainWindowController {
 			public void handle(MouseEvent e) {
 				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
-
+				btnRestart.setDisable(false);
 			}
 		});
+		
+		btnNewGame.setStyle(" -fx-background-repeat: no-repeat;"
+				+ " -fx-background-position: 15px 10px;"
+				+ " -fx-background-image: url('resources/icons/play.png');");
+		btnRestart.setStyle(" -fx-background-repeat: no-repeat;"
+				+ " -fx-background-position: 15px 10px;"
+				+ " -fx-background-image: url('resources/icons/start.png');");
+		btnUndo.setStyle(" -fx-background-repeat: no-repeat;"
+				+ " -fx-background-position: 15px 10px;"
+				+ " -fx-background-image: url('resources/icons/recycle.png');");
+		btnSettings.setStyle(" -fx-background-repeat: no-repeat;"
+				+ " -fx-background-position: 15px 10px;"
+				+ " -fx-background-image: url('resources/icons/tools.png');");
+		btnQuit.setStyle(" -fx-background-repeat: no-repeat;"
+				+ " -fx-background-position: 15px 10px;"
+				+ " -fx-background-image: url('resources/icons/exit.png');");
+		
+		btnRestart.setDisable(true);
+		btnUndo.setDisable(true);
+		
 	}
 
 	@FXML
@@ -109,6 +130,9 @@ public class MainWindowController {
 				this.game = factory.createGame(gameType, dialogController.getPlayerName1(),
 						dialogController.getPlayerName2(), gameCanvas.getGraphicsContext2D());
 				
+				btnRestart.setDisable(false);
+				btnUndo.setDisable(false);
+				
 //				if (gameController != null)
 //					bullScene.getDrawer().setGame(gameController);
 //				else
@@ -127,6 +151,7 @@ public class MainWindowController {
 	@FXML
 	void onRestartClick(ActionEvent event) {
 		game.restart();
+		btnUndo.setDisable(true);
 	}
 
 	@FXML

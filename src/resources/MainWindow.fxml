@@ -39,47 +39,47 @@
           </MenuBar>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <VBox prefHeight="600.0" prefWidth="167.0">
+                  <VBox prefHeight="600.0" prefWidth="167.0" style="-fx-background-color: #85bb65#85bb65;">
                      <children>
                       <Button fx:id="btnNewGame" alignment="CENTER" contentDisplay="CENTER" maxHeight="80.0" maxWidth="80.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onNewGameClick" prefHeight="80.0" prefWidth="80.0" text="New game" textAlignment="CENTER">
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="3.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </Button>
                         <Button fx:id="btnRestart" alignment="CENTER" contentDisplay="CENTER" maxHeight="80.0" maxWidth="80.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onRestartClick" prefHeight="80.0" prefWidth="80.0" text="Restart" textAlignment="CENTER">
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="3.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </Button>
                         <Button fx:id="btnUndo" alignment="CENTER" contentDisplay="CENTER" maxHeight="80.0" maxWidth="80.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onUndoClick" prefHeight="80.0" prefWidth="80.0" text="Undo move" textAlignment="CENTER">
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="3.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </Button>
                         <Button fx:id="btnSettings" alignment="CENTER" contentDisplay="CENTER" maxHeight="80.0" maxWidth="80.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onSettingsClick" prefHeight="80.0" prefWidth="80.0" text="Settings" textAlignment="CENTER">
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="3.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </Button>
                         <Button fx:id="btnQuit" alignment="CENTER" contentDisplay="CENTER" maxHeight="80.0" maxWidth="80.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onQuitClick" prefHeight="80.0" prefWidth="80.0" text="Quit" textAlignment="CENTER">
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="3.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </Button>
                      </children>
                      <padding>

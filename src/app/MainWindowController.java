@@ -1,12 +1,11 @@
 package app;
 
+import java.io.File;
 import java.util.Optional;
 
 import framework.ABoardGame;
 import framework.EGameState;
 import framework.IGameFactory;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,12 +18,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class MainWindowController {
 
@@ -81,14 +81,18 @@ public class MainWindowController {
 					return;
 				System.out.println("canvas handle");
 				game.handle((int) e.getX(), (int) e.getY());
+				
 				btnRestart.setDisable(false);
-				if (game.getGameState().equals(EGameState.ACTIVE))
+				if (game.getGameState().equals(EGameState.ACTIVE)) {
+					CSoundController.activate();
 					drawStatusText("Click a piece to activate and click again on an empty position." + "\nTurn: "
 							+ game.getCurrent().getName() + "\n" + game.getMessage());
-				else if (game.getGameState().equals(EGameState.NOMOVE))
+				}
+				else if (game.getGameState().equals(EGameState.NOMOVE)) {
+					CSoundController.noMove();
 					drawStatusText(
 							game.getMessage() + "\n" + game.getCurrent().getName() + " has to remove one piece.");
-				else
+				} else
 					drawStatusText(game.getMessage());
 			}
 		});
@@ -156,6 +160,14 @@ public class MainWindowController {
 				btnUndo.setDisable(false);
 				drawStatusText("Click a piece to activate and click again on an empty position." + "\nTurn: "
 						+ this.game.getCurrent().getName());
+				
+				CSoundController.start();
+				
+//				String musicFile = "src/resources/sounds/Sound-Tapple.mp3";     // For example
+//
+//				Media sound = new Media(getClass().getClassLoader().getResource("resources/sounds/Sound-Tapple.mp3").toString());
+//				MediaPlayer mediaPlayer = new MediaPlayer(sound);
+//				mediaPlayer.play();
 
 //				if (gameController != null)
 //					bullScene.getDrawer().setGame(gameController);

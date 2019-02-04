@@ -21,6 +21,8 @@
                 <items>
                   <MenuItem fx:id="mniNewGame" mnemonicParsing="false" onAction="#onNewGameClick" text="New game" />
                         <MenuItem fx:id="mniRestart" mnemonicParsing="false" onAction="#onRestartClick" text="Restart" />
+                        <MenuItem fx:id="mniSave" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
+                        <MenuItem fx:id="mniRestore" mnemonicParsing="false" onAction="#onRestoreClick" text="Restore" />
                   <MenuItem fx:id="mniQuit" mnemonicParsing="false" onAction="#onQuitClick" text="Quit" />
                 </items>
               </Menu>

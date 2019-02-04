@@ -39,6 +39,12 @@ public class MainWindowController {
 
 	@FXML
 	private MenuItem mniUndo;
+	
+	@FXML
+	private MenuItem mniSave;	
+	
+	@FXML
+	private MenuItem mniRestore;	
 
 	@FXML
 	private MenuItem mniSettings;
@@ -64,6 +70,7 @@ public class MainWindowController {
 	ABoardGame game;
 	CGameSettings settings;
 	CTimerController timer;
+	CCareTaker caretaker = new CCareTaker();
 
 	private Stage stage;
 
@@ -197,6 +204,19 @@ public class MainWindowController {
 	}
 
 	@FXML
+	void onSaveClick(ActionEvent event) {
+		CMemento memo = new CMemento(game);
+		caretaker.add(memo);
+	}
+
+
+	@FXML
+	void onRestoreClick(ActionEvent event) {
+		CMemento memo = caretaker.get(0);
+		this.game = memo.getGameSnapshot();
+	}
+	
+	@FXML
 	void onSettingsClick(ActionEvent event) {
 		CDialogSettings dialog = new CDialogSettings();
 		Optional<CGameSettings> result = dialog.showAndWait();
@@ -243,4 +263,6 @@ public class MainWindowController {
 		gc.setFill(Color.web("#00254d"));
 		gc.fillText(text, 100, 20, 400);
 	}
+	
+	
 }

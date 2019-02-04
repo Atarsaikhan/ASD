@@ -1,12 +1,4 @@
-/Application/
-/Framework/
-/resources/
 /.DS_Store
-/gui/
-/application/
 /framework/
-/fxgui/
-/horn/
-/yurt/
-/boardgame/
 /app/
+/resources/

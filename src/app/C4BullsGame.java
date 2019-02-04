@@ -6,7 +6,6 @@ import java.util.List;
 import framework.ABoardGame;
 import framework.APosition;
 import framework.CBoardGameController;
-import framework.CGuiManager;
 import framework.CPlayer;
 import framework.CPositionImpl;
 import framework.EBullColor;

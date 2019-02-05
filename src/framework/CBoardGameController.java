@@ -1,7 +1,9 @@
 package framework;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -291,5 +293,37 @@ public class CBoardGameController implements IGameMediator {
 		}
 
 	}
-
+	
+	public CMemento takeSnapshot() {
+		HashMap<Integer, EBullColor> posColors = new HashMap<>();
+		for (APosition pos : positions) {
+			posColors.put(pos.getId(), pos.getColor());
+		}
+		CMemento memo = new CMemento(posColors, this.getWhite().getName(),
+				this.getBlack().getName(), this.getWhite().getCurrentPieces(),
+				this.getBlack().getCurrentPieces(), this.getCurrent().getColor());
+		return memo;
+	}
+	
+	public void restore(CMemento snapshot) {
+		System.out.println("restore invoked");
+		
+		positions.stream().map(pos->pos.getId()+", "+pos.getColor()).forEach(System.out::println);
+		HashMap<Integer, EBullColor> posColors = snapshot.getPosColors();
+		for (APosition pos : positions) {
+			pos.setColor(posColors.get(pos.getId()));
+		}
+		positions.stream().map(pos->pos.getId()+", "+pos.getColor()).forEach(System.out::println);
+		
+		CPlayer white = new CPlayer(snapshot.getWhiteName(), snapshot.getWhitePieceCount() , EBullColor.WHITE);
+		CPlayer black = new CPlayer(snapshot.getBlackName(), snapshot.getBlackPieceCount() , EBullColor.BLACK);
+		this.setPlayers(white, black);
+		
+		if (snapshot.getCurrent().equals(EBullColor.WHITE)) {
+			this.setCurrent(white);
+		} else {
+			this.setCurrent(black);
+		}
+		guiManager.drawPositions(positions);
+	}
 }

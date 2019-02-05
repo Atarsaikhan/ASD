@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Optional;
 
 import framework.ABoardGame;
+import framework.CCareTaker;
+import framework.CMemento;
 import framework.EGameState;
 import framework.IGameFactory;
 import javafx.application.Platform;
@@ -117,6 +119,8 @@ public class MainWindowController {
 
 		btnRestart.setDisable(true);
 		btnUndo.setDisable(true);
+		mniSave.setDisable(false);
+		mniRestore.setDisable(true);
 
 		// drawStatusText("Hello!\nClick \"New Game\" to start a new game.");
 		drawBigText("Hello!\nClick \"New Game\" to start a new game.");
@@ -205,15 +209,19 @@ public class MainWindowController {
 
 	@FXML
 	void onSaveClick(ActionEvent event) {
-		CMemento memo = new CMemento(game);
+		CMemento memo = game.takeSnapshot();
 		caretaker.add(memo);
+		mniSave.setDisable(true);
+		mniRestore.setDisable(false);
 	}
-
 
 	@FXML
 	void onRestoreClick(ActionEvent event) {
-		CMemento memo = caretaker.get(0);
-		this.game = memo.getGameSnapshot();
+//		this.game.restore(caretaker.get(0));
+		this.game.restore(caretaker.pop());
+		mniSave.setDisable(false);
+		mniRestore.setDisable(true);
+		timer.stopTimer();
 	}
 	
 	@FXML

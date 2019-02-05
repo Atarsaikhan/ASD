@@ -1,2 +1,2 @@
 timer: 5
-movenumber: 2
+movenumber: 10

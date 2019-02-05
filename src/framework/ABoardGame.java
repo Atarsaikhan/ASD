@@ -1,5 +1,6 @@
 package framework;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -32,7 +33,7 @@ public abstract class ABoardGame {
 	public void handle(int x, int y) {
 
 		if (gameController.getGameState().equals(EGameState.GAMEOVER)) {
-			System.out.println(this.getMessage() +" - " +this.getGameState());
+			System.out.println(this.getMessage() + " - " + this.getGameState());
 			return;
 		}
 
@@ -46,7 +47,7 @@ public abstract class ABoardGame {
 					if (pos.isEmpty()) {
 						this.move(active, pos);
 						active = null;
-						System.out.println(this.getMessage() +" " +this.getGameState());
+						System.out.println(this.getMessage() + " " + this.getGameState());
 					} else if (pos.isMovable()) {
 						pos.activate(active);
 						active = pos;
@@ -107,7 +108,7 @@ public abstract class ABoardGame {
 		// TODO Auto-generated method stub
 		return this.gameController.getMessage();
 	}
-	
+
 	public void attach(IGameObserver observer) {
 		this.gameController.attach(observer);
 	}
@@ -116,4 +117,11 @@ public abstract class ABoardGame {
 		this.gameController.detach(observer);
 	}
 
+	public CMemento takeSnapshot() {
+		return this.gameController.takeSnapshot();
+	}
+
+	public void restore(CMemento snapshot) {
+		this.gameController.restore(snapshot);
+	}
 }
